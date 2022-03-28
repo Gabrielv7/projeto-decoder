@@ -1,0 +1,133 @@
+package com.ead.authuser.domain.services.impl;
+
+import com.ead.authuser.domain.enums.UserStatus;
+import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.exception.EmailExistsException;
+import com.ead.authuser.domain.exception.PasswordInvalidException;
+import com.ead.authuser.domain.exception.UserNameExistsException;
+import com.ead.authuser.domain.exception.UserNotFoundException;
+import com.ead.authuser.domain.forms.UserUpdateForm;
+import com.ead.authuser.domain.forms.UserUpdateImageForm;
+import com.ead.authuser.domain.model.UserModel;
+import com.ead.authuser.domain.repositories.UserRepository;
+import com.ead.authuser.domain.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Override
+    public List<UserModel> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public UserModel findById(UUID userId) {
+
+        return userRepository.findById(userId).
+                orElseThrow(() -> new UserNotFoundException("User not found."));
+    }
+
+    @Transactional
+    @Override
+    public void delete(UUID userId) {
+
+        var user = this.findById(userId);
+
+        userRepository.deleteById(user.getUserId());
+
+    }
+
+    @Transactional
+    @Override
+    public UserModel save(UserModel userModel) {
+
+        // verifica se o user name existe
+        if (userRepository.existsByUserName(userModel.getUserName())) {
+
+            throw new UserNameExistsException("Error username is Already Taken!");
+
+        }
+
+        // verifica se o email existe
+        if (userRepository.existsByEmail(userModel.getEmail())) {
+
+            throw new EmailExistsException("Error email is Already Taken!");
+
+        }
+
+
+        //define o status ativo
+        userModel.setUserStatus(UserStatus.ACTIVE);
+
+        //define o tipo de usuário estudante
+        userModel.setUserType(UserType.STUDENT);
+
+        return userRepository.save(userModel);
+
+    }
+
+    @Transactional
+    @Override
+    public UserModel updateUser(UserUpdateForm userUpdateForm, UUID userId) {
+
+        var userModel = this.findById(userId);
+
+        userModel.setFullName(userUpdateForm.getFullName());
+        userModel.setPhoneNumber(userUpdateForm.getPhoneNumber());
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        return userModel;
+
+    }
+
+    @Transactional
+    @Override
+    public UserModel updateImageUser(UserUpdateImageForm userUpdateImageForm, UUID userId) {
+
+        var userModel = this.findById(userId);
+
+        userModel.setImageUrl(userUpdateImageForm.getImageUrl());
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        return userModel;
+    }
+
+    @Transactional
+    @Override
+    public UserModel updatePassword(UUID userId, String oldPassword, String password) {
+
+        var userModel = this.findById(userId);
+
+        if (!oldPassword.equals(userModel.getPassword())) {
+
+            throw new PasswordInvalidException("Mismatched old password!");
+
+        }
+
+        userModel.setPassword(password);
+        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
+
+        return userModel;
+
+    }
+
+    @Override
+    public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
+        return userRepository.findAll(spec, pageable);
+    }
+
+}
