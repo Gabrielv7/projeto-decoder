@@ -2,6 +2,7 @@ package com.ead.course.api.controllers;
 
 import com.ead.course.domain.dtos.CourseDto;
 import com.ead.course.domain.forms.CourseForm;
+import com.ead.course.domain.forms.CourseUpdateForm;
 import com.ead.course.domain.services.CourseService;
 import com.ead.course.mapper.CourseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,10 +74,9 @@ public class CourseController {
     @PutMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
     public CourseDto updateCourse(@PathVariable(value="courseId") UUID courseId,
-                                  @RequestBody @Valid CourseForm courseForm){
+                                  @RequestBody @Valid CourseUpdateForm courseUpdateForm){
 
-        //Todo trocar a classe recebida no parametro para CourseUpdateForm sem o atributo userInstrutor
-      return mapper.toDto(courseService.updateCourse(courseId, courseForm));
+      return mapper.toDto(courseService.updateCourse(courseId, courseUpdateForm));
 
 
     }

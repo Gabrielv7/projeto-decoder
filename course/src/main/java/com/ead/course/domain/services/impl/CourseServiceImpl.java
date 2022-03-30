@@ -1,7 +1,7 @@
 package com.ead.course.domain.services.impl;
 
 import com.ead.course.domain.exceptions.CourseNotFoundException;
-import com.ead.course.domain.forms.CourseForm;
+import com.ead.course.domain.forms.CourseUpdateForm;
 import com.ead.course.domain.models.CourseModel;
 import com.ead.course.domain.models.ModuleModel;
 import com.ead.course.domain.repositories.CourseRepository;
@@ -51,15 +51,15 @@ public class CourseServiceImpl implements CourseService {
     
     @Transactional
     @Override
-    public CourseModel updateCourse(UUID courseId, CourseForm courseForm) {
+    public CourseModel updateCourse(UUID courseId, CourseUpdateForm courseUpdateForm) {
         
         var course = this.findById(courseId);
 
-        course.setName(courseForm.getName());
-        course.setDescription(courseForm.getDescription());
-        course.setImageUrl(courseForm.getImageUrl());
-        course.setCourseStatus(courseForm.getCourseStatus());
-        course.setCourseLevel(courseForm.getCourseLevel());
+        course.setName(courseUpdateForm.getName());
+        course.setDescription(courseUpdateForm.getDescription());
+        course.setImageUrl(courseUpdateForm.getImageUrl());
+        course.setCourseStatus(courseUpdateForm.getCourseStatus());
+        course.setCourseLevel(courseUpdateForm.getCourseLevel());
 
         return course;
     }
