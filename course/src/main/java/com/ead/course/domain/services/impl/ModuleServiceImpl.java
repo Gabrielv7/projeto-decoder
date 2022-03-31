@@ -1,6 +1,7 @@
 package com.ead.course.domain.services.impl;
 
 import com.ead.course.domain.exceptions.CourseOrModuleNotFoundException;
+import com.ead.course.domain.exceptions.ModuleNotFoundException;
 import com.ead.course.domain.forms.ModuleForm;
 import com.ead.course.domain.models.ModuleModel;
 import com.ead.course.domain.repositories.LessonRepository;
@@ -44,7 +45,7 @@ public class ModuleServiceImpl implements ModuleService {
 
     @Transactional
     @Override
-    public ModuleModel salvar(ModuleModel moduleModel, UUID courseId) {
+    public ModuleModel save(ModuleModel moduleModel, UUID courseId) {
 
         var course = courseService.findById(courseId);
 
@@ -74,5 +75,11 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public List<ModuleModel> findAllByCourse(UUID courseId) {
         return moduleRepository.findAllModulesIntoCourse(courseId);
+    }
+
+    @Override
+    public ModuleModel findById(UUID moduleId) {
+        return moduleRepository.findById(moduleId)
+                .orElseThrow(()-> new ModuleNotFoundException("Module not found."));
     }
 }

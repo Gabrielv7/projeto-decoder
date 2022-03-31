@@ -10,11 +10,13 @@ public interface ModuleService {
 
     void delete(UUID moduleId);
 
-    ModuleModel salvar(ModuleModel moduleModel, UUID courseId);
+    ModuleModel save(ModuleModel moduleModel, UUID courseId);
 
     ModuleModel findModuleIntoCourse(UUID moduleId, UUID courseId);
 
     ModuleModel updateCourse(ModuleForm moduleForm, ModuleModel module);
 
     List<ModuleModel> findAllByCourse(UUID courseId);
+
+    ModuleModel findById(UUID moduleId);
 }

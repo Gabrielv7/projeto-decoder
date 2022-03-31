@@ -38,7 +38,7 @@ public class ModuleController {
 
         var moduleModel = mapper.ToEntity(moduleForm);
 
-        return mapper.toDto(moduleService.salvar(moduleModel, courseId));
+        return mapper.toDto(moduleService.save(moduleModel, courseId));
 
 
     }

@@ -2,6 +2,8 @@ package com.ead.course.api.exceptionHandler;
 
 import com.ead.course.domain.exceptions.CourseNotFoundException;
 import com.ead.course.domain.exceptions.CourseOrModuleNotFoundException;
+import com.ead.course.domain.exceptions.LessonOrModuleNotFoundException;
+import com.ead.course.domain.exceptions.ModuleNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 
 @ControllerAdvice
-public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(CourseNotFoundException.class)
@@ -27,9 +29,31 @@ public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler(ModuleNotFoundException.class)
+    public ResponseEntity<Object> handleModuleNotFoundException(ModuleNotFoundException ex, WebRequest request){
+
+        var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
 
     @ExceptionHandler(CourseOrModuleNotFoundException.class)
     public ResponseEntity<Object> handleCourseOrModuleNotFoundException(CourseOrModuleNotFoundException ex, WebRequest request){
+
+        var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+    @ExceptionHandler(LessonOrModuleNotFoundException.class)
+    public ResponseEntity<Object> handleLessonOrModuleNotFoundException(LessonOrModuleNotFoundException ex, WebRequest request){
 
         var status = HttpStatus.NOT_FOUND;
 
