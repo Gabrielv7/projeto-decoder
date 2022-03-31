@@ -1,6 +1,7 @@
 package com.ead.course.api.exceptionHandler;
 
 import com.ead.course.domain.exceptions.CourseNotFoundException;
+import com.ead.course.domain.exceptions.CourseOrModuleNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,18 @@ public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CourseNotFoundException.class)
     public ResponseEntity<Object> handleCourseNotFoundException(CourseNotFoundException ex, WebRequest request){
+
+        var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+
+    @ExceptionHandler(CourseOrModuleNotFoundException.class)
+    public ResponseEntity<Object> handleCourseOrModuleNotFoundException(CourseOrModuleNotFoundException ex, WebRequest request){
 
         var status = HttpStatus.NOT_FOUND;
 
