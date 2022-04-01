@@ -1,10 +1,11 @@
 package com.ead.course.domain.services;
 
-import com.ead.course.domain.forms.CourseForm;
 import com.ead.course.domain.forms.CourseUpdateForm;
 import com.ead.course.domain.models.CourseModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface CourseService {
@@ -15,7 +16,7 @@ public interface CourseService {
 
     CourseModel findById(UUID courseId);
 
-    List<CourseModel> findAll();
+    Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable);
 
     CourseModel updateCourse(UUID courseId, CourseUpdateForm courseUpdateForm);
 }

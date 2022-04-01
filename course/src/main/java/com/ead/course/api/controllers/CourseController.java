@@ -5,7 +5,12 @@ import com.ead.course.domain.forms.CourseForm;
 import com.ead.course.domain.forms.CourseUpdateForm;
 import com.ead.course.domain.services.CourseService;
 import com.ead.course.mapper.CourseMapper;
+import com.ead.course.specifications.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -35,9 +39,10 @@ public class CourseController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CourseDto> getAllCourses(){
+    public Page<CourseDto> getAllCourses(SpecificationTemplate.CourseSpec spec,
+                                         @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable){
 
-        return mapper.toCollectionDto(courseService.findAll());
+        return courseService.findAll(spec, pageable).map(mapper::toDto);
 
     }
 
