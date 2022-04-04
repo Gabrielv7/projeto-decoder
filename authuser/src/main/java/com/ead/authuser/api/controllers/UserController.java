@@ -1,11 +1,11 @@
 package com.ead.authuser.api.controllers;
 
+import com.ead.authuser.api.mapper.UserMapper;
 import com.ead.authuser.domain.dtos.UserDto;
 import com.ead.authuser.domain.forms.UserPasswordForm;
 import com.ead.authuser.domain.forms.UserUpdateForm;
 import com.ead.authuser.domain.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.services.UserService;
-import com.ead.authuser.api.mapper.UserMapper;
 import com.ead.authuser.especifications.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,10 +24,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
