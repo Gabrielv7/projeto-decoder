@@ -1,4 +1,4 @@
-package com.ead.course.core;
+package com.ead.course.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
