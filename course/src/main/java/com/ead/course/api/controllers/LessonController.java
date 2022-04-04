@@ -5,7 +5,12 @@ import com.ead.course.domain.forms.LessonForm;
 import com.ead.course.domain.services.LessonService;
 import com.ead.course.domain.services.ModuleService;
 import com.ead.course.mapper.LessonMapper;
+import com.ead.course.specifications.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -74,9 +78,11 @@ public class LessonController {
 
     @GetMapping("/modules/{moduleId}/lessons")
     @ResponseStatus(HttpStatus.OK)
-    public List<LessonDto> getAllLessons(@PathVariable(value = "moduleId") UUID moduleId){
+    public Page<LessonDto> getAllLessons(SpecificationTemplate.LessonSpec spec,
+                                         @PageableDefault(page = 0, size = 10, sort = "lessonId", direction = Sort.Direction.ASC) Pageable pageable,
+                                         @PathVariable(value = "moduleId") UUID moduleId){
 
-        return mapper.toCollectionDto(lessonService.findAllByModule(moduleId));
+        return lessonService.findAllByModule(SpecificationTemplate.lessonModuleId(moduleId).and(spec),pageable).map(mapper::toDto);
 
     }
 
