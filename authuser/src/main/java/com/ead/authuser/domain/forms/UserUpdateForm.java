@@ -1,14 +1,19 @@
 package com.ead.authuser.domain.forms;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+@Data
 public class UserUpdateForm {
 
+    @NotBlank
+    @Size(max = 150)
     private String fullName;
 
+    @NotBlank
+    @Size(max = 20)
     private String phoneNumber;
 
 

@@ -4,6 +4,7 @@ import com.ead.authuser.domain.exception.EmailExistsException;
 import com.ead.authuser.domain.exception.PasswordInvalidException;
 import com.ead.authuser.domain.exception.UserNameExistsException;
 import com.ead.authuser.domain.exception.UserNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,15 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
+@Log4j2
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(EmailExistsException.class)
     public ResponseEntity<Object> handleEmailExistsException(EmailExistsException ex, WebRequest request){
+
+        log.error(ex.getMessage());
 
         var problem = createProblem(ex.getMessage(), HttpStatus.CONFLICT.value());
 
@@ -30,6 +34,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNameExistsException.class)
     public ResponseEntity<Object> handleUserNameExistsException(UserNameExistsException ex, WebRequest request){
 
+        log.error(ex.getMessage());
+
         var problem = createProblem(ex.getMessage(), HttpStatus.CONFLICT.value());
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.CONFLICT, request);
@@ -39,6 +45,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request){
 
+        log.error(ex.getMessage());
+
         var problem = createProblem(ex.getMessage(), HttpStatus.NOT_FOUND.value());
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
@@ -47,6 +55,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(PasswordInvalidException.class)
     public ResponseEntity<Object> handlePasswordInvalidException(PasswordInvalidException ex, WebRequest request){
+
+        log.error(ex.getMessage());
 
         var problem = createProblem(ex.getMessage(), HttpStatus.CONFLICT.value());
 

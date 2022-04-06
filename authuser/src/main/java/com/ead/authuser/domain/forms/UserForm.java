@@ -1,15 +1,13 @@
 package com.ead.authuser.domain.forms;
 
 import com.ead.authuser.validation.UsernameConstraint;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-@Getter
-@Setter
+@Data
 public class UserForm {
 
     @NotBlank

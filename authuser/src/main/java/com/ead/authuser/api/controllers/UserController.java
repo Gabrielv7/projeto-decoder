@@ -7,6 +7,7 @@ import com.ead.authuser.domain.forms.UserUpdateForm;
 import com.ead.authuser.domain.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.services.UserService;
 import com.ead.authuser.especifications.SpecificationTemplate;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +30,7 @@ import java.util.UUID;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Log4j2
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -71,6 +73,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "userId") UUID userId){
 
+        log.debug("DELETE deleteUser received  {} ", userId);
+
         userService.delete(userId);
 
     }
@@ -80,8 +84,14 @@ public class UserController {
     public UserDto updateUser(@PathVariable(value = "userId") UUID userId,
                               @RequestBody @Valid UserUpdateForm userUpdateForm){
 
+        log.debug("PUT updateUser userUpdateForm received {} ", userUpdateForm);
 
-        return mapper.toDto(userService.updateUser(userUpdateForm, userId));
+        var userModel = userService.updateUser(userUpdateForm, userId);
+
+        log.debug("PUT updateUser update userId {} ", userModel.getUserId());
+        log.info("User update sucessfully userId {}", userModel.getUserId());
+
+        return mapper.toDto(userModel);
 
 
     }
@@ -91,7 +101,12 @@ public class UserController {
     public UserDto updatePassword(@PathVariable(value = "userId") UUID userId,
                                   @RequestBody @Valid UserPasswordForm userPasswordForm){
 
+       log.debug("PUT updatePassword userPasswordForm received {} ", userPasswordForm);
+
        var userModel = userService.updatePassword(userId, userPasswordForm.getOldPassword(), userPasswordForm.getPassword());
+
+       log.debug("PUT updatePassword update userId {} ", userModel.getUserId());
+       log.info("User update password sucessfully userId {} ", userModel.getUserId());
 
        return mapper.toDto(userModel);
 
@@ -103,8 +118,14 @@ public class UserController {
     public UserDto updateImage(@PathVariable(value = "userId") UUID userId,
                                @RequestBody @Valid UserUpdateImageForm userUpdateImageForm){
 
+        log.debug("PUT updateImage UserUpdateImageForm received {} ", userUpdateImageForm);
 
-         return mapper.toDto(userService.updateImageUser(userUpdateImageForm, userId));
+        var userModel = userService.updateImageUser(userUpdateImageForm, userId);
+
+        log.debug("PUT updateImage update userId {} ", userModel.getUserId());
+        log.info("User update image sucessfully userId {} ", userModel.getUserId());
+
+        return mapper.toDto(userModel);
 
 
     }

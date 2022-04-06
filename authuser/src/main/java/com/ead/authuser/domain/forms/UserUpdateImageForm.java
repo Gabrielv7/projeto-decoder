@@ -1,12 +1,10 @@
 package com.ead.authuser.domain.forms;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
-@Setter
+@Data
 public class UserUpdateImageForm {
 
     @NotBlank

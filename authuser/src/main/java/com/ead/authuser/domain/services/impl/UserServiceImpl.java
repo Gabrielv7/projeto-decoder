@@ -11,6 +11,7 @@ import com.ead.authuser.domain.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +19,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -58,6 +58,8 @@ public class UserServiceImpl implements UserService {
         // verifica se o user name existe
         if (userRepository.existsByUserName(userModel.getUserName())) {
 
+            log.warn("Username {} is Already Taken", userModel.getUserName());
+
             throw new UserNameExistsException("Error username is Already Taken!");
 
         }
@@ -65,10 +67,11 @@ public class UserServiceImpl implements UserService {
         // verifica se o email existe
         if (userRepository.existsByEmail(userModel.getEmail())) {
 
+            log.warn("Email {} is Already Taken", userModel.getEmail());
+
             throw new EmailExistsException("Error email is Already Taken!");
 
         }
-
 
         //define o status ativo
         userModel.setUserStatus(UserStatus.ACTIVE);
@@ -88,9 +91,8 @@ public class UserServiceImpl implements UserService {
 
         userModel.setFullName(userUpdateForm.getFullName());
         userModel.setPhoneNumber(userUpdateForm.getPhoneNumber());
-        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
-        return userModel;
+        return userRepository.save(userModel);
 
     }
 
@@ -101,9 +103,8 @@ public class UserServiceImpl implements UserService {
         var userModel = this.findById(userId);
 
         userModel.setImageUrl(userUpdateImageForm.getImageUrl());
-        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
-        return userModel;
+        return userRepository.save(userModel);
     }
 
     @Transactional
@@ -114,14 +115,15 @@ public class UserServiceImpl implements UserService {
 
         if (!oldPassword.equals(userModel.getPassword())) {
 
+            log.warn("Mismatched old password {} ", userModel.getPassword());
+
             throw new PasswordInvalidException("Mismatched old password!");
 
         }
 
         userModel.setPassword(password);
-        userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
 
-        return userModel;
+        return userRepository.save(userModel);
 
     }
 
