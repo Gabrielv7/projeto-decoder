@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
-public class AuthUserExceptionHandler extends ResponseEntityExceptionHandler {
+public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler(EmailExistsException.class)
@@ -58,6 +60,7 @@ public class AuthUserExceptionHandler extends ResponseEntityExceptionHandler {
         return Problem.builder()
                 .message(msg)
                 .status(status)
+                .timesTamp(LocalDateTime.now())
                 .build();
 
     }

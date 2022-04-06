@@ -5,6 +5,7 @@ import com.ead.course.domain.forms.ModuleForm;
 import com.ead.course.domain.services.ModuleService;
 import com.ead.course.mapper.ModuleMapper;
 import com.ead.course.specifications.SpecificationTemplate;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class ModuleController {
@@ -40,9 +42,16 @@ public class ModuleController {
     public ModuleDto saveModule(@PathVariable(value = "courseId") UUID courseId,
                                 @RequestBody @Valid ModuleForm moduleForm){
 
+        log.debug("POST saveModule received {} ", moduleForm);
+
         var moduleModel = mapper.ToEntity(moduleForm);
 
-        return mapper.toDto(moduleService.save(moduleModel, courseId));
+        moduleService.save(moduleModel, courseId);
+
+        log.debug("POST saveModule save moduleId {} ", moduleModel.getModuleId());
+        log.info("Module save sucessfully moduleId {} ", moduleModel.getModuleId());
+
+        return mapper.toDto(moduleModel);
 
 
     }
@@ -52,9 +61,11 @@ public class ModuleController {
     public void deleteModule(@PathVariable(value = "courseId") UUID courseId,
                              @PathVariable(value = "moduleId") UUID moduleId){
 
-        var module = moduleService.findModuleIntoCourse(moduleId, courseId);
+        log.debug("DELETE deleteModule received {} ", moduleId);
 
-        moduleService.delete(module.getModuleId());
+        var moduleModel = moduleService.findModuleIntoCourse(moduleId, courseId);
+
+        moduleService.delete(moduleModel.getModuleId());
 
     }
 
@@ -65,9 +76,16 @@ public class ModuleController {
                                   @PathVariable(value = "moduleId") UUID moduleId,
                                   @RequestBody @Valid ModuleForm moduleForm){
 
-        var module = moduleService.findModuleIntoCourse(moduleId, courseId);
+        log.debug("PUT updateModule received {} ", moduleForm);
 
-        return mapper.toDto(moduleService.updateCourse(moduleForm, module));
+        var moduleModel = moduleService.findModuleIntoCourse(moduleId, courseId);
+
+        moduleService.updateCourse(moduleForm, moduleModel);
+
+        log.debug("PUT updateModule update moduleId {} ", moduleModel.getModuleId());
+        log.info("Module update sucessfully moduleId {} ", moduleModel.getModuleId());
+
+        return mapper.toDto(moduleModel);
 
 
     }

@@ -61,7 +61,7 @@ public class LessonServiceImpl implements LessonService {
         lessonModel.setDescription(lessonForm.getDescription());
         lessonModel.setVideoUrl(lessonForm.getVideoUrl());
 
-        return lessonModel;
+        return lessonRepository.save(lessonModel);
     }
 
     @Override

@@ -68,11 +68,10 @@ public class ModuleServiceImpl implements ModuleService {
     @Override
     public ModuleModel updateCourse(ModuleForm moduleForm, ModuleModel module) {
 
-
         module.setTitle(moduleForm.getTitle());
         module.setDescription(moduleForm.getDescription());
 
-        return module;
+        return moduleRepository.save(module);
     }
 
     @Override

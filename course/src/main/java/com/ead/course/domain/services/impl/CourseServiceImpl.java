@@ -63,7 +63,7 @@ public class CourseServiceImpl implements CourseService {
         course.setCourseStatus(courseUpdateForm.getCourseStatus());
         course.setCourseLevel(courseUpdateForm.getCourseLevel());
 
-        return course;
+        return courseRepository.save(course);
     }
 
     @Transactional

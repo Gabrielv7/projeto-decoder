@@ -6,6 +6,7 @@ import com.ead.course.domain.services.LessonService;
 import com.ead.course.domain.services.ModuleService;
 import com.ead.course.mapper.LessonMapper;
 import com.ead.course.specifications.SpecificationTemplate;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class LessonController {
@@ -44,9 +46,16 @@ public class LessonController {
     public LessonDto saveLesson(@PathVariable(value = "moduleId") UUID moduleId,
                                 @RequestBody @Valid LessonForm lessonForm){
 
+        log.debug("POST saveLeson received {} ", lessonForm);
+
         var lessonModel = mapper.toEntity(lessonForm);
 
-        return mapper.toDto(lessonService.save(lessonModel, moduleId));
+        lessonService.save(lessonModel, moduleId);
+
+        log.debug("POST saveLesson save lessonId {} ", lessonModel.getLessonId());
+        log.info("Lesson save sucessfully lessonId {} ", lessonModel.getLessonId());
+
+        return mapper.toDto(lessonModel);
 
 
     }
@@ -55,6 +64,8 @@ public class LessonController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteLesson(@PathVariable(value = "moduleId") UUID moduleId,
                              @PathVariable(value = "lessonId") UUID lessonId){
+
+        log.debug("DELETE deleteLesson received lessonId {} ", lessonId);
 
         var lessonModel = lessonService.findLessonIntoModule(moduleId, lessonId);
 
@@ -68,7 +79,12 @@ public class LessonController {
                                   @PathVariable(value = "lessonId") UUID lessonId,
                                   @RequestBody @Valid LessonForm lessonForm){
 
+        log.debug("PUT updateLesson received {} ", lessonForm);
+
         var lessonModel = lessonService.findLessonIntoModule(moduleId, lessonId);
+
+        log.debug("PUT updateLesson update lessonId {} ", lessonModel.getLessonId());
+        log.info("Lesson update sucessfully lessonId {} ", lessonModel.getLessonId());
 
         return mapper.toDto(lessonService.updateLesson(lessonForm, lessonModel));
 

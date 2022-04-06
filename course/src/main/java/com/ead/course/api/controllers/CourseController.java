@@ -6,6 +6,7 @@ import com.ead.course.domain.forms.CourseUpdateForm;
 import com.ead.course.domain.services.CourseService;
 import com.ead.course.mapper.CourseMapper;
 import com.ead.course.specifications.SpecificationTemplate;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.UUID;
 
+@Log4j2
 @RestController
 @RequestMapping("/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -59,15 +61,24 @@ public class CourseController {
     @ResponseStatus(HttpStatus.CREATED)
     public CourseDto saveCourse(@RequestBody @Valid CourseForm courseForm){
 
+        log.debug("POST saveCourse received {} ", courseForm);
+
         var courseModel = mapper.toEntity(courseForm);
 
-        return mapper.toDto(courseService.save(courseModel));
+        courseService.save(courseModel);
+
+        log.debug("POST saveCourse saved courseId {} ", courseModel.getCourseId());
+        log.info("Course save sucessfully courseId {}", courseModel.getCourseId());
+
+        return mapper.toDto(courseModel);
 
     }
 
     @DeleteMapping("/{courseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value="courseId") UUID courseId){
+    public void deleteCourse(@PathVariable(value="courseId") UUID courseId){
+
+        log.debug("DELETE deleteCourse received courseId {} ", courseId);
 
         var course = courseService.findById(courseId);
 
@@ -81,7 +92,14 @@ public class CourseController {
     public CourseDto updateCourse(@PathVariable(value="courseId") UUID courseId,
                                   @RequestBody @Valid CourseUpdateForm courseUpdateForm){
 
-      return mapper.toDto(courseService.updateCourse(courseId, courseUpdateForm));
+      log.debug("PUT updateCourse received {} ", courseUpdateForm);
+
+      var courseModel = courseService.updateCourse(courseId, courseUpdateForm);
+
+      log.debug("PUT updateCourse update courseId {} ", courseModel.getCourseId());
+      log.info("Course update sucessfully courseId {}", courseModel.getCourseId());
+
+      return mapper.toDto(courseModel);
 
 
     }
