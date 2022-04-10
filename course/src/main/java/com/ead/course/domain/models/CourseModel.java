@@ -1,7 +1,7 @@
 package com.ead.course.domain.models;
 
-import com.ead.course.domain.enums.CourseLevel;
-import com.ead.course.domain.enums.CourseStatus;
+import com.ead.course.domain.models.enums.CourseLevel;
+import com.ead.course.domain.models.enums.CourseStatus;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;

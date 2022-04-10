@@ -1,6 +1,6 @@
 package com.ead.course.domain.services;
 
-import com.ead.course.domain.forms.ModuleForm;
+import com.ead.course.domain.models.forms.ModuleForm;
 import com.ead.course.domain.models.ModuleModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

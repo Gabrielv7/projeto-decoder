@@ -1,8 +1,8 @@
 package com.ead.course.domain.services.impl;
 
-import com.ead.course.domain.exceptions.CourseOrModuleNotFoundException;
-import com.ead.course.domain.exceptions.ModuleNotFoundException;
-import com.ead.course.domain.forms.ModuleForm;
+import com.ead.course.common.exceptions.CourseOrModuleNotFoundException;
+import com.ead.course.common.exceptions.ModuleNotFoundException;
+import com.ead.course.domain.models.forms.ModuleForm;
 import com.ead.course.domain.models.ModuleModel;
 import com.ead.course.domain.repositories.LessonRepository;
 import com.ead.course.domain.repositories.ModuleRepository;

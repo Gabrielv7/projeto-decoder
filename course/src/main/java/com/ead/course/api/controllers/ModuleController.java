@@ -1,10 +1,10 @@
 package com.ead.course.api.controllers;
 
-import com.ead.course.domain.dtos.ModuleDto;
-import com.ead.course.domain.forms.ModuleForm;
+import com.ead.course.domain.models.dtos.ModuleDto;
+import com.ead.course.domain.models.forms.ModuleForm;
 import com.ead.course.domain.services.ModuleService;
-import com.ead.course.mapper.ModuleMapper;
-import com.ead.course.specifications.SpecificationTemplate;
+import com.ead.course.domain.mapper.ModuleMapper;
+import com.ead.course.domain.specifications.SpecificationTemplate;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
