@@ -1,7 +1,7 @@
 package com.ead.authuser.domain.model;
 
-import com.ead.authuser.domain.enums.UserStatus;
-import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.model.enums.UserStatus;
+import com.ead.authuser.domain.model.enums.UserType;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

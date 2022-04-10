@@ -1,13 +1,13 @@
 package com.ead.authuser.domain.services.impl;
 
-import com.ead.authuser.domain.enums.UserStatus;
-import com.ead.authuser.domain.enums.UserType;
-import com.ead.authuser.domain.exception.EmailExistsException;
-import com.ead.authuser.domain.exception.PasswordInvalidException;
-import com.ead.authuser.domain.exception.UserNameExistsException;
-import com.ead.authuser.domain.exception.UserNotFoundException;
-import com.ead.authuser.domain.forms.UserUpdateForm;
-import com.ead.authuser.domain.forms.UserUpdateImageForm;
+import com.ead.authuser.domain.model.enums.UserStatus;
+import com.ead.authuser.domain.model.enums.UserType;
+import com.ead.authuser.common.exception.EmailExistsException;
+import com.ead.authuser.common.exception.PasswordInvalidException;
+import com.ead.authuser.common.exception.UserNameExistsException;
+import com.ead.authuser.common.exception.UserNotFoundException;
+import com.ead.authuser.domain.model.forms.UserUpdateForm;
+import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;

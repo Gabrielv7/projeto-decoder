@@ -1,8 +1,8 @@
 package com.ead.authuser.api.controllers;
 
-import com.ead.authuser.api.mapper.UserMapper;
-import com.ead.authuser.domain.dtos.UserDto;
-import com.ead.authuser.domain.forms.UserForm;
+import com.ead.authuser.domain.mapper.UserMapper;
+import com.ead.authuser.domain.model.dtos.UserDto;
+import com.ead.authuser.domain.model.forms.UserForm;
 import com.ead.authuser.domain.services.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;

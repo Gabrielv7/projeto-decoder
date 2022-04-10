@@ -1,7 +1,7 @@
 package com.ead.authuser.domain.services;
 
-import com.ead.authuser.domain.forms.UserUpdateForm;
-import com.ead.authuser.domain.forms.UserUpdateImageForm;
+import com.ead.authuser.domain.model.forms.UserUpdateForm;
+import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.model.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
