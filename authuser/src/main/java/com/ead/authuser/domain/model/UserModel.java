@@ -10,12 +10,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -62,5 +65,8 @@ public class UserModel implements Serializable {
 
     @UpdateTimestamp
     private LocalDateTime lastUpdateDate;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<UserCourseModel> usersCourses;
 
 }
