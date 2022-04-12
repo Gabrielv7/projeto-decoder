@@ -1,12 +1,12 @@
 package com.ead.authuser.api.controllers;
 
+import com.ead.authuser.domain.especifications.SpecificationTemplate;
 import com.ead.authuser.domain.mapper.UserMapper;
 import com.ead.authuser.domain.model.dtos.UserDto;
 import com.ead.authuser.domain.model.forms.UserPasswordForm;
 import com.ead.authuser.domain.model.forms.UserUpdateForm;
 import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.services.UserService;
-import com.ead.authuser.domain.especifications.SpecificationTemplate;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -45,19 +47,32 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDto> getAllUsers(SpecificationTemplate.UserSpec spec,
-                                     @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable){
+                                     @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
+                                     @RequestParam(required = false) UUID courseId){
 
-        var page = userService.findAll(spec, pageable).map(mapper::toDto);
+        Page<UserDto> userDtoPage = null;
 
-        if(!page.isEmpty()){
+        if(Objects.nonNull(courseId)){
 
-         page.toList()
+            userDtoPage = userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable).map(mapper::toDto);
+
+        }
+
+        if(Objects.isNull(courseId)){
+
+            userDtoPage = userService.findAll(spec, pageable).map(mapper::toDto);
+
+        }
+
+        if(!userDtoPage.isEmpty()){
+
+            userDtoPage.toList()
                  .forEach(userDto -> userDto.add(linkTo(methodOn(UserController.class)
                          .getOneUser(userDto.getUserId()))
                          .withSelfRel()));
         }
 
-        return page;
+        return userDtoPage;
 
     }
 

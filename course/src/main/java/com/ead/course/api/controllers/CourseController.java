@@ -1,10 +1,10 @@
 package com.ead.course.api.controllers;
 
+import com.ead.course.domain.mapper.CourseMapper;
 import com.ead.course.domain.models.dtos.CourseDto;
 import com.ead.course.domain.models.forms.CourseForm;
 import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.services.CourseService;
-import com.ead.course.domain.mapper.CourseMapper;
 import com.ead.course.domain.specifications.SpecificationTemplate;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @Log4j2
@@ -42,15 +44,26 @@ public class CourseController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<CourseDto> getAllCourses(SpecificationTemplate.CourseSpec spec,
-                                         @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable){
+                                         @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
+                                         @RequestParam(required = false) UUID userId) {
 
-        return courseService.findAll(spec, pageable).map(mapper::toDto);
+        if (Objects.nonNull(userId)) {
+
+            return courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable).map(mapper::toDto);
+
+        }
+
+        if (Objects.isNull(userId)) {
+
+        }
+            return courseService.findAll(spec, pageable).map(mapper::toDto);
 
     }
 
+
     @GetMapping("/{courseID}")
     @ResponseStatus(HttpStatus.OK)
-    public CourseDto getOneCourse(@PathVariable(value = "courseID") UUID courseID){
+    public CourseDto getOneCourse(@PathVariable(value = "courseID") UUID courseID) {
 
         return mapper.toDto(courseService.findById(courseID));
 
@@ -59,7 +72,7 @@ public class CourseController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CourseDto saveCourse(@RequestBody @Valid CourseForm courseForm){
+    public CourseDto saveCourse(@RequestBody @Valid CourseForm courseForm) {
 
         log.debug("POST saveCourse received {} ", courseForm);
 
@@ -76,7 +89,7 @@ public class CourseController {
 
     @DeleteMapping("/{courseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCourse(@PathVariable(value="courseId") UUID courseId){
+    public void deleteCourse(@PathVariable(value = "courseId") UUID courseId) {
 
         log.debug("DELETE deleteCourse received courseId {} ", courseId);
 
@@ -89,17 +102,17 @@ public class CourseController {
 
     @PutMapping("/{courseId}")
     @ResponseStatus(HttpStatus.OK)
-    public CourseDto updateCourse(@PathVariable(value="courseId") UUID courseId,
-                                  @RequestBody @Valid CourseUpdateForm courseUpdateForm){
+    public CourseDto updateCourse(@PathVariable(value = "courseId") UUID courseId,
+                                  @RequestBody @Valid CourseUpdateForm courseUpdateForm) {
 
-      log.debug("PUT updateCourse received {} ", courseUpdateForm);
+        log.debug("PUT updateCourse received {} ", courseUpdateForm);
 
-      var courseModel = courseService.updateCourse(courseId, courseUpdateForm);
+        var courseModel = courseService.updateCourse(courseId, courseUpdateForm);
 
-      log.debug("PUT updateCourse update courseId {} ", courseModel.getCourseId());
-      log.info("Course update sucessfully courseId {}", courseModel.getCourseId());
+        log.debug("PUT updateCourse update courseId {} ", courseModel.getCourseId());
+        log.info("Course update sucessfully courseId {}", courseModel.getCourseId());
 
-      return mapper.toDto(courseModel);
+        return mapper.toDto(courseModel);
 
 
     }
