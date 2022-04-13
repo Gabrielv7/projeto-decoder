@@ -1,7 +1,7 @@
-package com.ead.authuser.api.controllers;
+package com.ead.course.api.controllers;
 
-import com.ead.authuser.infrastructure.clients.MsCourse;
-import com.ead.authuser.infrastructure.domain.model.dtos.CourseDto;
+import com.ead.course.infrastructure.clients.MsAuthUser;
+import com.ead.course.infrastructure.models.dto.UserDto;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,19 +20,21 @@ import java.util.UUID;
 @Log4j2
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
-public class UserCourseController {
+public class CourseUserController {
 
     @Autowired
-    MsCourse msCourse;
+    MsAuthUser msAuthUser;
 
-    @GetMapping("/users/{userId}/courses")
+    @GetMapping("/courses/{courseId}/users")
     @ResponseStatus(HttpStatus.OK)
-    public Page<CourseDto> getAllCoursesByUser(@PathVariable(value = "userId") UUID userId,
-                                                               @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public Page<UserDto> getAllUsersByCourse(@PathVariable(value = "courseId") UUID courseId,
+                                             @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        log.info("GET getAllCoursesByUser received userId {} ", userId);
+        log.info("GET getAllUsersByCourse received courseId {} ", courseId);
 
-        return msCourse.getAllCoursesByUser(pageable, userId);
+        return msAuthUser.getAllUsersByCourse(pageable, courseId);
 
     }
+
+
 }

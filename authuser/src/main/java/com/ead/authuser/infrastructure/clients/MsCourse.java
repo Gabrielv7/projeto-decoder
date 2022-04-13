@@ -37,8 +37,8 @@ public class MsCourse {
 
         String url = utilsService.createUrl(userId, pageable);
 
-        log.debug("Request URL: {} ", url);
-        log.info("Request URL: {} ", url);
+        log.debug("Request ms-course URL: {} ", url);
+        log.info("Request ms-course URL: {} ", url);
 
         try {
 
@@ -46,17 +46,17 @@ public class MsCourse {
             ResponseEntity<ResponsePageDto<CourseDto>> result = restTemplate.exchange(url, HttpMethod.GET, null, responseType);
             searchResult = result.getBody().getContent();
 
-            log.info("Response {} ", result.getStatusCode());
+            log.info("Response ms-course {} ", result.getStatusCode());
 
-            log.debug("Response Number of Elements: {} ", searchResult.size());
+            log.debug("Response ms-course Number of Elements: {} ", searchResult.size());
 
         }catch (HttpStatusCodeException e){
 
-            log.error("Error request /courses {} ", e);
+            log.error("Error request /ms-course {} ", e);
 
         }
 
-        log.info("Ending request/ courses userId {} ", userId);
+        log.info("Ending request/ ms-course {} ", userId);
 
         return new PageImpl<>(searchResult);
 
