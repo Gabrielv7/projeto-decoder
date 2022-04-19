@@ -64,6 +64,16 @@ public class MsAuthUser {
 
     }
 
+    public ResponseEntity<UserDto> getOneUserById (UUID userId) {
+
+        String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId;
+
+        log.debug("Request ms-authuser URL: {} ", url);
+        log.info("Request ms-authuser URL: {} ", url);
+
+        return restTemplate.exchange(url, HttpMethod.GET, null, UserDto.class);
+
+    }
 
 
 }
