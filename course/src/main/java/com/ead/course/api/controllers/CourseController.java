@@ -6,6 +6,7 @@ import com.ead.course.domain.models.forms.CourseForm;
 import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.services.CourseService;
 import com.ead.course.domain.specifications.SpecificationTemplate;
+import com.ead.course.validation.CourseValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +43,9 @@ public class CourseController {
 
     @Autowired
     CourseMapper mapper;
+
+    @Autowired
+    CourseValidator courseValidator;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -71,10 +77,17 @@ public class CourseController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public CourseDto saveCourse(@RequestBody @Valid CourseForm courseForm) {
+    public ResponseEntity<Object> saveCourse(@RequestBody CourseForm courseForm, Errors errors) {
 
         log.debug("POST saveCourse received {} ", courseForm);
+
+        courseValidator.validate(courseForm, errors);
+
+        if(errors.hasErrors()){
+
+            return ResponseEntity.badRequest().body(errors.getAllErrors());
+
+        }
 
         var courseModel = mapper.toEntity(courseForm);
 
@@ -83,7 +96,7 @@ public class CourseController {
         log.debug("POST saveCourse saved courseId {} ", courseModel.getCourseId());
         log.info("Course save sucessfully courseId {}", courseModel.getCourseId());
 
-        return mapper.toDto(courseModel);
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDto(courseModel));
 
     }
 
