@@ -2,6 +2,7 @@ package com.ead.course.infrastructure.clients;
 
 import com.ead.course.infrastructure.models.dto.ResponsePageDto;
 import com.ead.course.infrastructure.models.dto.UserDto;
+import com.ead.course.infrastructure.models.form.CourseUserForm;
 import com.ead.course.infrastructure.service.UtilsService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,4 +77,20 @@ public class MsAuthUser {
     }
 
 
+    public void postSubscriptionUserInCourse(UUID courseId, UUID userId) {
+
+        String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId + "/courses/subscription";
+
+        log.debug("Request ms-authuser URL: {} ", url);
+        log.info("Request ms-authuser URL: {} ", url);
+
+        var courseUserForm = new CourseUserForm();
+        courseUserForm.setCourseId(courseId);
+        courseUserForm.setUserId(userId);
+
+        restTemplate.postForObject(url, courseUserForm, String.class);
+
+
+
+    }
 }
