@@ -1,14 +1,14 @@
 package com.ead.authuser.domain.services.impl;
 
-import com.ead.authuser.domain.model.enums.UserStatus;
-import com.ead.authuser.domain.model.enums.UserType;
 import com.ead.authuser.common.exception.EmailExistsException;
 import com.ead.authuser.common.exception.PasswordInvalidException;
 import com.ead.authuser.common.exception.UserNameExistsException;
 import com.ead.authuser.common.exception.UserNotFoundException;
+import com.ead.authuser.domain.model.UserModel;
+import com.ead.authuser.domain.model.enums.UserStatus;
+import com.ead.authuser.domain.model.enums.UserType;
 import com.ead.authuser.domain.model.forms.UserUpdateForm;
 import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
-import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -130,6 +130,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
         return userRepository.findAll(spec, pageable);
+    }
+
+    @Transactional
+    @Override
+    public UserModel saveSubscriptionInstructor(UserModel userModel) {
+
+        userModel.setUserType(UserType.INSTRUCTOR);
+
+        return userRepository.save(userModel);
+
     }
 
 }
