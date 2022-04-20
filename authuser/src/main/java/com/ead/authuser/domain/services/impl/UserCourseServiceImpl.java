@@ -1,5 +1,6 @@
 package com.ead.authuser.domain.services.impl;
 
+import com.ead.authuser.common.exception.SubscriptionExistsException;
 import com.ead.authuser.domain.model.UserCourseModel;
 import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.repositories.UserCourseRepository;
@@ -16,9 +17,15 @@ public class UserCourseServiceImpl implements UserCourseService {
     UserCourseRepository userCourseRepository;
 
     @Override
-    public boolean existsByUserAndCourseId(UserModel userModel, UUID courseId) {
+    public void existsByUserAndCourseId(UserModel userModel, UUID courseId) {
 
-        return userCourseRepository.existsByUserAndCourseId(userModel, courseId);
+        var verify =  userCourseRepository.existsByUserAndCourseId(userModel, courseId);
+
+        if(verify) {
+
+            throw new SubscriptionExistsException("Subscription already exists!");
+
+        }
 
     }
 

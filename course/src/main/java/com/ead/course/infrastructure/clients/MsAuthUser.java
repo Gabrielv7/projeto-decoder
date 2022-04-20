@@ -67,17 +67,25 @@ public class MsAuthUser {
 
     public ResponseEntity<UserDto> getOneUserById (UUID userId) {
 
+        log.info("Request ms-authuser getOneUserById sending userId: {} ", userId);
+
         String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId;
 
         log.debug("Request ms-authuser URL: {} ", url);
         log.info("Request ms-authuser URL: {} ", url);
 
-        return restTemplate.exchange(url, HttpMethod.GET, null, UserDto.class);
+        var result = restTemplate.exchange(url, HttpMethod.GET, null, UserDto.class);
+
+        log.info("Response ms-authuser {} ", result.getStatusCode().value());
+
+        return result;
 
     }
 
 
     public void postSubscriptionUserInCourse(UUID courseId, UUID userId) {
+
+        log.info("Request ms-authuser postSubscriptionUserInCourse sending userId: {} and courseId: {} ", userId, courseId);
 
         String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId + "/courses/subscription";
 
@@ -89,8 +97,6 @@ public class MsAuthUser {
         courseUserForm.setUserId(userId);
 
         restTemplate.postForObject(url, courseUserForm, String.class);
-
-
 
     }
 }

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface CourseUserService {
 
-    boolean existsByCourseAndUserId(CourseModel courseModel, UUID userId);
+    void existsByCourseAndUserId(CourseModel courseModel, UUID userId);
 
     CourseUserModel saveAndSendSubscriptionUserInCourse(CourseUserModel courseUserModel);
 }

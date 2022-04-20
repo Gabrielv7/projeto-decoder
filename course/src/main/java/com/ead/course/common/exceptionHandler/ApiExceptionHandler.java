@@ -4,6 +4,7 @@ import com.ead.course.common.exceptions.CourseNotFoundException;
 import com.ead.course.common.exceptions.CourseOrModuleNotFoundException;
 import com.ead.course.common.exceptions.LessonOrModuleNotFoundException;
 import com.ead.course.common.exceptions.ModuleNotFoundException;
+import com.ead.course.common.exceptions.SubscriptionExistsException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(ex.getMessage());
 
         var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+    @ExceptionHandler(SubscriptionExistsException.class)
+    public ResponseEntity<Object> handleSubscriptionExistsException(SubscriptionExistsException ex, WebRequest request){
+
+        log.error(ex.getMessage());
+
+        var status = HttpStatus.CONFLICT;
 
         var problem = createProblem(ex.getMessage(), status.value());
 

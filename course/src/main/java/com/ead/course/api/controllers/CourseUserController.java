@@ -55,18 +55,13 @@ public class CourseUserController {
     public ResponseEntity<Object> saveSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
                                                                @RequestBody @Valid SubscriptionForm subscriptionForm) {
 
+        log.info("POST saveSubscriptionUserInCourse received courseId {} and subscriptionForm {} ", courseId, subscriptionForm);
 
         // Busca o curso pelo ID
         var courseFind = courseService.findById(courseId);
 
         // Verifica se o usuário já está cadastrado no curso
-        if(courseUserService.existsByCourseAndUserId(courseFind, subscriptionForm.getUserId())) {
-
-            log.info("Subscription already exists!");
-
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Subscription already exists!");
-
-        }
+        courseUserService.existsByCourseAndUserId(courseFind, subscriptionForm.getUserId());
 
         try {
           // busca o usuário no microserviço de authuser

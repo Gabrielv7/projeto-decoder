@@ -1,5 +1,6 @@
 package com.ead.authuser.api.controllers;
 
+import com.ead.authuser.domain.model.UserCourseModel;
 import com.ead.authuser.domain.model.dtos.UserCourseForm;
 import com.ead.authuser.domain.services.UserCourseService;
 import com.ead.authuser.domain.services.UserService;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,20 +50,19 @@ public class UserCourseController {
     }
 
     @PostMapping("/users/{userId}/courses/subscription")
-    public ResponseEntity<Object> saveSubscriptionUserInCourse(@PathVariable(value = "userId") UUID userId,
-                                                               @RequestBody @Valid UserCourseForm userCourseForm) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserCourseModel saveSubscriptionUserInCourse(@PathVariable(value = "userId") UUID userId,
+                                                        @RequestBody @Valid UserCourseForm userCourseForm) {
 
+        log.info("POST saveSubscriptionUserInCourse received userId {} and {} ", userId, userCourseForm);
+
+        // busca um usuário pelo Id
         var userFind = userService.findById(userId);
 
-        if(userCourseService.existsByUserAndCourseId(userFind, userCourseForm.getCourseId())){
+        // verifica se o usuário já está cadastrado no curso
+        userCourseService.existsByUserAndCourseId(userFind, userCourseForm.getCourseId());
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Subscription already exists!");
-
-        }
-
-        var userCourseModel = userCourseService.save(userFind.convertToUserCourseModel(userCourseForm.getCourseId()));
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userCourseModel);
+        return userCourseService.save(userFind.convertToUserCourseModel(userCourseForm.getCourseId()));
 
     }
 
