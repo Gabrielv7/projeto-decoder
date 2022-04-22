@@ -9,6 +9,7 @@ import com.ead.authuser.domain.model.enums.UserStatus;
 import com.ead.authuser.domain.model.enums.UserType;
 import com.ead.authuser.domain.model.forms.UserUpdateForm;
 import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
+import com.ead.authuser.domain.repositories.UserCourseRepository;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -27,7 +28,10 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
+
+    @Autowired
+    UserCourseRepository userCourseRepository;
 
     @Override
     public List<UserModel> findAll() {
@@ -46,6 +50,14 @@ public class UserServiceImpl implements UserService {
     public void delete(UUID userId) {
 
         var user = this.findById(userId);
+
+        var userCourseModelList = userCourseRepository.findAllUserCourseIntoUser(userId);
+
+        if(!userCourseModelList.isEmpty()){
+
+            userCourseRepository.deleteAll(userCourseModelList);
+
+        }
 
         userRepository.deleteById(user.getUserId());
 

@@ -1,10 +1,11 @@
 package com.ead.course.domain.services.impl;
 
 import com.ead.course.common.exceptions.CourseNotFoundException;
-import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.models.CourseModel;
 import com.ead.course.domain.models.ModuleModel;
+import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.repositories.CourseRepository;
+import com.ead.course.domain.repositories.CourseUserRepository;
 import com.ead.course.domain.repositories.LessonRepository;
 import com.ead.course.domain.repositories.ModuleRepository;
 import com.ead.course.domain.services.CourseService;
@@ -28,6 +29,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     LessonRepository lessonRepository;
+
+    @Autowired
+    CourseUserRepository courseUserRepository;
 
     @Transactional
     @Override
@@ -72,13 +76,13 @@ public class CourseServiceImpl implements CourseService {
 
         var moduleModelList = moduleRepository.findAllModulesIntoCourse(courseId);
 
-        if(!moduleModelList.isEmpty()){
+        if(!moduleModelList.isEmpty()) {
 
-            for(ModuleModel moduleModel : moduleModelList){
+            for (ModuleModel moduleModel : moduleModelList) {
 
                 var lessonModelList = lessonRepository.findAllLessonIntoModule(moduleModel.getModuleId());
 
-                if(!lessonModelList.isEmpty()){
+                if (!lessonModelList.isEmpty()) {
 
                     lessonRepository.deleteAll(lessonModelList);
 
@@ -86,6 +90,13 @@ public class CourseServiceImpl implements CourseService {
             }
 
             moduleRepository.deleteAll(moduleModelList);
+        }
+
+        var courseUserModelList = courseUserRepository.findAllCourseUserIntoCourse(courseId);
+
+        if(!courseUserModelList.isEmpty()){
+
+            courseUserRepository.deleteAll(courseUserModelList);
 
         }
 
