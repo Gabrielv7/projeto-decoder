@@ -9,6 +9,7 @@ import com.ead.course.domain.repositories.CourseUserRepository;
 import com.ead.course.domain.repositories.LessonRepository;
 import com.ead.course.domain.repositories.ModuleRepository;
 import com.ead.course.domain.services.CourseService;
+import com.ead.course.infrastructure.clients.MsAuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     CourseUserRepository courseUserRepository;
+
+    @Autowired
+    MsAuthUser msAuthUser;
 
     @Transactional
     @Override
@@ -74,33 +78,55 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void delete(UUID courseId) {
 
+        // verifica se tem modulos relacionados a um curso
         var moduleModelList = moduleRepository.findAllModulesIntoCourse(courseId);
 
+        // se a lista não estiver vazia
         if(!moduleModelList.isEmpty()) {
 
             for (ModuleModel moduleModel : moduleModelList) {
 
+                // verifica se tem lessons relacionadas a um modulo
                 var lessonModelList = lessonRepository.findAllLessonIntoModule(moduleModel.getModuleId());
 
+                // se a lista não estiver vazia
                 if (!lessonModelList.isEmpty()) {
 
+                    // deleta as lessons vinculadas a um modulo
                     lessonRepository.deleteAll(lessonModelList);
 
                 }
             }
 
+            // deleta os modulos vinculados a um curso
             moduleRepository.deleteAll(moduleModelList);
         }
 
+        // verifica se tem CourseUser vinculados a um curso
         var courseUserModelList = courseUserRepository.findAllCourseUserIntoCourse(courseId);
 
+        // variavel de controle para definir se precisa deletar essa relação no ms authuser
+        boolean deleteCourseUserInAuthUser = false;
+
+        // se a lista não estiver vazia
         if(!courseUserModelList.isEmpty()){
 
+            // deleta os CourseUsers vinculados a um curso
             courseUserRepository.deleteAll(courseUserModelList);
 
+            // necessário deletar essa relação no ms authuser
+            deleteCourseUserInAuthUser = true;
         }
 
+        // deleta o curso
         courseRepository.deleteById(courseId);
+
+        if(deleteCourseUserInAuthUser){
+
+            // deleta a relação no lado do ms authuser
+            msAuthUser.deleteCourseInAuthUser(courseId);
+
+        }
 
     }
 }

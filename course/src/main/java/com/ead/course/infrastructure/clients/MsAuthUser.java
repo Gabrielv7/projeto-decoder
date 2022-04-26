@@ -99,4 +99,14 @@ public class MsAuthUser {
         restTemplate.postForObject(url, courseUserForm, String.class);
 
     }
+
+    public void deleteCourseInAuthUser(UUID courseId) {
+
+       log.info("Request ms-authuser deleteCourseInAuthUser sending courseId: {}", courseId);
+
+       String url = REQUEST_URI_MS_AUTHUSER + "/users/courses/" + courseId;
+
+       restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
+
+    }
 }

@@ -13,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,6 +65,21 @@ public class UserCourseController {
         userCourseService.existsByUserAndCourseId(userFind, userCourseForm.getCourseId());
 
         return userCourseService.save(userFind.convertToUserCourseModel(userCourseForm.getCourseId()));
+
+    }
+
+    @DeleteMapping("/users/courses/{courseId}")
+    public ResponseEntity<Object> deleteUserCourseByCourse(@PathVariable(value = "courseId") UUID courseId){
+
+        log.info("DELETE deleteUserCourseByCourse received courseId {} ", courseId);
+
+        // verifica se existe o cursoId
+        userCourseService.existsByCourseId(courseId);
+
+        // deleta o usuário pelo cursoId
+        userCourseService.deleteUserCourseByCourse(courseId);
+
+        return ResponseEntity.ok("UserCourse deleted sucessfully.");
 
     }
 

@@ -3,6 +3,7 @@ package com.ead.authuser.common.exceptionhandler;
 import com.ead.authuser.common.exception.EmailExistsException;
 import com.ead.authuser.common.exception.PasswordInvalidException;
 import com.ead.authuser.common.exception.SubscriptionExistsException;
+import com.ead.authuser.common.exception.UserCourseNotFoundException;
 import com.ead.authuser.common.exception.UserNameExistsException;
 import com.ead.authuser.common.exception.UserNotFoundException;
 import lombok.extern.log4j.Log4j2;
@@ -75,6 +76,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         var problem = createProblem(ex.getMessage(), status.value());
 
         return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+    @ExceptionHandler(UserCourseNotFoundException.class)
+    public ResponseEntity<Object> handleUserCourseNotFoundException(UserCourseNotFoundException ex, WebRequest request){
+
+        log.error(ex.getMessage());
+
+        var problem = createProblem(ex.getMessage(), HttpStatus.NOT_FOUND.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 
     }
 

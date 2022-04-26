@@ -45,6 +45,8 @@ public class CourseUserController {
     public Page<UserDto> getAllUsersByCourse(@PathVariable(value = "courseId") UUID courseId,
                                              @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
+        courseService.findById(courseId);
+
         log.info("GET getAllUsersByCourse received courseId {} ", courseId);
 
         return msAuthUser.getAllUsersByCourse(pageable, courseId);
