@@ -1,5 +1,6 @@
 package com.ead.course.domain.services.impl;
 
+import com.ead.course.common.exceptions.CourseUserNotFoundException;
 import com.ead.course.common.exceptions.SubscriptionExistsException;
 import com.ead.course.domain.models.CourseModel;
 import com.ead.course.domain.models.CourseUserModel;
@@ -46,5 +47,24 @@ public class CourseUserServiceImpl implements CourseUserService {
         msAuthUser.postSubscriptionUserInCourse(courseUserModelSave.getCourse().getCourseId(), courseUserModelSave.getUserId());
 
         return courseUserModelSave;
+    }
+
+    @Override
+    public void existsByUserId(UUID userId) {
+
+        if(!courseUserRepository.existsByUserId(userId)){
+
+            throw new CourseUserNotFoundException("CourseUser not found.");
+
+        }
+
+    }
+
+    @Transactional
+    @Override
+    public void deleteCourseUserByUser(UUID userId) {
+
+        courseUserRepository.deleteAllByUserId(userId);
+
     }
 }

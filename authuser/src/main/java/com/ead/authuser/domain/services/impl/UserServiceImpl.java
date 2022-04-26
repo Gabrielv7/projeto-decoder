@@ -12,6 +12,7 @@ import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.repositories.UserCourseRepository;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
+import com.ead.authuser.infrastructure.clients.MsCourse;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserCourseRepository userCourseRepository;
 
+    @Autowired
+    MsCourse msCourse;
+
     @Override
     public List<UserModel> findAll() {
         return userRepository.findAll();
@@ -49,17 +53,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(UUID userId) {
 
+        // verifica se o usuário existe
         var user = this.findById(userId);
 
+        // verifica se tem UserCourse vinculados a um user
         var userCourseModelList = userCourseRepository.findAllUserCourseIntoUser(userId);
 
+        // variavel de controle para definir se precisa deletar essa relação no ms course
+        boolean deleteUserCourseInCourse = false;
+
+        // se a lista não estiver vazia
         if(!userCourseModelList.isEmpty()){
 
+            // deleta os UsersCourse vinculados a um user
             userCourseRepository.deleteAll(userCourseModelList);
+
+            // necessário deletar essa relação no ms course
+            deleteUserCourseInCourse = true;
 
         }
 
+        // deleta o user
         userRepository.deleteById(user.getUserId());
+
+        if(deleteUserCourseInCourse){
+            // deleta a relação no lado de ms course
+            msCourse.deleteUserInCourse(userId);
+
+        }
 
     }
 

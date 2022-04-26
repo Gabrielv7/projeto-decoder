@@ -2,6 +2,7 @@ package com.ead.course.common.exceptionHandler;
 
 import com.ead.course.common.exceptions.CourseNotFoundException;
 import com.ead.course.common.exceptions.CourseOrModuleNotFoundException;
+import com.ead.course.common.exceptions.CourseUserNotFoundException;
 import com.ead.course.common.exceptions.LessonOrModuleNotFoundException;
 import com.ead.course.common.exceptions.ModuleNotFoundException;
 import com.ead.course.common.exceptions.SubscriptionExistsException;
@@ -87,6 +88,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
 
+    @ExceptionHandler(CourseUserNotFoundException.class)
+    public ResponseEntity<Object> handleCourseUserNotFoundException(CourseUserNotFoundException ex, WebRequest request) {
+
+        log.error(ex.getMessage());
+
+        var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
 
     private Problem createProblem(String message, Integer status){
 

@@ -67,8 +67,6 @@ public class MsAuthUser {
 
     public ResponseEntity<UserDto> getOneUserById (UUID userId) {
 
-        log.info("Request ms-authuser getOneUserById sending userId: {} ", userId);
-
         String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId;
 
         log.debug("Request ms-authuser URL: {} ", url);
@@ -85,8 +83,6 @@ public class MsAuthUser {
 
     public void postSubscriptionUserInCourse(UUID courseId, UUID userId) {
 
-        log.info("Request ms-authuser postSubscriptionUserInCourse sending userId: {} and courseId: {} ", userId, courseId);
-
         String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId + "/courses/subscription";
 
         log.debug("Request ms-authuser URL: {} ", url);
@@ -102,9 +98,10 @@ public class MsAuthUser {
 
     public void deleteCourseInAuthUser(UUID courseId) {
 
-       log.info("Request ms-authuser deleteCourseInAuthUser sending courseId: {}", courseId);
-
        String url = REQUEST_URI_MS_AUTHUSER + "/users/courses/" + courseId;
+
+        log.debug("Request ms-authuser URL: {} ", url);
+        log.info("Request ms-authuser URL: {} ", url);
 
        restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
 
