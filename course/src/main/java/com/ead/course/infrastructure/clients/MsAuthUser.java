@@ -65,7 +65,7 @@ public class MsAuthUser {
 
     }
 
-    public ResponseEntity<UserDto> getOneUserById (UUID userId) {
+    public UserDto getOneUserById (UUID userId) {
 
         String url = REQUEST_URI_MS_AUTHUSER + "/users/" + userId;
 
@@ -76,7 +76,7 @@ public class MsAuthUser {
 
         log.info("Response ms-authuser {} ", result.getStatusCode().value());
 
-        return result;
+        return result.getBody();
 
     }
 

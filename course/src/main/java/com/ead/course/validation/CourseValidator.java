@@ -49,7 +49,7 @@ public class CourseValidator implements Validator {
 
             var responseUser = msAuthUser.getOneUserById(userInstructor);
 
-            if(responseUser.getBody().getUserType().equals(UserType.STUDENT)){
+            if(responseUser.getUserType().equals(UserType.STUDENT)){
 
                 errors.rejectValue("userInstructor", "UserInstructorError", "User must be INSTRUCTOR or ADMIN");
 

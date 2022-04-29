@@ -71,7 +71,7 @@ public class CourseUserController {
          var responseUser = msAuthUser.getOneUserById(subscriptionForm.getUserId());
 
             // verifica se o usuário está bloqueado
-            if(responseUser.getBody().getUserStatus().equals(UserStatus.BLOCKED)){
+            if(responseUser.getUserStatus().equals(UserStatus.BLOCKED)){
 
                 log.info("User is blocked");
 
