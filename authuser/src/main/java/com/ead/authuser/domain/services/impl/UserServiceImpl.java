@@ -9,7 +9,6 @@ import com.ead.authuser.domain.model.enums.UserStatus;
 import com.ead.authuser.domain.model.enums.UserType;
 import com.ead.authuser.domain.model.forms.UserUpdateForm;
 import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
-import com.ead.authuser.domain.repositories.UserCourseRepository;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
 import com.ead.authuser.infrastructure.clients.MsCourse;
@@ -32,9 +31,6 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Autowired
-    UserCourseRepository userCourseRepository;
-
-    @Autowired
     MsCourse msCourse;
 
     @Override
@@ -53,34 +49,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(UUID userId) {
 
-        // verifica se o usuário existe
         var user = this.findById(userId);
 
-        // verifica se tem UserCourse vinculados a um user
-        var userCourseModelList = userCourseRepository.findAllUserCourseIntoUser(userId);
-
-        // variavel de controle para definir se precisa deletar essa relação no ms course
-        boolean deleteUserCourseInCourse = false;
-
-        // se a lista não estiver vazia
-        if(!userCourseModelList.isEmpty()){
-
-            // deleta os UsersCourse vinculados a um user
-            userCourseRepository.deleteAll(userCourseModelList);
-
-            // necessário deletar essa relação no ms course
-            deleteUserCourseInCourse = true;
-
-        }
-
-        // deleta o user
         userRepository.deleteById(user.getUserId());
-
-        if(deleteUserCourseInCourse){
-            // deleta a relação no lado de ms course
-            msCourse.deleteUserInCourse(userId);
-
-        }
 
     }
 

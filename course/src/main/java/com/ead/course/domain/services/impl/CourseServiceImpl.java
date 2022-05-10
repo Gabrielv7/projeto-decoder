@@ -5,11 +5,10 @@ import com.ead.course.domain.models.CourseModel;
 import com.ead.course.domain.models.ModuleModel;
 import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.repositories.CourseRepository;
-import com.ead.course.domain.repositories.CourseUserRepository;
 import com.ead.course.domain.repositories.LessonRepository;
 import com.ead.course.domain.repositories.ModuleRepository;
+import com.ead.course.domain.repositories.UserRepository;
 import com.ead.course.domain.services.CourseService;
-import com.ead.course.infrastructure.clients.MsAuthUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,10 +31,8 @@ public class CourseServiceImpl implements CourseService {
     LessonRepository lessonRepository;
 
     @Autowired
-    CourseUserRepository courseUserRepository;
+    UserRepository userRepository;
 
-    @Autowired
-    MsAuthUser msAuthUser;
 
     @Transactional
     @Override
@@ -102,31 +99,9 @@ public class CourseServiceImpl implements CourseService {
             moduleRepository.deleteAll(moduleModelList);
         }
 
-        // verifica se tem CourseUser vinculados a um curso
-        var courseUserModelList = courseUserRepository.findAllCourseUserIntoCourse(courseId);
-
-        // variavel de controle para definir se precisa deletar essa relação no ms authuser
-        boolean deleteCourseUserInAuthUser = false;
-
-        // se a lista não estiver vazia
-        if(!courseUserModelList.isEmpty()){
-
-            // deleta os CourseUsers vinculados a um curso
-            courseUserRepository.deleteAll(courseUserModelList);
-
-            // necessário deletar essa relação no ms authuser
-            deleteCourseUserInAuthUser = true;
-        }
 
         // deleta o curso
         courseRepository.deleteById(courseId);
-
-        if(deleteCourseUserInAuthUser){
-
-            // deleta a relação no lado do ms authuser
-            msAuthUser.deleteCourseInAuthUser(courseId);
-
-        }
 
     }
 }

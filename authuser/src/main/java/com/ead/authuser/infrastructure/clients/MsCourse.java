@@ -64,14 +64,4 @@ public class MsCourse {
 
     }
 
-
-    public void deleteUserInCourse(UUID userId) {
-
-        String url = REQUEST_URL_MS_COURSE + "/courses/users/" + userId;
-
-        log.debug("Request ms-course URL: {} ", url);
-
-        restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
-
-    }
 }

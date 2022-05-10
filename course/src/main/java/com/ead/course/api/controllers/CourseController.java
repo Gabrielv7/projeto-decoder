@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Objects;
 import java.util.UUID;
 
 @Log4j2
@@ -53,16 +52,7 @@ public class CourseController {
                                          @PageableDefault(page = 0, size = 10, sort = "courseId", direction = Sort.Direction.ASC) Pageable pageable,
                                          @RequestParam(required = false) UUID userId) {
 
-        if (Objects.nonNull(userId)) {
-
-            return courseService.findAll(SpecificationTemplate.courseUserId(userId).and(spec), pageable).map(mapper::toDto);
-
-        }
-
-        if (Objects.isNull(userId)) {
-
-        }
-            return courseService.findAll(spec, pageable).map(mapper::toDto);
+        return courseService.findAll(spec, pageable).map(mapper::toDto);
 
     }
 

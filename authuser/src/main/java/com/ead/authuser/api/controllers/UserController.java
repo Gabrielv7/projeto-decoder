@@ -21,12 +21,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Objects;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -47,22 +45,9 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<UserDto> getAllUsers(SpecificationTemplate.UserSpec spec,
-                                     @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
-                                     @RequestParam(required = false) UUID courseId){
+                                     @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable){
 
-        Page<UserDto> userDtoPage = null;
-
-        if(Objects.nonNull(courseId)){
-
-            userDtoPage = userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable).map(mapper::toDto);
-
-        }
-
-        if(Objects.isNull(courseId)){
-
-            userDtoPage = userService.findAll(spec, pageable).map(mapper::toDto);
-
-        }
+        Page<UserDto> userDtoPage = userService.findAll(spec, pageable).map(mapper::toDto);
 
         if(!userDtoPage.isEmpty()){
 
