@@ -2,6 +2,7 @@ package com.ead.authuser.domain.model.forms;
 
 import com.ead.authuser.validation.UsernameConstraint;
 import lombok.Data;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -28,6 +29,10 @@ public class UserForm {
 
     private String phoneNumber;
 
+    @CPF
     private String cpf;
+
+    @NotBlank
+    private String imageUrl;
 
 }

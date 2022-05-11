@@ -12,7 +12,7 @@ spring:
     password: root
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
       dialect: org.hibernate.dialect.PostgreSQLDialect
       jdbc:
         lob.non.contextual-creation: true
@@ -36,6 +36,12 @@ ead:
     api:
       url:
         authuser: 'http://ead-authuser-service/ead-authuser'
+    broker:
+      exchange:
+       userEventeExchange: ead.userevent
+      queue:
+        userEventQueue:
+          name: ead.userevent.ms.course
 
 eureka:
   client:
