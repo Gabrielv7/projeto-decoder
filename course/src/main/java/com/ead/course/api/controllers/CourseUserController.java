@@ -3,6 +3,7 @@ package com.ead.course.api.controllers;
 import com.ead.course.domain.models.forms.SubscriptionForm;
 import com.ead.course.domain.services.CourseService;
 import com.ead.course.domain.services.UserService;
+import com.ead.course.domain.specifications.SpecificationTemplate;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +35,15 @@ public class CourseUserController {
 
     @GetMapping("/courses/{courseId}/users")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> getAllUsersByCourse(@PathVariable(value = "courseId") UUID courseId,
-                                             @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Object> getAllUsersByCourse(SpecificationTemplate.UserSpec spec,
+                                                      @PathVariable(value = "courseId") UUID courseId,
+                                                      @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
         courseService.findById(courseId);
 
         log.info("GET getAllUsersByCourse received courseId {} ", courseId);
 
-        return ResponseEntity.ok("");
+        return ResponseEntity.ok(userService.findAll(SpecificationTemplate.userCourseId(courseId).and(spec), pageable));
 
     }
 
