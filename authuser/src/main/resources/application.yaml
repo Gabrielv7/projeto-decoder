@@ -22,6 +22,8 @@ spring:
   output:
     ansi:
       enabled: always
+  rabbitmq:
+    addresses: amqps://shbnigfy:DNfgaXsEWH_Jrn_aWIkJFD9TFzXPdVOh@woodpecker.rmq.cloudamqp.com/shbnigfy
 
 logging:
   level:
