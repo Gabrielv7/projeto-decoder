@@ -29,4 +29,6 @@ public interface UserService {
     Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable);
 
     UserModel saveSubscriptionInstructor(UserModel userModel);
+
+    UserModel saveUser(UserModel userModel);
 }

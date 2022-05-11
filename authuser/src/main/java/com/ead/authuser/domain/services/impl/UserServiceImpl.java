@@ -5,6 +5,7 @@ import com.ead.authuser.common.exception.PasswordInvalidException;
 import com.ead.authuser.common.exception.UserNameExistsException;
 import com.ead.authuser.common.exception.UserNotFoundException;
 import com.ead.authuser.domain.model.UserModel;
+import com.ead.authuser.domain.model.enums.ActionType;
 import com.ead.authuser.domain.model.enums.UserStatus;
 import com.ead.authuser.domain.model.enums.UserType;
 import com.ead.authuser.domain.model.forms.UserUpdateForm;
@@ -12,6 +13,7 @@ import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
 import com.ead.authuser.infrastructure.clients.MsCourse;
+import com.ead.authuser.publishers.UserEventPublisher;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     MsCourse msCourse;
+
+    @Autowired
+    UserEventPublisher userEventPublisher;
 
     @Override
     public List<UserModel> findAll() {
@@ -145,5 +150,19 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userModel);
 
     }
+
+    @Transactional
+    @Override
+    public UserModel saveUser(UserModel userModel) {
+
+       var user = this.save(userModel);
+
+       userEventPublisher.publishUserEvent(user.converterToUserEventDto(), ActionType.CREATED);
+
+       return user;
+
+
+    }
+
 
 }

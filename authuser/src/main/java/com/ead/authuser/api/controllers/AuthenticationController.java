@@ -35,7 +35,7 @@ public class AuthenticationController {
 
         var userModel = userMapper.toEntity(userForm);
 
-        userService.save(userModel);
+        userService.saveUser(userModel);
 
         log.debug("POST registerUser saved userId {}", userModel.getUserId());
         log.info("User saved sucessfully userId {}", userModel.getUserId());

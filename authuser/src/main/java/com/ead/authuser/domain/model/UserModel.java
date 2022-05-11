@@ -1,11 +1,13 @@
 package com.ead.authuser.domain.model;
 
+import com.ead.authuser.domain.model.dtos.UserEventDto;
 import com.ead.authuser.domain.model.enums.UserStatus;
 import com.ead.authuser.domain.model.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.BeanUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,5 +67,17 @@ public class UserModel implements Serializable {
     @UpdateTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime lastUpdateDate;
+
+    public UserEventDto converterToUserEventDto(){
+
+        var userEventDto = new UserEventDto();
+
+        BeanUtils.copyProperties(this, userEventDto);
+
+        userEventDto.setUserType(this.getUserType().toString());
+        userEventDto.setUserStatus(this.getUserStatus().toString());
+
+        return userEventDto;
+    }
 
 }
