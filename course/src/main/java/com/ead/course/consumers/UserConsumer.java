@@ -30,9 +30,6 @@ public class UserConsumer {
         switch (ActionType.valueOf(userEventDto.getActionType())){
 
             case CREATED:
-                userService.save(userModel);
-                break;
-
             case UPDATE:
                 userService.save(userModel);
                 break;
