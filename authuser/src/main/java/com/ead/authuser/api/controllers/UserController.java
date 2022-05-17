@@ -75,7 +75,9 @@ public class UserController {
 
         log.debug("DELETE deleteUser received  {} ", userId);
 
-        userService.delete(userId);
+        var userModel = userService.findById(userId);
+
+        userService.deleteUser(userModel);
 
     }
 
@@ -86,7 +88,7 @@ public class UserController {
 
         log.debug("PUT updateUser userUpdateForm received {} ", userUpdateForm);
 
-        var userModel = userService.updateUser(userUpdateForm, userId);
+        var userModel = userService.updateUser(userId, mapper.toEntity(userUpdateForm));
 
         log.debug("PUT updateUser update userId {} ", userModel.getUserId());
         log.info("User update sucessfully userId {}", userModel.getUserId());
@@ -120,7 +122,7 @@ public class UserController {
 
         log.debug("PUT updateImage UserUpdateImageForm received {} ", userUpdateImageForm);
 
-        var userModel = userService.updateImageUser(userUpdateImageForm, userId);
+        var userModel = userService.updateUser(userId, mapper.toEntity(userUpdateImageForm));
 
         log.debug("PUT updateImage update userId {} ", userModel.getUserId());
         log.info("User update image sucessfully userId {} ", userModel.getUserId());

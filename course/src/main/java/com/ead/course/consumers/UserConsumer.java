@@ -33,6 +33,14 @@ public class UserConsumer {
                 userService.save(userModel);
                 break;
 
+            case UPDATE:
+                userService.save(userModel);
+                break;
+
+            case DELETE:
+                userService.delete(userModel.getUserId());
+                break;
+
         }
 
 

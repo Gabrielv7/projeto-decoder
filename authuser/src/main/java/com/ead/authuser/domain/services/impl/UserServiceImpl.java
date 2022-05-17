@@ -8,12 +8,11 @@ import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.model.enums.ActionType;
 import com.ead.authuser.domain.model.enums.UserStatus;
 import com.ead.authuser.domain.model.enums.UserType;
-import com.ead.authuser.domain.model.forms.UserUpdateForm;
-import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import com.ead.authuser.domain.repositories.UserRepository;
 import com.ead.authuser.domain.services.UserService;
 import com.ead.authuser.infrastructure.clients.MsCourse;
 import com.ead.authuser.publishers.UserEventPublisher;
+import com.google.common.base.MoreObjects;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,7 +21,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Log4j2
@@ -37,11 +35,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserEventPublisher userEventPublisher;
-
-    @Override
-    public List<UserModel> findAll() {
-        return userRepository.findAll();
-    }
 
     @Override
     public UserModel findById(UUID userId) {
@@ -94,45 +87,43 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserModel updateUser(UserUpdateForm userUpdateForm, UUID userId) {
+    public UserModel update(UUID userId, UserModel userModel) {
 
-        var userModel = this.findById(userId);
+        var oldUser = this.findById(userId);
 
-        userModel.setFullName(userUpdateForm.getFullName());
-        userModel.setPhoneNumber(userUpdateForm.getPhoneNumber());
+        oldUser.setUserId(userId);
+        oldUser.setUserName(MoreObjects.firstNonNull(userModel.getUserName(), oldUser.getUserName()));
+        oldUser.setEmail(MoreObjects.firstNonNull(userModel.getEmail(), oldUser.getEmail()));
+        oldUser.setPassword(MoreObjects.firstNonNull(userModel.getPassword(), oldUser.getPassword()));
+        oldUser.setFullName(MoreObjects.firstNonNull(userModel.getFullName(), oldUser.getFullName()));
+        oldUser.setUserStatus(MoreObjects.firstNonNull(userModel.getUserStatus(), oldUser.getUserStatus()));
+        oldUser.setUserType(MoreObjects.firstNonNull(userModel.getUserType(), oldUser.getUserType()));
+        oldUser.setPhoneNumber(MoreObjects.firstNonNull(userModel.getPhoneNumber(), oldUser.getPhoneNumber()));
+        oldUser.setCpf(MoreObjects.firstNonNull(userModel.getCpf(), oldUser.getCpf()));
+        oldUser.setImageUrl(MoreObjects.firstNonNull(userModel.getImageUrl(), oldUser.getImageUrl()));
 
-        return userRepository.save(userModel);
+        return oldUser;
 
-    }
-
-    @Transactional
-    @Override
-    public UserModel updateImageUser(UserUpdateImageForm userUpdateImageForm, UUID userId) {
-
-        var userModel = this.findById(userId);
-
-        userModel.setImageUrl(userUpdateImageForm.getImageUrl());
-
-        return userRepository.save(userModel);
     }
 
     @Transactional
     @Override
     public UserModel updatePassword(UUID userId, String oldPassword, String password) {
 
-        var userModel = this.findById(userId);
+        var oldUser = this.findById(userId);
 
-        if (!oldPassword.equals(userModel.getPassword())) {
+        if (!oldPassword.equals(oldUser.getPassword())) {
 
-            log.warn("Mismatched old password {} ", userModel.getPassword());
+            log.warn("Mismatched old password {} ", oldUser.getPassword());
 
             throw new PasswordInvalidException("Mismatched old password!");
 
         }
 
-        userModel.setPassword(password);
+        oldUser.setUserId(userId);
+        oldUser.setPassword(password);
 
-        return userRepository.save(userModel);
+        return oldUser;
 
     }
 
@@ -147,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
         userModel.setUserType(UserType.INSTRUCTOR);
 
-        return userRepository.save(userModel);
+        return this.updateUser(userModel.getUserId(), userModel);
 
     }
 
@@ -161,6 +152,27 @@ public class UserServiceImpl implements UserService {
 
        return user;
 
+
+    }
+
+    @Transactional
+    @Override
+    public void deleteUser(UserModel userModel) {
+
+        this.delete(userModel.getUserId());
+
+        userEventPublisher.publishUserEvent(userModel.converterToUserEventDto(), ActionType.DELETE);
+    }
+
+    @Transactional
+    @Override
+    public UserModel updateUser(UUID userId, UserModel userModel) {
+
+        var userUpdate = update(userId, userModel);
+
+        userEventPublisher.publishUserEvent(userUpdate.converterToUserEventDto(), ActionType.UPDATE);
+
+        return userUpdate;
 
     }
 

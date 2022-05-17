@@ -1,8 +1,10 @@
 package com.ead.authuser.domain.mapper;
 
+import com.ead.authuser.domain.model.UserModel;
 import com.ead.authuser.domain.model.dtos.UserDto;
 import com.ead.authuser.domain.model.forms.UserForm;
-import com.ead.authuser.domain.model.UserModel;
+import com.ead.authuser.domain.model.forms.UserUpdateForm;
+import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,6 +27,18 @@ public class UserMapper {
     public UserModel toEntity(UserForm userForm){
 
         return modelMapper.map(userForm, UserModel.class);
+
+    }
+
+    public UserModel toEntity(UserUpdateForm userUpdateForm){
+
+        return modelMapper.map(userUpdateForm, UserModel.class);
+
+    }
+
+    public UserModel toEntity(UserUpdateImageForm userUpdateImageForm){
+
+        return modelMapper.map(userUpdateImageForm, UserModel.class);
 
     }
 

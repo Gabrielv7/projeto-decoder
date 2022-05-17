@@ -1,18 +1,13 @@
 package com.ead.authuser.domain.services;
 
 import com.ead.authuser.domain.model.UserModel;
-import com.ead.authuser.domain.model.forms.UserUpdateForm;
-import com.ead.authuser.domain.model.forms.UserUpdateImageForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
-
-    List<UserModel> findAll();
 
     UserModel findById(UUID userId);
 
@@ -20,9 +15,7 @@ public interface UserService {
 
     UserModel save(UserModel userModel);
 
-    UserModel updateUser(UserUpdateForm userUpdateForm, UUID userId);
-
-    UserModel updateImageUser(UserUpdateImageForm userUpdateImageForm, UUID userId);
+    UserModel update(UUID userId, UserModel userModel);
 
     UserModel updatePassword(UUID userId, String oldPassword, String password);
 
@@ -31,4 +24,10 @@ public interface UserService {
     UserModel saveSubscriptionInstructor(UserModel userModel);
 
     UserModel saveUser(UserModel userModel);
+
+    void deleteUser(UserModel userId);
+
+    UserModel updateUser(UUID userId, UserModel userModel);
+
+
 }
