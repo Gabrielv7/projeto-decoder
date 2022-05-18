@@ -1,6 +1,7 @@
 package com.ead.course.domain.services.impl;
 
 import com.ead.course.common.exceptions.CourseNotFoundException;
+import com.ead.course.common.exceptions.SubscriptionExistsException;
 import com.ead.course.domain.models.CourseModel;
 import com.ead.course.domain.models.ModuleModel;
 import com.ead.course.domain.models.forms.CourseUpdateForm;
@@ -69,6 +70,26 @@ public class CourseServiceImpl implements CourseService {
         course.setCourseLevel(courseUpdateForm.getCourseLevel());
 
         return courseRepository.save(course);
+    }
+
+    @Override
+    public void existsByCourseAndUser(UUID courseId, UUID userId) {
+
+        var result =  courseRepository.existsByCourseAndUser(courseId, userId);
+
+        if(result){
+
+            throw new SubscriptionExistsException("Error: subscription already exists!");
+
+        }
+    }
+
+    @Transactional
+    @Override
+    public void saveSubscriptionUserInCourse(UUID courseId, UUID userId) {
+
+        courseRepository.saveCourseUser(courseId, userId);
+
     }
 
     @Transactional

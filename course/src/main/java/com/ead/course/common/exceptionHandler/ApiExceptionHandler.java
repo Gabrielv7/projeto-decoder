@@ -1,11 +1,6 @@
 package com.ead.course.common.exceptionHandler;
 
-import com.ead.course.common.exceptions.CourseNotFoundException;
-import com.ead.course.common.exceptions.CourseOrModuleNotFoundException;
-import com.ead.course.common.exceptions.CourseUserNotFoundException;
-import com.ead.course.common.exceptions.LessonOrModuleNotFoundException;
-import com.ead.course.common.exceptions.ModuleNotFoundException;
-import com.ead.course.common.exceptions.SubscriptionExistsException;
+import com.ead.course.common.exceptions.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -77,6 +72,32 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(SubscriptionExistsException.class)
     public ResponseEntity<Object> handleSubscriptionExistsException(SubscriptionExistsException ex, WebRequest request){
+
+        log.error(ex.getMessage());
+
+        var status = HttpStatus.CONFLICT;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request){
+
+        log.error(ex.getMessage());
+
+        var status = HttpStatus.NOT_FOUND;
+
+        var problem = createProblem(ex.getMessage(), status.value());
+
+        return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+
+    }
+
+    @ExceptionHandler(UserIsBlockedException.class)
+    public ResponseEntity<Object> handleUserIsBlockedException(UserIsBlockedException ex, WebRequest request){
 
         log.error(ex.getMessage());
 

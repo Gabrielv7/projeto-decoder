@@ -1,7 +1,7 @@
 package com.ead.course.domain.services;
 
-import com.ead.course.domain.models.forms.CourseUpdateForm;
 import com.ead.course.domain.models.CourseModel;
+import com.ead.course.domain.models.forms.CourseUpdateForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,4 +19,8 @@ public interface CourseService {
     Page<CourseModel> findAll(Specification<CourseModel> spec, Pageable pageable);
 
     CourseModel updateCourse(UUID courseId, CourseUpdateForm courseUpdateForm);
+
+    void existsByCourseAndUser(UUID courseId, UUID userId);
+
+    void saveSubscriptionUserInCourse(UUID courseId, UUID userId);
 }

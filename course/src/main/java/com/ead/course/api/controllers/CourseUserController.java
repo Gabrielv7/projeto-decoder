@@ -11,13 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.UUID;
@@ -54,10 +48,20 @@ public class CourseUserController {
         log.info("POST saveSubscriptionUserInCourse received courseId {} and subscriptionForm {} ", courseId, subscriptionForm);
 
         // Busca o curso pelo ID
-        var courseFind = courseService.findById(courseId);
+        var courseModel = courseService.findById(courseId);
 
-        //verificações state transfer
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        // Busca o usuário pelo Id
+        var userModel = userService.findById(subscriptionForm.getUserId());
+
+        // verifica se o usuário já esta matriculado no curso
+        courseService.existsByCourseAndUser(courseModel.getCourseId(), userModel.getUserId());
+
+        //verifica se o usuário está bloqueado
+        userService.verifyUserIsBlocked(userModel);
+
+        courseService.saveSubscriptionUserInCourse(courseModel.getCourseId(), userModel.getUserId());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Subscription created sucessfully.");
 
     }
 
