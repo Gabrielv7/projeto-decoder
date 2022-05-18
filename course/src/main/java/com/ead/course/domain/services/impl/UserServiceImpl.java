@@ -3,6 +3,7 @@ package com.ead.course.domain.services.impl;
 import com.ead.course.common.exceptions.UserIsBlockedException;
 import com.ead.course.common.exceptions.UserNotFoundException;
 import com.ead.course.domain.models.UserModel;
+import com.ead.course.domain.repositories.CourseRepository;
 import com.ead.course.domain.repositories.UserRepository;
 import com.ead.course.domain.services.UserService;
 import com.ead.course.infrastructure.models.enums.UserStatus;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    CourseRepository courseRepository;
+
     @Override
     public Page<UserModel> findAll(Specification<UserModel> spec, Pageable pageable) {
 
@@ -39,9 +43,14 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Transactional
     @Override
     public void delete(UUID userId) {
 
+        // deleta a relação de um usuário com um curso
+        courseRepository.deleteCourseUserByUser(userId);
+
+        // deleta o usuário
         userRepository.deleteById(userId);
 
     }
