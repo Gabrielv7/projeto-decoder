@@ -4,6 +4,7 @@ import com.ead.authuser.domain.User;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.service.UserService;
+import com.ead.authuser.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    UserValidator validator;
+
     @Override
     public List<User> findAllUsers() {
         return userRepository.findAll();
@@ -36,5 +40,11 @@ public class UserServiceImpl implements UserService {
     public void deleteById(UUID userId) {
         this.findById(userId);
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public User save(User user) {
+        validator.validUsernameAndEmailAlreadyExists(user);
+        return userRepository.save(user);
     }
 }
