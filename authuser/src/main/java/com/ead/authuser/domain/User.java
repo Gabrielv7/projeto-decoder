@@ -19,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -80,5 +81,11 @@ public class User implements Serializable {
     @UpdateTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime lastUpdateDate;
+
+    @PrePersist
+    public void setUserActiveAndSetUserTypeStudent(){
+        this.setUserStatus(UserStatus.ACTIVE);
+        this.setUserType(UserType.STUDENT);
+    }
 
 }
