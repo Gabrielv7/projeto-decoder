@@ -12,10 +12,10 @@ import org.springframework.stereotype.Component;
 public class UserValidator {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    MessageSource messageSource;
+    private MessageSource messageSource;
 
     public void validUsernameAndEmailAlreadyExists(User user) {
         if(userRepository.existsByEmail(user.getEmail())){
@@ -26,4 +26,9 @@ public class UserValidator {
 
     }
 
+    public void matchOldPassword(String password, String oldPassword) {
+        if(!password.equalsIgnoreCase(oldPassword)){
+            throw new BusinessException(messageSource.getMessage("password-invalid", null, LocaleContextHolder.getLocale()));
+        }
+    }
 }

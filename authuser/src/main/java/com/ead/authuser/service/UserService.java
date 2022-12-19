@@ -14,4 +14,10 @@ public interface UserService {
     void deleteById(UUID userId);
 
     User save(User user);
+
+    User update(UUID userId, User user);
+
+    void updatePassword(UUID userId, String oldPassword, String newPassword);
+
+    User updateImage(UUID userId, User user);
 }
