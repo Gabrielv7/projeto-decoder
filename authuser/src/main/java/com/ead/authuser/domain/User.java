@@ -2,9 +2,6 @@ package com.ead.authuser.domain;
 
 import com.ead.authuser.domain.enums.UserStatus;
 import com.ead.authuser.domain.enums.UserType;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,16 +26,11 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "TB_USER")
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /*
-    Quando for ultilizar o ModelMapper migrar as anotações relacionadas ao JSON para a classe DTO
-     */
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -51,7 +43,6 @@ public class User implements Serializable {
     private String email;
 
     @Column(nullable = false)
-    @JsonIgnore
     private String password;
 
     @Column(nullable = false, length = 150)
@@ -75,11 +66,9 @@ public class User implements Serializable {
     private String imageUrl;
 
     @CreationTimestamp
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime creationDate;
 
     @UpdateTimestamp
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime lastUpdateDate;
 
     @PrePersist
