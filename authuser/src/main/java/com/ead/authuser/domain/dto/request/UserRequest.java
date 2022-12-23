@@ -1,5 +1,6 @@
 package com.ead.authuser.domain.dto.request;
 
+import com.ead.authuser.validator.UsernameConstraint;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
@@ -17,8 +18,7 @@ public class UserRequest {
         public static interface ImagePut {}
     }
 
-    @NotBlank(groups = UserView.RegistrationPost.class, message = "{username-not-blank}")
-    @Size(groups = UserView.RegistrationPost.class, min = 4, max = 50, message = "{username-size}")
+    @UsernameConstraint(groups = UserView.RegistrationPost.class)
     @JsonView({UserView.RegistrationPost.class})
     private String username;
 
