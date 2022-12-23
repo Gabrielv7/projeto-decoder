@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +25,8 @@ public class AuthenticationController {
     private UserMapper mapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@RequestBody @JsonView(UserRequest.UserView.RegistrationPost.class) UserRequest userRequest){
+    public ResponseEntity<Object> registerUser(@RequestBody @Validated(UserRequest.UserView.RegistrationPost.class)
+                                               @JsonView(UserRequest.UserView.RegistrationPost.class) UserRequest userRequest){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(mapper.toEntity(userRequest)));
     }
 

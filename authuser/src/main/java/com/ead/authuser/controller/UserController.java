@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,21 +51,24 @@ public class UserController {
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable(value = "userId") UUID userId,
-                                             @RequestBody @JsonView(UserRequest.UserView.UserPut.class) UserRequest userRequest){
+                                                   @RequestBody @Validated(UserRequest.UserView.UserPut.class)
+                                                   @JsonView(UserRequest.UserView.UserPut.class) UserRequest userRequest){
         return ResponseEntity.ok(mapper.toResponse(service.update(userId, mapper.toEntity(userRequest))));
     }
 
     @PutMapping("/{userId}/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(@PathVariable(value = "userId") UUID userId,
-                               @RequestBody @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest){
+                               @RequestBody @Validated(UserRequest.UserView.PasswordPut.class)
+                               @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest){
         service.updatePassword(userId, userRequest.getOldPassword(), userRequest.getPassword());
     }
 
     @PutMapping("/{userId}/image")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<UserResponse> updateImage(@PathVariable(value = "userId") UUID userId,
-                            @RequestBody @JsonView(UserRequest.UserView.ImagePut.class) UserRequest userRequest){
+                                                     @RequestBody @Validated(UserRequest.UserView.ImagePut.class)
+                                                     @JsonView(UserRequest.UserView.ImagePut.class) UserRequest userRequest){
       return ResponseEntity.ok(mapper.toResponse(service.updateImage(userId, mapper.toEntity(userRequest))));
     }
 }
