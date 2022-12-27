@@ -6,6 +6,10 @@ import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,8 +37,9 @@ public class UserController {
     private UserMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers(){
-        return ResponseEntity.ok(mapper.toColletionResponse(service.findAllUsers()));
+    public ResponseEntity<Page<UserResponse>> getAllUsers(@PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+        Page<UserResponse> pageUserResponse = service.findAllUsers(pageable).map(u -> mapper.toResponse(u));
+        return ResponseEntity.ok(pageUserResponse);
     }
 
     @GetMapping("/{userId}")
