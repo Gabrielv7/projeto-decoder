@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
     private UserValidator validator;
 
     @Override
-    public Page<User> findAllUsers(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<User> findAllUsers(Pageable pageable, Specification<User> spec) {
+        return userRepository.findAll(spec, pageable);
     }
 
     @Override
