@@ -1,6 +1,7 @@
 package com.ead.authuser.service;
 
 import com.ead.authuser.domain.User;
+import com.ead.authuser.domain.dto.request.UserRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,7 +20,7 @@ public interface UserService {
 
     User update(UUID userId, User user);
 
-    void updatePassword(UUID userId, String oldPassword, String newPassword);
+    void updatePassword(UUID userId, UserRequest userRequest);
 
     User updateImage(UUID userId, User user);
 }

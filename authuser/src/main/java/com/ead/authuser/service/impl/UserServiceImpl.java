@@ -1,6 +1,7 @@
 package com.ead.authuser.service.impl;
 
 import com.ead.authuser.domain.User;
+import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.service.UserService;
@@ -64,10 +65,10 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updatePassword(UUID userId, String oldPassword, String newPassword) {
+    public void updatePassword(UUID userId, UserRequest userRequest) {
         User userFind = this.findById(userId);
-        validator.matchOldPassword(userFind.getPassword(), oldPassword);
-        userFind.setPassword(newPassword);
+        validator.matchOldPassword(userFind.getPassword(), userRequest.getOldPassword());
+        userFind.setPassword(userRequest.getPassword());
     }
 
     @Override

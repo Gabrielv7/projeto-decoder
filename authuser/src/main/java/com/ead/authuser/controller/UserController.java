@@ -67,7 +67,7 @@ public class UserController {
     public void updatePassword(@PathVariable(value = "userId") UUID userId,
                                @RequestBody @Validated(UserRequest.UserView.PasswordPut.class)
                                @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest){
-        service.updatePassword(userId, userRequest.getOldPassword(), userRequest.getPassword());
+        service.updatePassword(userId, userRequest);
     }
 
     @PutMapping("/{userId}/image")
