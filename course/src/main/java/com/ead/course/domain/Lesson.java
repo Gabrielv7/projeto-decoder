@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -44,6 +46,10 @@ public class Lesson implements Serializable {
 
     @Column(nullable = false)
     private String videoUrl;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "MODULE_ID")
+    private Module module;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
