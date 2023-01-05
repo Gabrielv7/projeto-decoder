@@ -8,10 +8,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,11 +52,12 @@ public class Module implements Serializable {
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @JoinColumn(name = "COURSE_ID")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Course course;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "module")
+    @OneToMany(mappedBy = "module", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SUBSELECT)
     private Set<Lesson> lessons;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")

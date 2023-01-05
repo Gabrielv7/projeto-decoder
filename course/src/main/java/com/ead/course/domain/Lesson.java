@@ -11,6 +11,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,7 +48,7 @@ public class Lesson implements Serializable {
     @Column(nullable = false)
     private String videoUrl;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "MODULE_ID")
     private Module module;
 
