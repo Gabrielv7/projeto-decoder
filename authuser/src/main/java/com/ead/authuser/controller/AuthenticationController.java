@@ -1,6 +1,8 @@
 package com.ead.authuser.controller;
 
+import com.ead.authuser.domain.User;
 import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.dto.response.UserResponse;
 import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -25,9 +27,10 @@ public class AuthenticationController {
     private UserMapper mapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> registerUser(@RequestBody @Validated(UserRequest.UserView.RegistrationPost.class)
+    public ResponseEntity<UserResponse> registerUser(@RequestBody @Validated(UserRequest.UserView.RegistrationPost.class)
                                                @JsonView(UserRequest.UserView.RegistrationPost.class) UserRequest userRequest){
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(mapper.toEntity(userRequest)));
+        User userSaved = service.save(mapper.toEntity(userRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(userSaved));
     }
 
 }
