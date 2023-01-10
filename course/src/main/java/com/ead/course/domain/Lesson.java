@@ -1,7 +1,5 @@
 package com.ead.course.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,12 +24,9 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "TB_LESSON")
 public class Lesson implements Serializable {
-
-    //Remover as anotações do JSON quando for criado a classe DTO
 
     private static final long serialVersionUID = 1L;
 
@@ -52,12 +47,10 @@ public class Lesson implements Serializable {
     @JoinColumn(name = "MODULE_ID")
     private Module module;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @CreationTimestamp
     @Column(nullable = false)
     private LocalDateTime creationDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime lastUpdateDate;

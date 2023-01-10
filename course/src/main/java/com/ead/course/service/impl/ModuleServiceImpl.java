@@ -58,8 +58,14 @@ public class ModuleServiceImpl implements ModuleService {
 
     public Module findModuleIntoCourse(UUID courseId, UUID moduleId) {
         return moduleRepository.findModuleIntoCourse(courseId, moduleId).
-                orElseThrow(()-> new NotFoundException(messageSource.getMessage("module-not-found", null, LocaleContextHolder.getLocale())));
+                orElseThrow(()-> new NotFoundException(messageSource.getMessage("module-not-found-in-course", null, LocaleContextHolder.getLocale())));
 
+    }
+
+    @Override
+    public Module findById(UUID moduleId) {
+        return moduleRepository.findById(moduleId)
+                .orElseThrow(()-> new NotFoundException(messageSource.getMessage("module-not-found", null, LocaleContextHolder.getLocale())));
     }
 
     @Transactional
