@@ -5,7 +5,12 @@ import com.ead.course.domain.dto.request.CourseRequest;
 import com.ead.course.domain.dto.response.CourseResponse;
 import com.ead.course.mapper.CourseMapper;
 import com.ead.course.service.CourseService;
+import com.ead.course.specification.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +25,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -55,9 +59,10 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CourseResponse>> getAllCourses(){
-        List<Course> courses = service.findAll();
-        return ResponseEntity.ok(mapper.toCollectionResponse(courses));
+    public ResponseEntity<Page<CourseResponse>> getAllCourses(SpecificationTemplate.CourseSpec spec,
+                                                              @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable){
+        Page<CourseResponse> courses = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
+        return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/{courseId}")
