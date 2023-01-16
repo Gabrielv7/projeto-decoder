@@ -11,6 +11,9 @@ import com.ead.course.validator.LessonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -68,8 +71,8 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<Lesson> findAllLessonsByModuleId(UUID moduleId) {
-        return lessonRepository.findAllLessonsIntoModule(moduleId);
+    public Page<Lesson> findLessonsByModuleId(Specification<Lesson> spec, Pageable pageable) {
+        return lessonRepository.findAll(spec, pageable);
     }
 
 }

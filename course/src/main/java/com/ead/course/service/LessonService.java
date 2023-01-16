@@ -2,8 +2,10 @@ package com.ead.course.service;
 
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.dto.request.LessonRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface LessonService {
@@ -16,5 +18,5 @@ public interface LessonService {
 
     Lesson update(UUID moduleId, UUID lessonId, LessonRequest lessonRequest);
 
-    List<Lesson> findAllLessonsByModuleId(UUID moduleId);
+    Page<Lesson> findLessonsByModuleId(Specification<Lesson> spec, Pageable pageable);
 }

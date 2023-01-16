@@ -60,7 +60,7 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<Page<CourseResponse>> getAllCourses(SpecificationTemplate.CourseSpec spec,
-                                                              @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable){
+                                                              @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
         Page<CourseResponse> courses = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
         return ResponseEntity.ok(courses);
     }
