@@ -5,7 +5,12 @@ import com.ead.course.domain.dto.request.ModuleRequest;
 import com.ead.course.domain.dto.response.ModuleResponse;
 import com.ead.course.mapper.ModuleMapper;
 import com.ead.course.service.ModuleService;
+import com.ead.course.specification.SpecificationTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -58,9 +64,14 @@ public class ModuleController {
     }
 
     @GetMapping("/courses/{courseId}/modules")
-    public ResponseEntity<List<ModuleResponse>> getAllModulesByCourseId(@PathVariable(value = "courseId") UUID courseId) {
-       List<Module> modules = service.findAllByCourseId(courseId);
-       return ResponseEntity.ok(mapper.toCollectionResponse(modules));
+    public ResponseEntity<Page<ModuleResponse>> getAllModulesByCourseId(@PathVariable(value = "courseId") UUID courseId,
+                                                                        SpecificationTemplate.ModuleSpec spec,
+                                                                        @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
+
+        Page<ModuleResponse> modulesResponse = service.findModulesByCourseId(SpecificationTemplate.findModulesByCourseId(courseId).and(spec), pageable)
+                .map(module -> mapper.toResponse(module));
+
+        return ResponseEntity.ok(modulesResponse);
     }
 
     @GetMapping("/courses/{courseId}/modules/{moduleId}")
