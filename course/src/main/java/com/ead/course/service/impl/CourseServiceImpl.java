@@ -43,7 +43,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public Course save(Course course) {
-        validator.validNameAndDescriptionAlreadyExists(course);
+        validator.validNameAndDescriptionAlreadyExists(course.getName(), course.getDescription());
         return courseRepository.save(course);
     }
 
@@ -57,7 +57,7 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public Course update(UUID courseId, CourseRequest courseRequest) {
-        validator.validNameAndDescriptionAlreadyExists(courseRequest);
+        validator.validNameAndDescriptionAlreadyExists(courseRequest.getName(), courseRequest.getDescription());
         Course course = this.findById(courseId);
         course.setName(courseRequest.getName());
         course.setDescription(courseRequest.getDescription());

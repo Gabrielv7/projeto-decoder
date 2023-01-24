@@ -39,7 +39,7 @@ public class LessonServiceImpl implements LessonService {
     @Transactional
     @Override
     public Lesson save(UUID moduleId, Lesson lesson) {
-        validator.validTitleAndDescriptionAlreadyExists(lesson);
+        validator.validTitleAndDescriptionAlreadyExists(lesson.getTitle(), lesson.getDescription());
         Module module = moduleService.findById(moduleId);
         lesson.setModule(module);
         return lessonRepository.save(lesson);
@@ -60,7 +60,7 @@ public class LessonServiceImpl implements LessonService {
     @Transactional
     @Override
     public Lesson update(UUID moduleId, UUID lessonId, LessonRequest lessonRequest) {
-        validator.validTitleAndDescriptionAlreadyExists(lessonRequest);
+        validator.validTitleAndDescriptionAlreadyExists(lessonRequest.getTitle(), lessonRequest.getDescription());
         Lesson lesson = this.findLessonIntoModule(moduleId, lessonId);
         lesson.setTitle(lessonRequest.getTitle());
         lesson.setDescription(lessonRequest.getDescription());

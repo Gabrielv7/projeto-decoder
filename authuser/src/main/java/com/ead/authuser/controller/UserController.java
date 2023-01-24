@@ -1,11 +1,14 @@
 package com.ead.authuser.controller;
 
+import com.ead.authuser.domain.User;
 import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.domain.dto.response.UserResponse;
 import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.specification.SpecificationTemplate;
+import com.ead.authuser.util.ConstantsLog;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +32,7 @@ import java.util.UUID;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Slf4j
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/users")
@@ -43,31 +47,58 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsers(SpecificationTemplate.UserSpec spec,
                                                           @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
+                "getAllUsers", "GET", "Searching a list of users");
+
         Page<UserResponse> pageUserResponse = service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
+
         if(!pageUserResponse.isEmpty()){
            pageUserResponse.forEach(userResponse -> {
                userResponse.add(linkTo(methodOn(UserController.class).getOneUser(userResponse.getUserId())).withSelfRel());
             });
         }
+
         return ResponseEntity.ok(pageUserResponse);
     }
 
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getOneUser(@PathVariable(value = "userId") UUID userId){
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
+                "getOneUser", "GET", "Searching one user", userId);
+
         return ResponseEntity.ok(mapper.toResponse(service.findById(userId)));
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable(value = "userId") UUID userId){
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
+                "deleteUser", "DELETE", "Deleting user", userId);
+
         service.deleteById(userId);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
+                "deleteUser", ConstantsLog.LOG_EVENT_INFO, "Deleted user", ConstantsLog.LOG_HTTP_CODE_NO_CONTENT, userId);
+
     }
 
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable(value = "userId") UUID userId,
                                                    @RequestBody @Validated(UserRequest.UserView.UserPut.class)
                                                    @JsonView(UserRequest.UserView.UserPut.class) UserRequest userRequest){
-        return ResponseEntity.ok(mapper.toResponse(service.update(userId, mapper.toEntity(userRequest))));
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID + ConstantsLog.LOG_ENTITY,
+                "updateUser", "PUT", "Updating user", userId, userRequest);
+
+        User userUpdated = service.update(userId, mapper.toEntity(userRequest));
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
+                "updateUser", ConstantsLog.LOG_EVENT_INFO, "User updated", ConstantsLog.LOG_HTTP_CODE_OK, userUpdated.getUserId());
+
+        return ResponseEntity.ok(mapper.toResponse(userUpdated));
     }
 
     @PutMapping("/{userId}/password")
@@ -75,7 +106,14 @@ public class UserController {
     public void updatePassword(@PathVariable(value = "userId") UUID userId,
                                @RequestBody @Validated(UserRequest.UserView.PasswordPut.class)
                                @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest){
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
+                "updatePassword", "PUT", "Updating user password", userId);
+
         service.updatePassword(userId, userRequest);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
+                "updatePassword", ConstantsLog.LOG_EVENT_INFO, "Updated user password", ConstantsLog.LOG_HTTP_CODE_OK, userId);
     }
 
     @PutMapping("/{userId}/image")
@@ -83,6 +121,15 @@ public class UserController {
     public ResponseEntity<UserResponse> updateImage(@PathVariable(value = "userId") UUID userId,
                                                      @RequestBody @Validated(UserRequest.UserView.ImagePut.class)
                                                      @JsonView(UserRequest.UserView.ImagePut.class) UserRequest userRequest){
-      return ResponseEntity.ok(mapper.toResponse(service.updateImage(userId, mapper.toEntity(userRequest))));
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID + ConstantsLog.LOG_ENTITY,
+                "updateImage", "PUT", "Updating user image", userId, userRequest.getImageUrl());
+
+        User userUpdated = service.updateImage(userId, mapper.toEntity(userRequest));
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
+                "updateImage", ConstantsLog.LOG_EVENT_INFO, "Updated user image", ConstantsLog.LOG_HTTP_CODE_OK, userUpdated.getUserId());
+
+        return ResponseEntity.ok(mapper.toResponse(userUpdated));
     }
 }
