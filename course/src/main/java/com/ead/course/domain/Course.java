@@ -65,7 +65,7 @@ public class Course implements Serializable {
     private Set<Module> modules;
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
-    private Set<CourseUser> courseUsers;
+    private Set<CourseUser> coursesUsers;
 
     @CreationTimestamp
     @Column(nullable = false)
