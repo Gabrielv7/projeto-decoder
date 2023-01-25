@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -86,13 +88,21 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<Page<CourseResponse>> getAllCourses(SpecificationTemplate.CourseSpec spec,
-                                                              @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
+                                                              @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable,
+                                                              @RequestParam(required = false) UUID userId){
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllCourses", "GET", "Searching a list of courses");
 
-        Page<CourseResponse> courses = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
-        return ResponseEntity.ok(courses);
+        Page<CourseResponse> coursesResponse = null;
+
+        if(Objects.nonNull(userId)){
+            coursesResponse = service.findAll(SpecificationTemplate.findCoursesByUserId(userId).and(spec), pageable).map(c -> mapper.toResponse(c));
+        }else{
+            coursesResponse = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
+        }
+
+        return ResponseEntity.ok(coursesResponse);
     }
 
     @GetMapping("/{courseId}")
