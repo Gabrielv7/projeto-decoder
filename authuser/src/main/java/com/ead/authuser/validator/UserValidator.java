@@ -4,13 +4,13 @@ import com.ead.authuser.domain.User;
 import com.ead.authuser.exception.BusinessException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.util.ConstantsLog;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
-@Slf4j
+@Log4j2
 @Component
 public class UserValidator {
 
