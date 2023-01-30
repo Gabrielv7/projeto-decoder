@@ -16,6 +16,7 @@ public class ConstantsLog {
     public static final String LOG_HTTP_CODE_OK = "200 ";
     public static final String LOG_EVENT_INFO = "info ";
     public static final String LOG_ENTITY_ID = "entityId={} ";
+    public static final String LOG_USER_ID = "userId={} ";
 
 
 }
