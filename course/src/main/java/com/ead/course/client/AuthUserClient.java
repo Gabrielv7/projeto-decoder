@@ -1,6 +1,6 @@
-package com.ead.authuser.client;
+package com.ead.course.client;
 
-import com.ead.authuser.domain.dto.response.CourseResponse;
+import com.ead.course.domain.dto.response.UserResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
-@FeignClient(name = "CourseClient", url = "${course.url}")
-public interface CourseClient {
+@FeignClient(name = "AuthUserClient", url = "${authuser.url}")
+public interface AuthUserClient {
 
     @GetMapping
-    Page<CourseResponse> getAllCourses(@RequestParam UUID userId, Pageable pageable);
+    Page<UserResponse> getAllUsers(@RequestParam UUID courseId, Pageable pageable);
 
 }

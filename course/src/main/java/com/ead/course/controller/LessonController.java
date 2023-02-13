@@ -7,7 +7,7 @@ import com.ead.course.mapper.LessonMapper;
 import com.ead.course.service.LessonService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.util.UUID;
 
-@Slf4j
+@Log4j2
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 public class LessonController {

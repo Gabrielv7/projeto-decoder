@@ -51,14 +51,20 @@ public class UserController {
                                                           @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
                                                           @RequestParam(required = false) UUID courseId) {
 
-        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
-                "getAllUsers", "GET", "Searching a list of users");
-
         Page<UserResponse> pageUserResponse = null;
 
         if(Objects.nonNull(courseId)){
+
+            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
+                    "getAllUsers", "GET", "Searching a list of users by course", courseId);
+
             pageUserResponse = service.findAllUsers(pageable, SpecificationTemplate.findUsersByCourseId(courseId).and(spec)).map(u -> mapper.toResponse(u));
+
         }else{
+
+            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
+                    "getAllUsers", "GET", "Searching a list of users");
+
            pageUserResponse = service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
         }
 

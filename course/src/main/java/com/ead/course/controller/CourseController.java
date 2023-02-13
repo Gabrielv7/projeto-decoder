@@ -7,7 +7,7 @@ import com.ead.course.mapper.CourseMapper;
 import com.ead.course.service.CourseService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +31,7 @@ import javax.validation.Valid;
 import java.util.Objects;
 import java.util.UUID;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/courses")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -91,14 +91,20 @@ public class CourseController {
                                                               @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable,
                                                               @RequestParam(required = false) UUID userId){
 
-        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
-                "getAllCourses", "GET", "Searching a list of courses");
-
         Page<CourseResponse> coursesResponse = null;
 
         if(Objects.nonNull(userId)){
+
+            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_USER_ID,
+                    "getAllCourses", "GET", "Searching a list of courses by user", userId);
+
             coursesResponse = service.findAll(SpecificationTemplate.findCoursesByUserId(userId).and(spec), pageable).map(c -> mapper.toResponse(c));
+
         }else{
+
+            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
+                    "getAllCourses", "GET", "Searching a list of courses");
+
             coursesResponse = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
         }
 
