@@ -2,14 +2,20 @@ package com.ead.course.service.impl;
 
 import com.ead.course.client.AuthUserClient;
 import com.ead.course.domain.dto.response.UserResponse;
+import com.ead.course.exception.BusinessException;
+import com.ead.course.exception.NotFoundException;
 import com.ead.course.service.AuthUserClientService;
 import com.ead.course.util.ConstantsLog;
 import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +26,9 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
 
     @Autowired
     private AuthUserClient authUserClient;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public Page<UserResponse> getAllUsersByCourse(UUID courseId, Pageable pageable) {
@@ -36,4 +45,18 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
 
         return result == null ? new PageImpl<>(new ArrayList<>()) : result;
     }
+
+    @Override
+    public UserResponse getOneUser(UUID userId) {
+        UserResponse userResponse = null;
+        try {
+            userResponse = authUserClient.getOneUser(userId);
+        } catch (FeignException ex) {
+            if(HttpStatus.NOT_FOUND.value() == ex.status()) {
+                throw new NotFoundException(messageSource.getMessage("user-not-found", null, LocaleContextHolder.getLocale()));
+            }
+        }
+        return userResponse;
+    }
+
 }

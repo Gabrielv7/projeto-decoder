@@ -1,9 +1,11 @@
 package com.ead.course.service;
 
+import com.ead.course.domain.CourseUser;
+
 import java.util.UUID;
 
 public interface CourseUserService {
 
-    Object saveSubscriptionUserInCourse(UUID courseId, UUID userId);
+    CourseUser saveSubscriptionUserInCourse(UUID courseId, UUID userId);
 
 }

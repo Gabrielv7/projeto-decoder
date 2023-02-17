@@ -10,4 +10,6 @@ public interface AuthUserClientService {
 
     Page<UserResponse> getAllUsersByCourse(UUID courseId, Pageable pageable);
 
+    UserResponse getOneUser(UUID userId);
+
 }
