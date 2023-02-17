@@ -1,7 +1,10 @@
 package com.ead.course.controller;
 
+import com.ead.course.domain.CourseUser;
 import com.ead.course.domain.dto.request.SubscriptionRequest;
+import com.ead.course.domain.dto.response.CourseUserResponse;
 import com.ead.course.domain.dto.response.UserResponse;
+import com.ead.course.mapper.CourseUserMapper;
 import com.ead.course.service.AuthUserClientService;
 import com.ead.course.service.CourseUserService;
 import com.ead.course.util.ConstantsLog;
@@ -34,6 +37,9 @@ public class CourseUserController {
     @Autowired
     private CourseUserService courseUserService;
 
+    @Autowired
+    private CourseUserMapper mapper;
+
     @GetMapping("/courses/{courseId}/users")
     public ResponseEntity<Page<UserResponse>> getAllUsersByCourse(@PathVariable(value = "courseId") UUID courseId,
                                                                   @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
@@ -46,11 +52,11 @@ public class CourseUserController {
     }
 
     @PostMapping("/courses/{courseId}/users/subscription")
-    public ResponseEntity<Object> createSubscriptionUserInCourse(@PathVariable(name = "courseId") UUID courseId,
-                                                                 @RequestBody @Valid SubscriptionRequest subscriptionRequest){
+    public ResponseEntity<CourseUserResponse> createSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
+                                                                             @RequestBody @Valid SubscriptionRequest subscriptionRequest){
 
-        Object result = courseUserService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        CourseUser courseUserSaved = courseUserService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(courseUserSaved));
     }
 
 }
