@@ -50,7 +50,7 @@ public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ErrorResponse buildErrorResponse(Exception ex, HttpStatus status, List<ErrorObject> errors) {
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setHttpCode((status.value()));
+        errorResponse.setCode((status.value()));
         if(ex instanceof MethodArgumentNotValidException){
             errorResponse.setMessage(messageSource.getMessage("request-invalid", null, LocaleContextHolder.getLocale()));
             if(Objects.nonNull(errors)){
