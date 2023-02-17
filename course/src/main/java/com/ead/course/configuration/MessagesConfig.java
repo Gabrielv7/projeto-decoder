@@ -9,7 +9,7 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import java.util.Locale;
 
 @Configuration
-public class MessageConfig {
+public class MessagesConfig {
 
     @Bean
     public MessageSource messageSource(){
@@ -23,8 +23,7 @@ public class MessageConfig {
     @Bean
     public LocalValidatorFactoryBean localValidatorFactoryBean(){
         var bean = new LocalValidatorFactoryBean();
-        bean.setValidationMessageSource(this.messageSource());
+        bean.setValidationMessageSource(messageSource());
         return bean;
     }
-
 }

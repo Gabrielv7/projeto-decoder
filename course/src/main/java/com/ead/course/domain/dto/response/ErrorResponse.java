@@ -18,9 +18,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorResponse {
 
-    private String message;
+    private int code;
 
-    private int HttpCode;
+    private String message;
 
     private List<ErrorObject> errors;
 
