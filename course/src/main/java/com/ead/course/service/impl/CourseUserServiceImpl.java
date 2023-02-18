@@ -3,6 +3,8 @@ package com.ead.course.service.impl;
 import com.ead.course.domain.Course;
 import com.ead.course.domain.CourseUser;
 import com.ead.course.domain.assembler.CourseUserAssembler;
+import com.ead.course.domain.assembler.UserCourseAssembler;
+import com.ead.course.domain.dto.request.UserCourseRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import com.ead.course.domain.enums.UserStatus;
 import com.ead.course.exception.BusinessException;
@@ -32,13 +34,16 @@ public class CourseUserServiceImpl implements CourseUserService {
     private CourseUserValidator validator;
 
     @Autowired
-    private CourseUserAssembler assembler;
+    private CourseUserAssembler courseUserAssembler;
 
     @Autowired
     private AuthUserClientService authUserClientService;
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private UserCourseAssembler userCourseAssembler;
 
     @Transactional
     @Override
@@ -47,8 +52,11 @@ public class CourseUserServiceImpl implements CourseUserService {
         UserResponse user = authUserClientService.getOneUser(userId);
         this.verifyUserIsBlocked(user);
         validator.validSubscriptionUserInCourse(course, user.getUserId());
-        CourseUser courseUser = assembler.assemblerCourseUserBeforeSave(course, user.getUserId());
-        return courseUserRepository.save(courseUser);
+        CourseUser courseUser = courseUserAssembler.assemblerCourseUserBeforeSave(course, user.getUserId());
+        courseUserRepository.save(courseUser);
+        UserCourseRequest userCourseRequest = userCourseAssembler.assemblerUserCourseToRequestMsAuthUser(courseUser.getCourse().getCourseId());
+        authUserClientService.saveSubscriptionUserInCourse(courseUser.getUserId(), userCourseRequest);
+        return courseUser;
     }
 
     public void verifyUserIsBlocked(UserResponse userResponse) {

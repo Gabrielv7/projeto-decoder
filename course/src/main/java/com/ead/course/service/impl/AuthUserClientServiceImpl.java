@@ -1,14 +1,13 @@
 package com.ead.course.service.impl;
 
 import com.ead.course.client.AuthUserClient;
+import com.ead.course.domain.dto.request.UserCourseRequest;
 import com.ead.course.domain.dto.response.UserResponse;
-import com.ead.course.exception.BusinessException;
 import com.ead.course.exception.NotFoundException;
 import com.ead.course.service.AuthUserClientService;
 import com.ead.course.util.ConstantsLog;
 import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -57,6 +56,11 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
             }
         }
         return userResponse;
+    }
+
+    @Override
+    public void saveSubscriptionUserInCourse(UUID userId, UserCourseRequest userCourseRequest) {
+        authUserClient.saveSubscriptionUserInCourse(userId, userCourseRequest);
     }
 
 }
