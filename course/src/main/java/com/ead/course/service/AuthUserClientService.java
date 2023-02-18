@@ -1,5 +1,6 @@
 package com.ead.course.service;
 
+import com.ead.course.domain.dto.request.UserCourseRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,5 +12,7 @@ public interface AuthUserClientService {
     Page<UserResponse> getAllUsersByCourse(UUID courseId, Pageable pageable);
 
     UserResponse getOneUser(UUID userId);
+
+    void saveSubscriptionUserInCourse(UUID userId, UserCourseRequest userCourseRequest);
 
 }
