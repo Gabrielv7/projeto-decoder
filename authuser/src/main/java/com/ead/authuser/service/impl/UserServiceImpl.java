@@ -2,6 +2,7 @@ package com.ead.authuser.service.impl;
 
 import com.ead.authuser.domain.User;
 import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.enums.UserType;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.service.UserService;
@@ -49,7 +50,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) {
-        validator.validUsernameAndEmailAlreadyExists(user);
+        if(!UserType.INSTRUCTOR.equals(user.getUserType())) {
+            validator.validUsernameAndEmailAlreadyExists(user);
+        }
         return userRepository.save(user);
     }
 

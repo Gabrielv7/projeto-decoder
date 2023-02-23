@@ -78,7 +78,7 @@ public class User implements Serializable {
     private LocalDateTime lastUpdateDate;
 
     @PrePersist
-    public void setUserActiveAndSetUserTypeStudent(){
+    public void setUserActiveAndUserTypeStudent(){
         this.setUserStatus(UserStatus.ACTIVE);
         this.setUserType(UserType.STUDENT);
     }
