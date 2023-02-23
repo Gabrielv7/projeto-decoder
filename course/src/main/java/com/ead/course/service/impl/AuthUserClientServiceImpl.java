@@ -49,9 +49,14 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
     public UserResponse getOneUser(UUID userId) {
         UserResponse userResponse = null;
         try {
+            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID,
+                    "getOneUser", "request ms-authuser", userId);
+
             userResponse = authUserClient.getOneUser(userId);
+
         } catch (FeignException ex) {
             if(HttpStatus.NOT_FOUND.value() == ex.status()) {
+                log.error("FeignException = {}", ex.getMessage());
                 throw new NotFoundException(messageSource.getMessage("user-not-found", null, LocaleContextHolder.getLocale()));
             }
         }
@@ -60,6 +65,10 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
 
     @Override
     public void saveSubscriptionUserInCourse(UUID userId, UserCourseRequest userCourseRequest) {
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID + ConstantsLog.LOG_ENTITY,
+                "saveSubscriptionUserInCourse", "request ms-authuser", userId, userCourseRequest);
+
         authUserClient.saveSubscriptionUserInCourse(userId, userCourseRequest);
     }
 
