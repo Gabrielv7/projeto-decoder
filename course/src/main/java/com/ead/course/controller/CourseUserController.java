@@ -52,8 +52,11 @@ public class CourseUserController {
     }
 
     @PostMapping("/courses/{courseId}/users/subscription")
-    public ResponseEntity<CourseUserResponse> createSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
+    public ResponseEntity<CourseUserResponse> saveSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
                                                                              @RequestBody @Valid SubscriptionRequest subscriptionRequest){
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
+                "createSubscriptionUserInCourse", "POST", "save subscription user in course", courseId, subscriptionRequest);
 
         CourseUser courseUserSaved = courseUserService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(courseUserSaved));

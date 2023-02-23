@@ -12,7 +12,9 @@ import com.ead.course.repository.CourseUserRepository;
 import com.ead.course.service.AuthUserClientService;
 import com.ead.course.service.CourseService;
 import com.ead.course.service.CourseUserService;
+import com.ead.course.util.ConstantsLog;
 import com.ead.course.validator.CourseUserValidator;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+@Log4j2
 @Service
 public class CourseUserServiceImpl implements CourseUserService {
 
@@ -61,7 +64,14 @@ public class CourseUserServiceImpl implements CourseUserService {
 
     public void verifyUserIsBlocked(UserResponse userResponse) {
         if (UserStatus.BLOCKED.equals(userResponse.getUserStatus())) {
-            throw new BusinessException(messageSource.getMessage("user-blocked", null, LocaleContextHolder.getLocale()));
+
+            String message = messageSource.getMessage("user-blocked", null, LocaleContextHolder.getLocale());
+
+            log.error(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_MESSAGE,
+                    "verifyUserIsBlocked", "BusinessException", ConstantsLog.LOG_HTTP_CODE_BAD_REQUEST, message);
+
+            throw new BusinessException(message);
+
         }
     }
 

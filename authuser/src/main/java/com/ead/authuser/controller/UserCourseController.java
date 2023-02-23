@@ -55,6 +55,9 @@ public class UserCourseController {
     public ResponseEntity<UserCourseResponse> saveSubscriptionUserInCourse(@PathVariable(value = "userId") UUID userId,
                                                                            @RequestBody @Valid UserCourseRequest userCourseRequest){
 
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
+                "saveSubscriptionUserInCourse", "POST", "save subscription user in course", userId, userCourseRequest);
+
         UserCourse userCourseSaved = userCourseService.saveSubscriptionUserInCourse(userId, userCourseRequest.getCourseId());
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(userCourseSaved));
     }
