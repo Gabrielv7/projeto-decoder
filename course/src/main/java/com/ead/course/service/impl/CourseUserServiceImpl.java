@@ -34,7 +34,7 @@ public class CourseUserServiceImpl implements CourseUserService {
     private CourseService courseService;
 
     @Autowired
-    private CourseUserValidator validator;
+    private CourseUserValidator courseUserValidator;
 
     @Autowired
     private CourseUserAssembler courseUserAssembler;
@@ -54,7 +54,7 @@ public class CourseUserServiceImpl implements CourseUserService {
         Course course = courseService.findById(courseId);
         UserResponse user = authUserClientService.getOneUser(userId);
         this.verifyUserIsBlocked(user);
-        validator.validSubscriptionUserInCourse(course, user.getUserId());
+        courseUserValidator.validSubscriptionUserInCourse(course, user.getUserId());
         CourseUser courseUser = courseUserAssembler.assemblerCourseUserBeforeSave(course, user.getUserId());
         courseUserRepository.save(courseUser);
         UserCourseRequest userCourseRequest = userCourseAssembler.assemblerUserCourseToRequestMsAuthUser(courseUser.getCourse().getCourseId());
