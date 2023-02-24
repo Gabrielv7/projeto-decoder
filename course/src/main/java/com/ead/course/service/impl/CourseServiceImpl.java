@@ -3,7 +3,6 @@ package com.ead.course.service.impl;
 import com.ead.course.domain.Course;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.Module;
-import com.ead.course.domain.dto.request.CourseRequest;
 import com.ead.course.exception.NotFoundException;
 import com.ead.course.repository.CourseRepository;
 import com.ead.course.repository.LessonRepository;
@@ -38,12 +37,12 @@ public class CourseServiceImpl implements CourseService {
     private MessageSource messageSource;
 
     @Autowired
-    private CourseValidator validator;
+    private CourseValidator courseValidator;
 
     @Transactional
     @Override
     public Course save(Course course) {
-        validator.validNameAndDescriptionAlreadyExists(course.getName(), course.getDescription());
+        courseValidator.validateCreate(course);
         return courseRepository.save(course);
     }
 
@@ -56,15 +55,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public Course update(UUID courseId, CourseRequest courseRequest) {
-        validator.validNameAndDescriptionAlreadyExists(courseRequest.getName(), courseRequest.getDescription());
-        Course course = this.findById(courseId);
-        course.setName(courseRequest.getName());
-        course.setDescription(courseRequest.getDescription());
-        course.setImageUrl(courseRequest.getImageUrl());
-        course.setCourseStatus(courseRequest.getCourseStatus());
-        course.setCourseLevel(courseRequest.getCourseLevel());
-        return course;
+    public Course update(UUID courseId, Course course) {
+        courseValidator.validateUpdate(course);
+        Course courseFind = this.findById(courseId);
+        courseFind.setName(course.getName());
+        courseFind.setDescription(course.getDescription());
+        courseFind.setImageUrl(course.getImageUrl());
+        courseFind.setCourseStatus(course.getCourseStatus());
+        courseFind.setCourseLevel(course.getCourseLevel());
+        return courseFind;
     }
 
     @Override

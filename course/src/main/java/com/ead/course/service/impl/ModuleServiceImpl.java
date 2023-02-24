@@ -38,7 +38,7 @@ public class ModuleServiceImpl implements ModuleService {
     private MessageSource messageSource;
 
     @Autowired
-    private ModuleValidator validator;
+    private ModuleValidator moduleValidator;
 
     @Transactional
     @Override
@@ -53,7 +53,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Transactional
     @Override
     public Module save(Module module, UUID courseId) {
-        validator.validTitleAndDescriptionAlreadyExists(module.getTitle(), module.getDescription());
+        moduleValidator.validTitleAndDescriptionAlreadyExists(module.getTitle(), module.getDescription());
         Course course = courseService.findById(courseId);
         module.setCourse(course);
         return moduleRepository.save(module);
@@ -80,7 +80,7 @@ public class ModuleServiceImpl implements ModuleService {
     @Transactional
     @Override
     public Module updateModule(UUID courseId, UUID moduleId, ModuleRequest moduleRequest) {
-        validator.validTitleAndDescriptionAlreadyExists(moduleRequest.getTitle(), moduleRequest.getDescription());
+        moduleValidator.validTitleAndDescriptionAlreadyExists(moduleRequest.getTitle(), moduleRequest.getDescription());
         Module module = this.findModuleIntoCourse(courseId, moduleId);
         module.setTitle(moduleRequest.getTitle());
         module.setDescription(moduleRequest.getDescription());

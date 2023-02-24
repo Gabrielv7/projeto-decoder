@@ -17,7 +17,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,12 +33,12 @@ public class LessonServiceImpl implements LessonService {
     private MessageSource messageSource;
 
     @Autowired
-    private LessonValidator validator;
+    private LessonValidator lessonValidator;
 
     @Transactional
     @Override
     public Lesson save(UUID moduleId, Lesson lesson) {
-        validator.validTitleAndDescriptionAlreadyExists(lesson.getTitle(), lesson.getDescription());
+        lessonValidator.validTitleAndDescriptionAlreadyExists(lesson.getTitle(), lesson.getDescription());
         Module module = moduleService.findById(moduleId);
         lesson.setModule(module);
         return lessonRepository.save(lesson);
@@ -60,7 +59,7 @@ public class LessonServiceImpl implements LessonService {
     @Transactional
     @Override
     public Lesson update(UUID moduleId, UUID lessonId, LessonRequest lessonRequest) {
-        validator.validTitleAndDescriptionAlreadyExists(lessonRequest.getTitle(), lessonRequest.getDescription());
+        lessonValidator.validTitleAndDescriptionAlreadyExists(lessonRequest.getTitle(), lessonRequest.getDescription());
         Lesson lesson = this.findLessonIntoModule(moduleId, lessonId);
         lesson.setTitle(lessonRequest.getTitle());
         lesson.setDescription(lessonRequest.getDescription());

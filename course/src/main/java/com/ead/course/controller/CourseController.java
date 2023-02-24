@@ -78,7 +78,7 @@ public class CourseController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
                 "updateCourse", "PUT", "Updating course", courseId, courseRequest);
 
-        Course courseUpdated = service.update(courseId, courseRequest);
+        Course courseUpdated = service.update(courseId, mapper.toEntity(courseRequest));
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_COURSE_ID,
                 "updateCourse", ConstantsLog.LOG_EVENT_INFO, "Course updated", ConstantsLog.LOG_HTTP_CODE_OK, courseUpdated.getCourseId());
