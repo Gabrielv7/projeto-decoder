@@ -1,9 +1,11 @@
 package com.ead.authuser.service.impl;
 
 import com.ead.authuser.domain.User;
+import com.ead.authuser.domain.UserCourse;
 import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.domain.enums.UserType;
 import com.ead.authuser.exception.NotFoundException;
+import com.ead.authuser.repository.UserCourseRepository;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;
@@ -16,6 +18,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,6 +33,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserValidator validator;
 
+    @Autowired
+    private UserCourseRepository userCourseRepository;
+
     @Override
     public Page<User> findAllUsers(Pageable pageable, Specification<User> spec) {
         return userRepository.findAll(spec, pageable);
@@ -41,9 +47,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(()-> new NotFoundException(messageSource.getMessage("user-not-found", null, LocaleContextHolder.getLocale())));
     }
 
+    @Transactional
     @Override
     public void deleteById(UUID userId) {
         this.findById(userId);
+        List<UserCourse> userCourses = userCourseRepository.findAllUserIntoUserCourse(userId);
+        if(!userCourses.isEmpty()){
+            userCourseRepository.deleteAll(userCourses);
+        }
         userRepository.deleteById(userId);
     }
 

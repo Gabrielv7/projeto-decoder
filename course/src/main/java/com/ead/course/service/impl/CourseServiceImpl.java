@@ -1,10 +1,12 @@
 package com.ead.course.service.impl;
 
 import com.ead.course.domain.Course;
+import com.ead.course.domain.CourseUser;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.Module;
 import com.ead.course.exception.NotFoundException;
 import com.ead.course.repository.CourseRepository;
+import com.ead.course.repository.CourseUserRepository;
 import com.ead.course.repository.LessonRepository;
 import com.ead.course.repository.ModuleRepository;
 import com.ead.course.service.CourseService;
@@ -38,6 +40,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private CourseValidator courseValidator;
+
+    @Autowired
+    private CourseUserRepository courseUserRepository;
 
     @Transactional
     @Override
@@ -84,6 +89,10 @@ public class CourseServiceImpl implements CourseService {
                 }
             });
             moduleRepository.deleteAll(modules);
+        }
+        List<CourseUser> courseUsers = courseUserRepository.findAllCourseIntoCourseUser(courseId);
+        if(!courseUsers.isEmpty()){
+            courseUserRepository.deleteAll(courseUsers);
         }
         courseRepository.deleteById(courseId);
     }
