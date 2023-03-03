@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
 
-@FeignClient(name = "CourseClient", url = "${ms.course.url}")
+@FeignClient(name = "ead-course", path = "/courses")
 public interface CourseClient {
 
     @GetMapping
