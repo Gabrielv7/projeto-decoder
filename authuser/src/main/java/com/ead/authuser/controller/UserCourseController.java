@@ -17,10 +17,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -55,11 +57,25 @@ public class UserCourseController {
     public ResponseEntity<UserCourseResponse> saveSubscriptionUserInCourse(@PathVariable(value = "userId") UUID userId,
                                                                            @RequestBody @Valid UserCourseRequest userCourseRequest){
 
-        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_USER_ID + ConstantsLog.LOG_ENTITY,
                 "saveSubscriptionUserInCourse", "POST", "Saving subscription user in course", userId, userCourseRequest);
 
         UserCourse userCourseSaved = userCourseService.saveSubscriptionUserInCourse(userId, userCourseRequest.getCourseId());
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(userCourseSaved));
+    }
+
+    @DeleteMapping("/users/courses/{courseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUserCourseByCourse(@PathVariable(value = "courseId") UUID courseId){
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
+                "deleteUserCourseByCourse", "DELETE", "Deleting subscription user in course", courseId);
+
+        userCourseService.deleteUserCourseByCourseId(courseId);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
+                "deleteUserCourseByCourse", "info", "Deleted subscription user in course", courseId);
+
     }
 
 }

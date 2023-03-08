@@ -15,4 +15,5 @@ public interface AuthUserClientService {
 
     void saveSubscriptionUserInCourse(UUID userId, UserCourseRequest userCourseRequest);
 
+    void deleteSubscriptionCourseInAuthUser(UUID courseId);
 }

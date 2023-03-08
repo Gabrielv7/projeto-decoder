@@ -8,4 +8,5 @@ public interface UserCourseService {
 
     UserCourse saveSubscriptionUserInCourse(UUID userId, UUID courseId);
 
+    void deleteUserCourseByCourseId(UUID courseId);
 }

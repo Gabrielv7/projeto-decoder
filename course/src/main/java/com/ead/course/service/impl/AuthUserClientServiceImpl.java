@@ -5,6 +5,7 @@ import com.ead.course.domain.dto.request.UserCourseRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import com.ead.course.exception.NotFoundException;
 import com.ead.course.service.AuthUserClientService;
+import com.ead.course.service.CourseService;
 import com.ead.course.util.ConstantsLog;
 import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
@@ -29,10 +30,16 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private CourseService courseService;
+
     @Override
     public Page<UserResponse> getAllUsersByCourse(UUID courseId, Pageable pageable) {
         Page<UserResponse> result = null;
         try {
+
+            courseService.findById(courseId);
+
             log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_COURSE_ID,
                     "getAllUsersByCourse", "request ms-authuser", courseId);
 
@@ -70,6 +77,16 @@ public class AuthUserClientServiceImpl implements AuthUserClientService {
                 "saveSubscriptionUserInCourse", "request ms-authuser", userId, userCourseRequest);
 
         authUserClient.saveSubscriptionUserInCourse(userId, userCourseRequest);
+    }
+
+    @Override
+    public void deleteSubscriptionCourseInAuthUser(UUID courseId) {
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_COURSE_ID,
+                "deleteSubscriptionCourseInAuthUser", "request ms-authuser", courseId);
+
+        authUserClient.deleteSubscriptionCourseInAuthUser(courseId);
+
     }
 
 }
