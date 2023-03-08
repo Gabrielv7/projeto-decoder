@@ -62,7 +62,7 @@ public class CourseUserServiceImpl implements CourseUserService {
         return courseUser;
     }
 
-    public void verifyUserIsBlocked(UserResponse userResponse) {
+    private void verifyUserIsBlocked(UserResponse userResponse) {
         if (UserStatus.BLOCKED.equals(userResponse.getUserStatus())) {
 
             String message = messageSource.getMessage("user-blocked", null, LocaleContextHolder.getLocale());

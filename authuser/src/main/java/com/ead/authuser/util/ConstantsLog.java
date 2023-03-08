@@ -11,6 +11,7 @@ public class ConstantsLog {
     public static final String LOG_ID = "Id={} ";
     public static final String LOG_HTTP_CODE = "httpCode={} ";
     public static final String LOG_HTTP_CODE_BAD_REQUEST = "400 ";
+    public static final String LOG_HTTP_CODE_NOT_FOUND = "404 ";
     public static final String LOG_HTTP_CODE_CREATED = "201 ";
     public static final String LOG_HTTP_CODE_NO_CONTENT = "204 ";
     public static final String LOG_HTTP_CODE_OK = "200 ";
