@@ -61,6 +61,10 @@ public class UserCourseController {
                 "saveSubscriptionUserInCourse", "POST", "Saving subscription user in course", userId, userCourseRequest);
 
         UserCourse userCourseSaved = userCourseService.saveSubscriptionUserInCourse(userId, userCourseRequest.getCourseId());
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
+                "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", userCourseSaved.getId());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toResponse(userCourseSaved));
     }
 
