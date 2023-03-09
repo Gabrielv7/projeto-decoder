@@ -7,6 +7,7 @@ import com.ead.authuser.domain.enums.UserType;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserCourseRepository;
 import com.ead.authuser.repository.UserRepository;
+import com.ead.authuser.service.CourseClientService;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserCourseRepository userCourseRepository;
 
+    @Autowired
+    private CourseClientService courseClientService;
+
     @Override
     public Page<User> findAllUsers(Pageable pageable, Specification<User> spec) {
         return userRepository.findAll(spec, pageable);
@@ -50,12 +54,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(UUID userId) {
+        boolean deleteUserCourseInCourse = false;
         this.findById(userId);
         List<UserCourse> userCourses = userCourseRepository.findAllUserIntoUserCourse(userId);
         if(!userCourses.isEmpty()){
             userCourseRepository.deleteAll(userCourses);
+            deleteUserCourseInCourse = true;
         }
         userRepository.deleteById(userId);
+        if(deleteUserCourseInCourse){
+            courseClientService.deleteCourseUserByUser(userId);
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.ead.authuser.service.impl;
 import com.ead.authuser.client.CourseClient;
 import com.ead.authuser.domain.dto.response.CourseResponse;
 import com.ead.authuser.service.CourseClientService;
+import com.ead.authuser.service.UserService;
 import com.ead.authuser.util.ConstantsLog;
 import feign.FeignException;
 import lombok.extern.log4j.Log4j2;
@@ -22,10 +23,16 @@ public class CourseClientServiceImpl implements CourseClientService {
     @Autowired
     private CourseClient courseClient;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable) {
         Page<CourseResponse> result = null;
         try {
+
+            userService.findById(userId);
+
             log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID,
                     "getAllCoursesByUserId", "request ms-course", userId);
 
@@ -35,5 +42,14 @@ public class CourseClientServiceImpl implements CourseClientService {
             log.error("FeignException = {}", ex.getMessage());
         }
         return result == null ? new PageImpl<>(new ArrayList<>()) : result;
+    }
+
+    @Override
+    public void deleteCourseUserByUser(UUID userId) {
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID,
+                "deleteCourseUserByUser", "request ms-course", userId);
+
+        courseClient.deleteCourseUserByUser(userId);
     }
 }

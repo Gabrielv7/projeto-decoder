@@ -8,6 +8,7 @@ import com.ead.course.domain.dto.request.UserCourseRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import com.ead.course.domain.enums.UserStatus;
 import com.ead.course.exception.BusinessException;
+import com.ead.course.exception.NotFoundException;
 import com.ead.course.repository.CourseUserRepository;
 import com.ead.course.service.AuthUserClientService;
 import com.ead.course.service.CourseService;
@@ -73,6 +74,16 @@ public class CourseUserServiceImpl implements CourseUserService {
             throw new BusinessException(message);
 
         }
+    }
+
+    @Transactional
+    @Override
+    public void deleteCourseUserByUserId(UUID userId) {
+        if(!courseUserRepository.existsByUserId(userId)){
+            String messageError = messageSource.getMessage("course-user-not-found", null, LocaleContextHolder.getLocale());
+            throw new NotFoundException(messageError);
+        }
+            courseUserRepository.deleteAllByUserId(userId);
     }
 
 }
