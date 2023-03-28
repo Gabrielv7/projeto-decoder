@@ -44,12 +44,4 @@ public class CourseClientServiceImpl implements CourseClientService {
         return result == null ? new PageImpl<>(new ArrayList<>()) : result;
     }
 
-    @Override
-    public void deleteCourseUserByUser(UUID userId) {
-
-        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID,
-                "deleteCourseUserByUser", "request ms-course", userId);
-
-        courseClient.deleteCourseUserByUser(userId);
-    }
 }

@@ -1,11 +1,8 @@
 package com.ead.course.validator;
 
 import com.ead.course.domain.Course;
-import com.ead.course.domain.dto.response.UserResponse;
-import com.ead.course.domain.enums.UserType;
 import com.ead.course.exception.BusinessException;
 import com.ead.course.repository.CourseRepository;
-import com.ead.course.service.AuthUserClientService;
 import com.ead.course.util.ConstantsLog;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +19,6 @@ public class CourseValidator {
 
     @Autowired
     private MessageSource messageSource;
-
-    @Autowired
-    private AuthUserClientService authUserClientService;
 
     public void validateCreate(Object object){
         Course course = (Course) object;
@@ -52,16 +46,17 @@ public class CourseValidator {
     }
 
     public void validUserInstructor(Course course){
-        UserResponse userResponse = authUserClientService.getOneUser(course.getUserInstructor());
-        if(!UserType.INSTRUCTOR.equals(userResponse.getUserType())){
-
-            String errorMessage = messageSource.getMessage("not-permission-create-course", null, LocaleContextHolder.getLocale());
-
-            log.error(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_MESSAGE,
-                    "validUserInstructor", "BusinessException", ConstantsLog.LOG_HTTP_CODE_BAD_REQUEST, errorMessage);
-
-            throw new BusinessException(errorMessage);
-        }
+        //todo: voltar para comtemplar state transfer param
+//        UserResponse userResponse = authUserClientService.getOneUser(course.getUserInstructor());
+//        if(!UserType.INSTRUCTOR.equals(userResponse.getUserType())){
+//
+//            String errorMessage = messageSource.getMessage("not-permission-create-course", null, LocaleContextHolder.getLocale());
+//
+//            log.error(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_MESSAGE,
+//                    "validUserInstructor", "BusinessException", ConstantsLog.LOG_HTTP_CODE_BAD_REQUEST, errorMessage);
+//
+//            throw new BusinessException(errorMessage);
+//        }
     }
 
 }
