@@ -24,11 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -48,25 +46,12 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsers(SpecificationTemplate.UserSpec spec,
-                                                          @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
-                                                          @RequestParam(required = false) UUID courseId) {
+                                                          @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
 
-        Page<UserResponse> pageUserResponse = null;
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
+                "getAllUsers", "GET", "Searching a list of users");
 
-        if(Objects.nonNull(courseId)){
-
-            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
-                    "getAllUsers", "GET", "Searching a list of users by course", courseId);
-
-            pageUserResponse = service.findAllUsers(pageable, SpecificationTemplate.findUsersByCourseId(courseId).and(spec)).map(u -> mapper.toResponse(u));
-
-        }else{
-
-            log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
-                    "getAllUsers", "GET", "Searching a list of users");
-
-           pageUserResponse = service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
-        }
+        Page<UserResponse> pageUserResponse =  service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
 
         if(!pageUserResponse.isEmpty()){
            pageUserResponse.forEach(userResponse -> {

@@ -10,6 +10,4 @@ public interface CourseClientService {
 
     Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable);
 
-    void deleteCourseUserByUser(UUID userId);
-
 }
