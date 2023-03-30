@@ -3,6 +3,7 @@ package com.ead.course.specification;
 import com.ead.course.domain.Course;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.Module;
+import com.ead.course.domain.User;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -29,6 +30,14 @@ public class SpecificationTemplate {
     @Spec(path = "title", spec = Like.class)
     public interface LessonSpec extends Specification<Lesson> {}
 
+    @And({
+            @Spec(path = "userType", spec = Equal.class),
+            @Spec(path = "email", spec = Like.class),
+            @Spec(path = "userStatus", spec = Equal.class),
+            @Spec(path = "fullName", spec = Like.class)
+    })
+    public interface UserSpec extends Specification<User> {}
+
     public static Specification<Module> findModulesByCourseId(final UUID courseId) {
         return (root, query, cb) -> {
             query.distinct(true);
@@ -49,5 +58,24 @@ public class SpecificationTemplate {
         };
     }
 
+    public static Specification<User> findUsersByCourseId(final UUID courseId) {
+        return (root, query, cb) -> {
+            query.distinct(true);
+            Root<User> user = root;
+            Root<Course> course = query.from(Course.class);
+            Expression<Collection<User>> courseUsers = course.get("users");
+            return cb.and(cb.equal(course.get("courseId"), courseId), cb.isMember(user, courseUsers));
+        };
+    }
+
+    public static Specification<Course> findCoursesByUserId(final UUID userId) {
+        return (root, query, cb) -> {
+            query.distinct(true);
+            Root<Course> course = root;
+            Root<User> user = query.from(User.class);
+            Expression<Collection<Course>> usersCourse = user.get("courses");
+            return cb.and(cb.equal(user.get("userId"), userId), cb.isMember(course, usersCourse));
+        };
+    }
 
 }

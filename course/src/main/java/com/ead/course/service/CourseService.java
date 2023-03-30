@@ -18,6 +18,6 @@ public interface CourseService {
 
     Course update(UUID courseId, Course course);
 
-    Page<Course> findAll(Specification<Course> spec, Pageable pageable);
+    Page<Course> decideWhichSpecToCall(UUID userId, Specification<Course> spec, Pageable pageable);
 
 }

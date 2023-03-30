@@ -93,8 +93,7 @@ public class CourseController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllCourses", "GET", "Searching a list of courses");
 
-        Page<CourseResponse> coursesResponse = service.findAll(spec, pageable).map(c -> mapper.toResponse(c));
-
+        Page<CourseResponse> coursesResponse  = service.decideWhichSpecToCall(userId, spec, pageable).map(c -> mapper.toResponse(c));
         return ResponseEntity.ok(coursesResponse);
     }
 
