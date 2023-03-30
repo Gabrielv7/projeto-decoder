@@ -1,8 +1,14 @@
 package com.ead.course.controller;
 
 import com.ead.course.domain.dto.request.SubscriptionRequest;
+import com.ead.course.domain.dto.response.UserResponse;
+import com.ead.course.mapper.UserMapper;
+import com.ead.course.service.UserService;
+import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -23,15 +29,24 @@ import java.util.UUID;
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseUserController {
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserMapper mapper;
+
     @GetMapping("/courses/{courseId}/users")
-    public ResponseEntity<Object> getAllUsersByCourse(@PathVariable(value = "courseId") UUID courseId,
-                                                                  @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
+    public ResponseEntity<Page<UserResponse>> getAllUsersByCourse(SpecificationTemplate.UserSpec spec,
+                                                      @PathVariable(value = "courseId") UUID courseId,
+                                                      @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
                 "getAllUsersByCourse", "GET", "Searching a list of users by course", courseId);
-        //todo: voltar para comtemplar state transfer param
-     //   Page<UserResponse> usersResponse = authUserClientService.getAllUsersByCourse(courseId, pageable);
-        return ResponseEntity.ok("");
+
+        Page<UserResponse> usersResponse = userService.findAllUsersByCourseId(SpecificationTemplate.findUsersByCourseId(courseId).and(spec), pageable)
+                .map(u -> mapper.toResponse(u));
+
+        return ResponseEntity.ok(usersResponse);
     }
 
     @PostMapping("/courses/{courseId}/users/subscription")

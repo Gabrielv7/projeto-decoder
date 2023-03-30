@@ -8,6 +8,7 @@ import com.ead.course.repository.CourseRepository;
 import com.ead.course.repository.LessonRepository;
 import com.ead.course.repository.ModuleRepository;
 import com.ead.course.service.CourseService;
+import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.validator.CourseValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -66,10 +68,19 @@ public class CourseServiceImpl implements CourseService {
         return courseFind;
     }
 
-    @Override
-    public Page<Course> findAll(Specification<Course> spec, Pageable pageable) {
+    private Page<Course> findAll(Specification<Course> spec, Pageable pageable) {
         return courseRepository.findAll(spec, pageable);
     }
+
+    public Page<Course> decideWhichSpecToCall(UUID userId, Specification<Course> spec, Pageable pageable){
+        //se o userId não for nulo, executa a busca de cursos pelo userId
+        if(Objects.nonNull(userId)){
+            return this.findAll(SpecificationTemplate.findCoursesByUserId(userId).and(spec), pageable);
+        }
+
+        return this.findAll(spec, pageable);
+    }
+
 
     @Transactional
     @Override
