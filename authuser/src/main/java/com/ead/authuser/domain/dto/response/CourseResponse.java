@@ -1,7 +1,7 @@
 package com.ead.authuser.domain.dto.response;
 
-import com.ead.authuser.domain.enums.CourseLevel;
-import com.ead.authuser.domain.enums.CourseStatus;
+import com.ead.authuser.domain.enums.CourseLevelEnum;
+import com.ead.authuser.domain.enums.CourseStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -19,9 +19,9 @@ public class CourseResponse {
 
     private String imageUrl;
 
-    private CourseStatus courseStatus;
+    private CourseStatusEnum courseStatus;
 
-    private CourseLevel courseLevel;
+    private CourseLevelEnum courseLevel;
 
     private UUID userInstructor;
 

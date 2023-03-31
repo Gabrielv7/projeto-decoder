@@ -1,7 +1,7 @@
 package com.ead.authuser.domain;
 
-import com.ead.authuser.domain.enums.UserStatus;
-import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.enums.UserStatusEnum;
+import com.ead.authuser.domain.enums.UserTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,11 +50,11 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserStatus userStatus;
+    private UserStatusEnum userStatus;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserType userType;
+    private UserTypeEnum userType;
 
     @Column(length = 20)
     private String phoneNumber;
@@ -73,8 +73,8 @@ public class User implements Serializable {
 
     @PrePersist
     public void setUserActiveAndUserTypeStudent(){
-        this.setUserStatus(UserStatus.ACTIVE);
-        this.setUserType(UserType.STUDENT);
+        this.setUserStatus(UserStatusEnum.ACTIVE);
+        this.setUserType(UserTypeEnum.STUDENT);
     }
 
 }

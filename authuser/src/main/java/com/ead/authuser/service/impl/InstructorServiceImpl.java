@@ -1,7 +1,7 @@
 package com.ead.authuser.service.impl;
 
 import com.ead.authuser.domain.User;
-import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.enums.UserTypeEnum;
 import com.ead.authuser.service.InstructorService;
 import com.ead.authuser.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class InstructorServiceImpl implements InstructorService {
     @Override
     public User saveUserTypeInstructor(UUID userId) {
         User user = userService.findById(userId);
-        user.setUserType(UserType.INSTRUCTOR);
+        user.setUserType(UserTypeEnum.INSTRUCTOR);
         return userService.save(user);
     }
 }
