@@ -1,11 +1,14 @@
 package com.ead.authuser.service.impl;
 
 import com.ead.authuser.domain.User;
+import com.ead.authuser.domain.assembler.UserAssembler;
+import com.ead.authuser.domain.dto.rabbit.UserEventDto;
 import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.enums.ActionTypeEnum;
 import com.ead.authuser.domain.enums.UserType;
 import com.ead.authuser.exception.NotFoundException;
+import com.ead.authuser.sender.UserEventExchangeSender;
 import com.ead.authuser.repository.UserRepository;
-import com.ead.authuser.service.CourseClientService;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,10 @@ public class UserServiceImpl implements UserService {
     private UserValidator validator;
 
     @Autowired
-    private CourseClientService courseClientService;
+    private UserAssembler userAssembler;
+
+    @Autowired
+    private UserEventExchangeSender userEventExchangeSender;
 
     @Override
     public Page<User> findAllUsers(Pageable pageable, Specification<User> spec) {
@@ -58,7 +64,10 @@ public class UserServiceImpl implements UserService {
         if(!UserType.INSTRUCTOR.equals(user.getUserType())) {
             validator.validUsernameAndEmailAlreadyExists(user);
         }
-        return userRepository.save(user);
+        User userSaved = userRepository.save(user);
+        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(user, ActionTypeEnum.CREATE);
+        userEventExchangeSender.sendToUserEventExchange(userEventDto);
+        return userSaved;
     }
 
     @Override
