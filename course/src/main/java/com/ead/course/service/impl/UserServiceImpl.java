@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -19,4 +21,11 @@ public class UserServiceImpl implements UserService {
     public Page<User> findAllUsersByCourseId(Specification<User> spec, Pageable pageable) {
         return userRepository.findAll(spec, pageable);
     }
+
+    @Transactional
+    @Override
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
 }

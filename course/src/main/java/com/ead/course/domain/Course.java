@@ -1,7 +1,7 @@
 package com.ead.course.domain;
 
-import com.ead.course.domain.enums.CourseLevel;
-import com.ead.course.domain.enums.CourseStatus;
+import com.ead.course.domain.enums.CourseLevelEnum;
+import com.ead.course.domain.enums.CourseStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -54,11 +54,11 @@ public class Course implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CourseStatus courseStatus;
+    private CourseStatusEnum courseStatus;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private CourseLevel courseLevel;
+    private CourseLevelEnum courseLevel;
 
     @Column(nullable = false)
     private UUID userInstructor;
