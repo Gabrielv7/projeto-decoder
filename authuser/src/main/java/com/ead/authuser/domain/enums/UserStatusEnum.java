@@ -1,6 +1,6 @@
 package com.ead.authuser.domain.enums;
 
-public enum UserStatus {
+public enum UserStatusEnum {
 
     ACTIVE,
     BLOCKED

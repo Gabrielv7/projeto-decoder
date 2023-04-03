@@ -1,7 +1,7 @@
 package com.ead.course.domain.dto.request;
 
-import com.ead.course.domain.enums.CourseLevel;
-import com.ead.course.domain.enums.CourseStatus;
+import com.ead.course.domain.enums.CourseLevelEnum;
+import com.ead.course.domain.enums.CourseStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,10 +26,10 @@ public class CourseRequest {
     private String imageUrl;
 
     @NotNull(message = "{course-status-not-null}")
-    private CourseStatus courseStatus;
+    private CourseStatusEnum courseStatus;
 
     @NotNull(message = "{course-level-not-null}")
-    private CourseLevel courseLevel;
+    private CourseLevelEnum courseLevel;
 
     @NotNull(message = "{course-userInstructor-not-null}")
     private UUID userInstructor;

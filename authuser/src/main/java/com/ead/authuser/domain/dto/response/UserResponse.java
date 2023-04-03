@@ -1,7 +1,7 @@
 package com.ead.authuser.domain.dto.response;
 
-import com.ead.authuser.domain.enums.UserStatus;
-import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.enums.UserStatusEnum;
+import com.ead.authuser.domain.enums.UserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,9 +26,9 @@ public class UserResponse extends RepresentationModel<UserResponse> {
 
     private String fullName;
 
-    private UserStatus userStatus;
+    private UserStatusEnum userStatus;
 
-    private UserType userType;
+    private UserTypeEnum userType;
 
     private String phoneNumber;
 

@@ -5,7 +5,7 @@ import com.ead.authuser.domain.assembler.UserAssembler;
 import com.ead.authuser.domain.dto.rabbit.UserEventDto;
 import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.domain.enums.ActionTypeEnum;
-import com.ead.authuser.domain.enums.UserType;
+import com.ead.authuser.domain.enums.UserTypeEnum;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.sender.UserEventExchangeSender;
 import com.ead.authuser.repository.UserRepository;
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) {
-        if(!UserType.INSTRUCTOR.equals(user.getUserType())) {
+        if(!UserTypeEnum.INSTRUCTOR.equals(user.getUserType())) {
             validator.validUsernameAndEmailAlreadyExists(user);
         }
         User userSaved = userRepository.save(user);

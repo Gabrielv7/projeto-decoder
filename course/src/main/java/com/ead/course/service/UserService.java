@@ -9,4 +9,5 @@ public interface UserService {
 
     Page<User> findAllUsersByCourseId(Specification<User> spec, Pageable pageable);
 
+    User save(User user);
 }
