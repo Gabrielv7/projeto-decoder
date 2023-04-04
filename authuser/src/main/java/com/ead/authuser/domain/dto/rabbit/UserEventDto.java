@@ -1,13 +1,11 @@
 package com.ead.authuser.domain.dto.rabbit;
 
 import com.ead.authuser.domain.enums.ActionTypeEnum;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class UserEventDto {
 
     private UUID userId;

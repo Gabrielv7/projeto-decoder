@@ -48,7 +48,11 @@ public class UserEventQueueConsumer {
 
         switch (actionTypeEnum){
             case CREATE:
+            case UPDATE:
                 userService.save(user);
+                break;
+            case DELETE:
+                userService.deleteById(user.getUserId());
                 break;
         }
     }

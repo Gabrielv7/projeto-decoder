@@ -15,9 +15,10 @@ public class RabbitmqConfig {
     @Autowired
     private CachingConnectionFactory cachingConnectionFactory;
 
+    @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate template = new RabbitTemplate(cachingConnectionFactory);
-        template.setMessageConverter(messageConverter());
+        template.setMessageConverter(this.messageConverter());
         return template;
     }
 
