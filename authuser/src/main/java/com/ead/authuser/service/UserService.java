@@ -2,6 +2,7 @@ package com.ead.authuser.service;
 
 import com.ead.authuser.domain.User;
 import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.enums.ActionTypeEnum;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,4 +24,6 @@ public interface UserService {
     void updatePassword(UUID userId, UserRequest userRequest);
 
     User updateImage(UUID userId, User user);
+
+    void assemblerAndSendToUserEventExchange(User user, ActionTypeEnum actionTypeEnum);
 }

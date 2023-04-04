@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface InstructorService {
 
-    User saveUserTypeInstructor(UUID userId);
+    User updateToUserTypeInstructor(UUID userId);
 
 }
