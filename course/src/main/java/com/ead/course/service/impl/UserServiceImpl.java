@@ -2,6 +2,7 @@ package com.ead.course.service.impl;
 
 import com.ead.course.domain.User;
 import com.ead.course.exception.NotFoundException;
+import com.ead.course.repository.CourseRepository;
 import com.ead.course.repository.UserRepository;
 import com.ead.course.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private CourseRepository courseRepository;
+
     @Override
     public Page<User> findAllUsersByCourseId(Specification<User> spec, Pageable pageable) {
         return userRepository.findAll(spec, pageable);
@@ -38,6 +42,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(UUID userId) {
+        courseRepository.deleteCourseUserByUserId(userId);
         userRepository.deleteById(userId);
     }
 

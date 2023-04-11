@@ -65,7 +65,7 @@ public class CourseUserController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE,
                 "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", ConstantsLog.LOG_HTTP_CODE_CREATED);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Successful subscription");
+        return ResponseEntity.status(HttpStatus.CREATED).body(ConstantsLog.MSG_SUCCESSFUL_SUBSCRIPTION);
     }
 
 }

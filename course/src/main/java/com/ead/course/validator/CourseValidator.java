@@ -62,7 +62,7 @@ public class CourseValidator {
 
         User user = userService.findById(userId);
 
-        if(!UserTypeEnum.INSTRUCTOR.toString().equalsIgnoreCase(user.getUserType())){
+        if(!UserTypeEnum.INSTRUCTOR.equals(user.getUserType())){
 
             String errorMessage = messageSource.getMessage("not-permission-create-course", null, LocaleContextHolder.getLocale());
 
@@ -79,7 +79,7 @@ public class CourseValidator {
         if(courseRepository.hasExistsSubscription(courseId, userId)){
             throw new BusinessException(this.messageSource.getMessage("subscription-already-exists", null, LocaleContextHolder.getLocale()));
         }
-        if (user.getUserStatus().equalsIgnoreCase(UserStatusEnum.BLOCKED.toString())) {
+        if (UserStatusEnum.BLOCKED.equals(user.getUserStatus())) {
             throw new BusinessException(messageSource.getMessage("user-is-blocked", null, LocaleContextHolder.getLocale()));
         }
     }
