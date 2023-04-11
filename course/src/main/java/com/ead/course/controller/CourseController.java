@@ -63,7 +63,7 @@ public class CourseController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
                 "deleteCourse", "DELETE", "Deleting course", courseId);
 
-        service.delete(courseId);
+        service.deleteById(courseId);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_COURSE_ID,
                 "deleteCourse", ConstantsLog.LOG_EVENT_INFO, "Course deleted", ConstantsLog.LOG_HTTP_CODE_NO_CONTENT, courseId);

@@ -7,10 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.util.UUID;
 
-
 public interface CourseService {
 
-    void delete(UUID courseId);
+    void deleteById(UUID courseId);
 
     Course save(Course course);
 

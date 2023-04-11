@@ -90,7 +90,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public void delete(UUID courseId) {
+    public void deleteById(UUID courseId) {
 
         this.findById(courseId);
         List<Module> modules = moduleRepository.findAllModulesIntoCourse(courseId);
@@ -107,7 +107,7 @@ public class CourseServiceImpl implements CourseService {
 
             moduleRepository.deleteAll(modules);
         }
-
+        courseRepository.deleteCourseUserByCourseId(courseId);
         courseRepository.deleteById(courseId);
     }
 

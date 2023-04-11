@@ -18,5 +18,6 @@ public class ConstantsLog {
     public static final String LOG_COURSE_ID = "courseId={} ";
     public static final String LOG_MODULE_ID = "moduleId={} ";
     public static final String LOG_LESSON_ID = "lessonId={} ";
+    public static final String MSG_SUCCESSFUL_SUBSCRIPTION = "Successful subscription";
 
 }

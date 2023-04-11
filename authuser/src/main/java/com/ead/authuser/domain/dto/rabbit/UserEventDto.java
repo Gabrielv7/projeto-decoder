@@ -19,5 +19,4 @@ public class UserEventDto {
     private String imageUrl;
     private ActionTypeEnum actionType;
 
-
 }

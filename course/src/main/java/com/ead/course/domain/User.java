@@ -1,5 +1,7 @@
 package com.ead.course.domain;
 
+import com.ead.course.domain.enums.UserStatusEnum;
+import com.ead.course.domain.enums.UserTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +10,8 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -37,10 +41,12 @@ public class User implements Serializable {
     private String fullName;
 
     @Column(nullable = false)
-    private String userStatus;
+    @Enumerated(EnumType.STRING)
+    private UserStatusEnum userStatus;
 
     @Column(nullable = false)
-    private String userType;
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
 
     @Column(length = 20)
     private String cpf;
