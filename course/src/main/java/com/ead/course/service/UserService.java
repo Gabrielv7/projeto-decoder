@@ -14,4 +14,7 @@ public interface UserService {
     User save(User user);
 
     void deleteById(UUID userId);
+
+    User findById(UUID userId);
+
 }

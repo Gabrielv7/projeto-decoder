@@ -1,9 +1,12 @@
 package com.ead.course.service.impl;
 
 import com.ead.course.domain.User;
+import com.ead.course.exception.NotFoundException;
 import com.ead.course.repository.UserRepository;
 import com.ead.course.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -17,6 +20,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     public Page<User> findAllUsersByCourseId(Specification<User> spec, Pageable pageable) {
@@ -33,6 +39,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(UUID userId) {
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public User findById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(()-> new NotFoundException(
+                        messageSource.getMessage("user-not-found", null, LocaleContextHolder.getLocale())
+                ));
     }
 
 }
