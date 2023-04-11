@@ -3,6 +3,7 @@ package com.ead.course.controller;
 import com.ead.course.domain.dto.request.SubscriptionRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import com.ead.course.mapper.UserMapper;
+import com.ead.course.service.CourseService;
 import com.ead.course.service.UserService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
@@ -35,10 +36,13 @@ public class CourseUserController {
     @Autowired
     private UserMapper mapper;
 
+    @Autowired
+    private CourseService courseService;
+
     @GetMapping("/courses/{courseId}/users")
     public ResponseEntity<Page<UserResponse>> getAllUsersByCourse(SpecificationTemplate.UserSpec spec,
-                                                      @PathVariable(value = "courseId") UUID courseId,
-                                                      @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable){
+                                                                  @PathVariable(value = "courseId") UUID courseId,
+                                                                  @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.DESC) Pageable pageable){
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
                 "getAllUsersByCourse", "GET", "Searching a list of users by course", courseId);
@@ -51,17 +55,17 @@ public class CourseUserController {
 
     @PostMapping("/courses/{courseId}/users/subscription")
     public ResponseEntity<Object> saveSubscriptionUserInCourse(@PathVariable(value = "courseId") UUID courseId,
-                                                                             @RequestBody @Valid SubscriptionRequest subscriptionRequest){
+                                                               @RequestBody @Valid SubscriptionRequest subscriptionRequest){
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
-                "createSubscriptionUserInCourse", "POST", "Saving subscription user in course", courseId, subscriptionRequest);
-        //todo: voltar para comtemplar state transfer param
-        //User userSaved = courseUserService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
-//
-//        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
-//                "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", ConstantsLog.LOG_HTTP_CODE_CREATED, userSaved.getId());
+                "saveSubscriptionUserInCourse", "POST", "Saving subscription user in course", courseId, subscriptionRequest);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("");
+        courseService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE,
+                "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", ConstantsLog.LOG_HTTP_CODE_CREATED);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Successful subscription");
     }
 
 }

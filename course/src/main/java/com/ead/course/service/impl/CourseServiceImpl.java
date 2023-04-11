@@ -81,6 +81,12 @@ public class CourseServiceImpl implements CourseService {
         return this.findAll(spec, pageable);
     }
 
+    @Transactional
+    @Override
+    public void saveSubscriptionUserInCourse(UUID courseId, UUID userId) {
+        courseValidator.validSubscriptionUserInCourse(courseId, userId);
+        courseRepository.saveCourseUser(courseId, userId);
+    }
 
     @Transactional
     @Override

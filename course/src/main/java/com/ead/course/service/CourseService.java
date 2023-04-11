@@ -20,4 +20,6 @@ public interface CourseService {
 
     Page<Course> decideWhichSpecToCall(UUID userId, Specification<Course> spec, Pageable pageable);
 
+    void saveSubscriptionUserInCourse(UUID courseId, UUID courseID);
+
 }
