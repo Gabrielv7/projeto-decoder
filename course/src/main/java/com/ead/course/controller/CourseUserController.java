@@ -6,6 +6,7 @@ import com.ead.course.mapper.UserMapper;
 import com.ead.course.service.CourseService;
 import com.ead.course.service.UserService;
 import com.ead.course.specification.SpecificationTemplate;
+import com.ead.course.util.Constants;
 import com.ead.course.util.ConstantsLog;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class CourseUserController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE,
                 "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", ConstantsLog.LOG_HTTP_CODE_CREATED);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(ConstantsLog.MSG_SUCCESSFUL_SUBSCRIPTION);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Constants.MSG_SUCCESSFUL_SUBSCRIPTION);
     }
 
 }

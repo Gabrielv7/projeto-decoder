@@ -35,7 +35,7 @@ public class UserEventQueueConsumer {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY,
                 "receiveUserEventMessage", ConstantsLog.LOG_EVENT_INFO, "Receiving message", userEventDto);
 
-        this.doProcess(userEventDto, userEventDto.getActionType());
+        this.doProcess(userEventDto, ActionTypeEnum.valueOf(userEventDto.getActionType()));
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "receiveUserEventMessage", ConstantsLog.LOG_EVENT_INFO, "successfully processed message");
