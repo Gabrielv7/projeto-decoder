@@ -5,7 +5,6 @@ import com.ead.authuser.domain.assembler.UserAssembler;
 import com.ead.authuser.domain.dto.rabbit.UserEventDto;
 import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.domain.enums.ActionTypeEnum;
-import com.ead.authuser.domain.enums.UserTypeEnum;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.sender.UserEventExchangeSender;
@@ -56,7 +55,8 @@ public class UserServiceImpl implements UserService {
     public void deleteById(UUID userId) {
         User user = this.findById(userId);
         userRepository.deleteById(user.getUserId());
-        this.assemblerAndSendToUserEventExchange(user, ActionTypeEnum.DELETE);
+        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(user, ActionTypeEnum.DELETE);
+        this.sendToUserEventExchange(userEventDto);
     }
 
     @Override
@@ -64,7 +64,8 @@ public class UserServiceImpl implements UserService {
     public User save(User user) {
         validator.validUsernameAndEmailAlreadyExists(user);
         User userSaved = userRepository.save(user);
-        this.assemblerAndSendToUserEventExchange(userSaved, ActionTypeEnum.CREATE);
+        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(userSaved, ActionTypeEnum.CREATE);
+        this.sendToUserEventExchange(userEventDto);
         return userSaved;
     }
 
@@ -75,7 +76,8 @@ public class UserServiceImpl implements UserService {
         userFind.setFullName(user.getFullName());
         userFind.setPhoneNumber(user.getPhoneNumber());
         userFind.setCpf(user.getCpf());
-        this.assemblerAndSendToUserEventExchange(userFind, ActionTypeEnum.UPDATE);
+        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(userFind, ActionTypeEnum.UPDATE);
+        this.sendToUserEventExchange(userEventDto);
         return userFind;
     }
 
@@ -92,12 +94,12 @@ public class UserServiceImpl implements UserService {
     public User updateImage(UUID userId, User user) {
         User userFind = this.findById(userId);
         userFind.setImageUrl(user.getImageUrl());
-        this.assemblerAndSendToUserEventExchange(userFind, ActionTypeEnum.UPDATE);
+        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(userFind, ActionTypeEnum.UPDATE);
+        this.sendToUserEventExchange(userEventDto);
         return userFind;
     }
 
-    public void assemblerAndSendToUserEventExchange(User user, ActionTypeEnum actionTypeEnum){
-        UserEventDto userEventDto = userAssembler.assemblerUserEventDto(user, actionTypeEnum);
+    public void sendToUserEventExchange(UserEventDto userEventDto){
         userEventExchangeSender.sendToUserEventExchange(userEventDto);
     }
 

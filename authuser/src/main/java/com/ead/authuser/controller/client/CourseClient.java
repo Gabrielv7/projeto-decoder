@@ -1,4 +1,4 @@
-package com.ead.authuser.client;
+package com.ead.authuser.controller.client;
 
 import com.ead.authuser.domain.dto.response.CourseResponse;
 import org.springframework.cloud.openfeign.FeignClient;

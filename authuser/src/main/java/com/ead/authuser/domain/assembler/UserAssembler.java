@@ -15,7 +15,7 @@ public class UserAssembler {
 
     public UserEventDto assemblerUserEventDto(User user, ActionTypeEnum actionTypeEnum){
         UserEventDto userEventDto = modelMapper.map(user, UserEventDto.class);
-        userEventDto.setActionType(actionTypeEnum);
+        userEventDto.setActionType(String.valueOf(actionTypeEnum));
         return userEventDto;
     }
 
