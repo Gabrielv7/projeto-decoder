@@ -3,28 +3,32 @@ package com.ead.course.consumer;
 import com.ead.course.domain.User;
 import com.ead.course.domain.dto.rabbit.UserEventDto;
 import com.ead.course.domain.enums.ActionTypeEnum;
+import com.ead.course.exception.BusinessException;
 import com.ead.course.mapper.UserMapper;
 import com.ead.course.service.UserService;
 import com.ead.course.util.ConstantsLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.core.ExchangeTypes;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Log4j2
+@RequiredArgsConstructor
 @Component
 public class UserEventQueueConsumer {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private UserMapper mapper;
+    private final UserMapper mapper;
+
+    private final MessageSource messageSource;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = "${ead.broker.queue.userEvent}", durable = "true"),
@@ -41,19 +45,14 @@ public class UserEventQueueConsumer {
                 "receiveUserEventMessage", ConstantsLog.LOG_EVENT_INFO, "successfully processed message");
     }
 
-
     public void doProcess(UserEventDto userEventDto, ActionTypeEnum actionTypeEnum){
 
         User user = mapper.toEntity(userEventDto);
 
-        switch (actionTypeEnum){
-            case CREATE:
-            case UPDATE:
-                userService.save(user);
-                break;
-            case DELETE:
-                userService.deleteById(user.getUserId());
-                break;
+        switch (actionTypeEnum) {
+          case CREATE, UPDATE -> userService.save(user);
+          case DELETE -> userService.deleteById(user.getUserId());
+          default -> throw new BusinessException(messageSource.getMessage("event-not-found", null, LocaleContextHolder.getLocale()));
         }
     }
 
