@@ -1,2 +1,4 @@
 
 config-server/src/main/resources/application.yaml
+course/src/main/resources/application.properties
+authuser/src/main/resources/application.properties
