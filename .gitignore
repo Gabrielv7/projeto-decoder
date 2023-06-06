@@ -4,3 +4,4 @@ course/src/main/resources/application.properties
 authuser/src/main/resources/application.properties
 authuser/src/main/resources/application.properties
 course/src/main/resources/application.properties
+notification/src/main/resources/application.properties
