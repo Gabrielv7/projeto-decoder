@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serial;
 import java.io.Serializable;
@@ -46,11 +47,16 @@ public class Notification implements Serializable {
     @Column(nullable = false)
     private String message;
 
-    @CreationTimestamp
-    private LocalDateTime creationDate;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusEnum statusEnum;
+
+    @CreationTimestamp
+    private LocalDateTime creationDate;
+
+    @PrePersist
+    public void setStatusEnumCreated() {
+        statusEnum = StatusEnum.CREATED;
+    }
 
 }

@@ -31,8 +31,15 @@ public class UserEventQueueConsumer {
     private final MessageSource messageSource;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "${ead.broker.queue.userEvent}", durable = "true"),
-            exchange = @Exchange(value = "${ead.broker.exchange.userEvent}", type = ExchangeTypes.FANOUT, ignoreDeclarationExceptions = "true")
+            value = @Queue(
+                    value = "${ead.broker.queue.userEvent}",
+                    durable = "true"
+            ),
+            exchange = @Exchange(
+                    value = "${ead.broker.exchange.userEvent}",
+                    type = ExchangeTypes.FANOUT,
+                    ignoreDeclarationExceptions = "true"
+            )
     ))
     public void receiveUserEventMessage(@Payload UserEventDto userEventDto){
 
