@@ -6,6 +6,6 @@ import java.util.UUID;
 
 public interface InstructorService {
 
-    User updateToUserTypeInstructor(UUID userId);
+    User updateUserForTypeInstructor(UUID userId);
 
 }

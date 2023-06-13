@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -32,6 +33,7 @@ import java.util.UUID;
 @Table(name = "TB_USER")
 public class User implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -74,9 +76,10 @@ public class User implements Serializable {
     private LocalDateTime lastUpdateDate;
 
     @PrePersist
-    public void setUserActiveAndUserTypeStudent(){
-        this.setUserStatus(UserStatusEnum.ACTIVE);
-        this.setUserType(UserTypeEnum.STUDENT);
+    public void setUserActiveAndSetUserTypeStudent(){
+        userStatus = UserStatusEnum.ACTIVE;
+        userType = UserTypeEnum.STUDENT;
     }
+
 
 }

@@ -8,8 +8,8 @@ import com.ead.authuser.service.UserService;
 import com.ead.authuser.specification.SpecificationTemplate;
 import com.ead.authuser.util.ConstantsLog;
 import com.fasterxml.jackson.annotation.JsonView;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -33,16 +33,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Log4j2
-@RestController
+@RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
+@RestController
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserService service;
-
-    @Autowired
-    private UserMapper mapper;
+    private final UserService service;
+    private final UserMapper mapper;
 
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsers(SpecificationTemplate.UserSpec spec,
@@ -51,11 +49,11 @@ public class UserController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllUsers", "GET", "Searching a list of users");
 
-        Page<UserResponse> pageUserResponse =  service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
+        Page<UserResponse> pageUserResponse = service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
 
-        if(!pageUserResponse.isEmpty()){
-           pageUserResponse.forEach(userResponse -> {
-               userResponse.add(linkTo(methodOn(UserController.class).getOneUser(userResponse.getUserId())).withSelfRel());
+        if (!pageUserResponse.isEmpty()) {
+            pageUserResponse.forEach(userResponse -> {
+                userResponse.add(linkTo(methodOn(UserController.class).getOneUser(userResponse.getUserId())).withSelfRel());
             });
         }
 
@@ -63,17 +61,18 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getOneUser(@PathVariable(value = "userId") UUID userId){
+    public ResponseEntity<UserResponse> getOneUser(@PathVariable(value = "userId") UUID userId) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
                 "getOneUser", "GET", "Searching one user", userId);
 
-        return ResponseEntity.ok(mapper.toResponse(service.findById(userId)));
+        User user = service.findById(userId);
+        return ResponseEntity.ok(mapper.toResponse(user));
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable(value = "userId") UUID userId){
+    public void deleteUser(@PathVariable(value = "userId") UUID userId) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
                 "deleteUser", "DELETE", "Deleting user", userId);
@@ -88,7 +87,7 @@ public class UserController {
     @PutMapping("/{userId}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable(value = "userId") UUID userId,
                                                    @RequestBody @Validated(UserRequest.UserView.UserPut.class)
-                                                   @JsonView(UserRequest.UserView.UserPut.class) UserRequest userRequest){
+                                                   @JsonView(UserRequest.UserView.UserPut.class) UserRequest userRequest) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID + ConstantsLog.LOG_ENTITY,
                 "updateUser", "PUT", "Updating user", userId, userRequest);
@@ -105,7 +104,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePassword(@PathVariable(value = "userId") UUID userId,
                                @RequestBody @Validated(UserRequest.UserView.PasswordPut.class)
-                               @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest){
+                               @JsonView(UserRequest.UserView.PasswordPut.class) UserRequest userRequest) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
                 "updatePassword", "PUT", "Updating user password", userId);
@@ -119,8 +118,8 @@ public class UserController {
     @PutMapping("/{userId}/image")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<UserResponse> updateImage(@PathVariable(value = "userId") UUID userId,
-                                                     @RequestBody @Validated(UserRequest.UserView.ImagePut.class)
-                                                     @JsonView(UserRequest.UserView.ImagePut.class) UserRequest userRequest){
+                                                    @RequestBody @Validated(UserRequest.UserView.ImagePut.class)
+                                                    @JsonView(UserRequest.UserView.ImagePut.class) UserRequest userRequest) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID + ConstantsLog.LOG_ENTITY,
                 "updateImage", "PUT", "Updating user image", userId, userRequest.getImageUrl());
