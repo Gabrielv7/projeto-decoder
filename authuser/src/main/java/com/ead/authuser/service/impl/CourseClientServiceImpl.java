@@ -6,8 +6,8 @@ import com.ead.authuser.service.CourseClientService;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.util.ConstantsLog;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,13 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Log4j2
+@RequiredArgsConstructor
 @Service
 public class CourseClientServiceImpl implements CourseClientService {
 
-    @Autowired
-    private CourseClient courseClient;
+    private final CourseClient courseClient;
 
-    @Autowired
-    private UserService userService;
+    private final  UserService userService;
 
     @CircuitBreaker(name = "circuitbreakerInstance")
     @Override

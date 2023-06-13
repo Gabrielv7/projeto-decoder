@@ -10,7 +10,7 @@ import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.sender.UserEventExchangeSender;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -21,23 +21,19 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private UserValidator validator;
+    private final UserValidator validator;
 
-    @Autowired
-    private UserAssembler userAssembler;
+    private final UserAssembler userAssembler;
 
-    @Autowired
-    private UserEventExchangeSender userEventExchangeSender;
+    private final UserEventExchangeSender userEventExchangeSender;
 
     @Override
     public Page<User> findAllUsers(Pageable pageable, Specification<User> spec) {
@@ -62,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User save(User user) {
-        validator.validUsernameAndEmailAlreadyExists(user);
+        validator.validateCreate(user);
         User userSaved = userRepository.save(user);
         UserEventDto userEventDto = userAssembler.assemblerUserEventDto(userSaved, ActionTypeEnum.CREATE);
         this.sendToUserEventExchange(userEventDto);
@@ -85,7 +81,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updatePassword(UUID userId, UserRequest userRequest) {
         User userFind = this.findById(userId);
-        validator.matchOldPassword(userFind.getPassword(), userRequest.getOldPassword());
+        validator.validateUpdatePassword(userFind, userRequest);
         userFind.setPassword(userRequest.getPassword());
     }
 

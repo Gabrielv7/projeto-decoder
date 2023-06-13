@@ -1,28 +1,36 @@
 package com.ead.authuser.validator;
 
 import com.ead.authuser.domain.User;
+import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.exception.BusinessException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.util.ConstantsLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 @Log4j2
+@RequiredArgsConstructor
 @Component
 public class UserValidator {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    public void validUsernameAndEmailAlreadyExists(User user) {
+    public void validateCreate(User user) {
+        this.validUsernameAndEmailAlreadyExists(user);
+    }
 
-        if(userRepository.existsByEmail(user.getEmail())){
+    public void validateUpdatePassword(User user, UserRequest userRequest) {
+        this.matchOldPassword(user.getPassword(), userRequest.getOldPassword());
+    }
+
+    private void validUsernameAndEmailAlreadyExists(User user) {
+
+        if (userRepository.existsByEmail(user.getEmail())) {
 
             String message = messageSource.getMessage("email-already-registered", null, LocaleContextHolder.getLocale());
             log.error(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_MESSAGE,
@@ -30,7 +38,7 @@ public class UserValidator {
 
             throw new BusinessException(message);
 
-        }else if(userRepository.existsByUsername(user.getUsername())){
+        } else if (userRepository.existsByUsername(user.getUsername())) {
 
             String message = messageSource.getMessage("username-already-registered", null, LocaleContextHolder.getLocale());
 
@@ -42,8 +50,8 @@ public class UserValidator {
 
     }
 
-    public void matchOldPassword(String password, String oldPassword) {
-        if(!password.equalsIgnoreCase(oldPassword)){
+    private void matchOldPassword(String newPassword, String oldPassword) {
+        if (!newPassword.equalsIgnoreCase(oldPassword)) {
 
             String message = messageSource.getMessage("password-invalid", null, LocaleContextHolder.getLocale());
 
