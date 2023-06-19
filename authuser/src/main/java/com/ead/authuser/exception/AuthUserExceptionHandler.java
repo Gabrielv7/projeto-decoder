@@ -1,9 +1,5 @@
 package com.ead.authuser.exception;
 
-import com.ead.authuser.exception.ErrorObject;
-import com.ead.authuser.exception.ErrorResponse;
-import com.ead.authuser.exception.BusinessException;
-import com.ead.authuser.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
