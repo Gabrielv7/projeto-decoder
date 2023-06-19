@@ -3,14 +3,20 @@ package com.ead.course.service.impl;
 import com.ead.course.domain.Course;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.Module;
+import com.ead.course.domain.User;
+import com.ead.course.domain.assembler.NotificationAssembler;
+import com.ead.course.domain.dto.rabbit.NotificationCommandDto;
 import com.ead.course.exception.NotFoundException;
+import com.ead.course.publisher.NotificationCommandExchangeSender;
 import com.ead.course.repository.CourseRepository;
 import com.ead.course.repository.LessonRepository;
 import com.ead.course.repository.ModuleRepository;
 import com.ead.course.service.CourseService;
+import com.ead.course.service.UserService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.validator.CourseValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -22,24 +28,26 @@ import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+@Log4j2
+@RequiredArgsConstructor
 @Service
 public class CourseServiceImpl implements CourseService {
 
-    @Autowired
-    private CourseRepository courseRepository;
+    private final CourseRepository courseRepository;
 
-    @Autowired
-    private ModuleRepository moduleRepository;
+    private final ModuleRepository moduleRepository;
 
-    @Autowired
-    private LessonRepository lessonRepository;
+    private final LessonRepository lessonRepository;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private CourseValidator courseValidator;
+    private final  CourseValidator courseValidator;
+
+    private final UserService userService;
+
+    private final NotificationAssembler notificationAssembler;
+
+    private final NotificationCommandExchangeSender notificationCommandExchangeSender;
 
     @Transactional
     @Override
@@ -84,9 +92,19 @@ public class CourseServiceImpl implements CourseService {
     @Transactional
     @Override
     public void saveSubscriptionUserInCourse(UUID courseId, UUID userId) {
-        courseValidator.validSubscriptionUserInCourse(courseId, userId);
-        courseRepository.saveCourseUser(courseId, userId);
+        Course course = findById(courseId);
+        User user = userService.findById(userId);
+        courseValidator.validateSubscription(course, user);
+        courseRepository.saveCourseUser(course.getCourseId(), user.getUserId());
+        try {
+            NotificationCommandDto notificationCommandDto = notificationAssembler.assemblerNotificationCommandDto(course, user);
+            notificationCommandExchangeSender.sendNotificationCommandExchange(notificationCommandDto);
+        } catch (Exception ex) {
+            log.warn("Error sending Exchange");
+        }
+
     }
+
 
     @Transactional
     @Override

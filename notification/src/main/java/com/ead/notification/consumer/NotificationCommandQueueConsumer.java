@@ -22,7 +22,7 @@ public class NotificationCommandQueueConsumer {
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(
-                    value = "${ead.broker.queue.notificationCommandQueue.name}",
+                    value = "${ead.broker.queue.notificationCommandQueue}",
                     durable = "true"
             ),
             exchange = @Exchange(
