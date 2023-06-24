@@ -1,6 +1,6 @@
 package com.ead.notification.domain;
 
-import com.ead.notification.domain.enums.StatusEnum;
+import com.ead.notification.domain.enums.NotificationStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -49,14 +49,14 @@ public class Notification implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusEnum statusEnum;
+    private NotificationStatusEnum notificationStatus;
 
     @CreationTimestamp
     private LocalDateTime creationDate;
 
     @PrePersist
     public void setStatusEnumCreated() {
-        statusEnum = StatusEnum.CREATED;
+        notificationStatus = NotificationStatusEnum.CREATED;
     }
 
 }

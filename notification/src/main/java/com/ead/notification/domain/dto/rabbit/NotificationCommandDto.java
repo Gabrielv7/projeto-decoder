@@ -1,12 +1,10 @@
-package com.ead.notification.domain.dto;
+package com.ead.notification.domain.dto.rabbit;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 public class NotificationCommandDto {
 
     private String title;
