@@ -1,6 +1,6 @@
 package com.ead.notification.domain.enums;
 
-public enum StatusEnum {
+public enum NotificationStatusEnum {
 
     CREATED,
     READ

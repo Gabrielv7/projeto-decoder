@@ -1,7 +1,7 @@
 package com.ead.notification.consumer;
 
 import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.NotificationCommandDto;
+import com.ead.notification.domain.dto.rabbit.NotificationCommandDto;
 import com.ead.notification.mapper.NotificationMapper;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class NotificationCommandQueueConsumer {
     }
 
     public void doProcess(NotificationCommandDto notificationCommandDto) {
-        Notification notification = mapper.toEntity(notificationCommandDto);
+        Notification notification = mapper.convertMessage(notificationCommandDto);
         notificationService.saveNotification(notification);
     }
 
