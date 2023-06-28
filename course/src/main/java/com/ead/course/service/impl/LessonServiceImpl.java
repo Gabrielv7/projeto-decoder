@@ -8,7 +8,7 @@ import com.ead.course.repository.LessonRepository;
 import com.ead.course.service.LessonService;
 import com.ead.course.service.ModuleService;
 import com.ead.course.validator.LessonValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -20,20 +20,14 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class LessonServiceImpl implements LessonService {
 
-    @Autowired
-    private LessonRepository lessonRepository;
-
-    @Autowired
-    private ModuleService moduleService;
-
-    @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private LessonValidator lessonValidator;
+    private final LessonRepository lessonRepository;
+    private final ModuleService moduleService;
+    private final MessageSource messageSource;
+    private final LessonValidator lessonValidator;
 
     @Transactional
     @Override
@@ -46,27 +40,27 @@ public class LessonServiceImpl implements LessonService {
 
     @Transactional
     @Override
-    public void validatedAndDelete(UUID moduleId, UUID lessonId) {
-        Lesson lesson = this.findLessonIntoModule(moduleId, lessonId);
+    public void deleteById(UUID moduleId, UUID lessonId) {
+        Lesson lesson = findLessonIntoModule(moduleId, lessonId);
         lessonRepository.deleteById(lesson.getLessonId());
-    }
-
-    public Lesson findLessonIntoModule(UUID moduleId, UUID lessonId) {
-        return lessonRepository.findLessonIntoModule(moduleId, lessonId)
-                .orElseThrow(()-> new BusinessException(messageSource.getMessage("lesson-not-found-in-module", null, LocaleContextHolder.getLocale())));
     }
 
     @Transactional
     @Override
     public Lesson update(UUID moduleId, UUID lessonId, LessonRequest lessonRequest) {
         lessonValidator.validTitleAndDescriptionAlreadyExists(lessonRequest.getTitle(), lessonRequest.getDescription());
-        Lesson lesson = this.findLessonIntoModule(moduleId, lessonId);
+        Lesson lesson = findLessonIntoModule(moduleId, lessonId);
         lesson.setTitle(lessonRequest.getTitle());
         lesson.setDescription(lessonRequest.getDescription());
         if(Objects.nonNull(lessonRequest.getVideoUrl())){
             lesson.setVideoUrl(lessonRequest.getVideoUrl());
         }
         return lesson;
+    }
+
+    public Lesson findLessonIntoModule(UUID moduleId, UUID lessonId) {
+        return lessonRepository.findLessonIntoModule(moduleId, lessonId)
+                .orElseThrow(()-> new BusinessException(messageSource.getMessage("lesson-not-found-in-module", null, LocaleContextHolder.getLocale())));
     }
 
     @Override

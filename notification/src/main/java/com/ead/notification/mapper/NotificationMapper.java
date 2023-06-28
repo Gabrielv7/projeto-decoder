@@ -22,7 +22,7 @@ public class NotificationMapper {
         return mapper.map(notification, NotificationResponse.class);
     }
 
-    public Page<NotificationResponse> getMap(Page<Notification> notifications) {
+    public Page<NotificationResponse> convertToPageNotificationsResponse(Page<Notification> notifications) {
         return notifications.map(this::toResponse);
     }
 

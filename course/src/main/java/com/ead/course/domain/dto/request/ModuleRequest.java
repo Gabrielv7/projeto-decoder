@@ -13,10 +13,10 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class ModuleRequest {
 
-    @NotBlank(message = "{module-title-not-blank}")
+    @NotBlank(message = "{module.title.not.blank}")
     private String title;
 
-    @NotBlank(message = "{module-description-not-blank}")
+    @NotBlank(message = "{module.description.not.blank}")
     private String description;
 
 }

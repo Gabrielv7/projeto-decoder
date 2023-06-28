@@ -3,16 +3,12 @@ package com.ead.course.service.impl;
 import com.ead.course.domain.Course;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.Module;
-import com.ead.course.domain.User;
-import com.ead.course.domain.assembler.NotificationAssembler;
-import com.ead.course.domain.dto.rabbit.NotificationCommandDto;
 import com.ead.course.exception.NotFoundException;
-import com.ead.course.publisher.NotificationCommandExchangeSender;
 import com.ead.course.repository.CourseRepository;
+import com.ead.course.repository.CourseUserRepository;
 import com.ead.course.repository.LessonRepository;
 import com.ead.course.repository.ModuleRepository;
 import com.ead.course.service.CourseService;
-import com.ead.course.service.UserService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.validator.CourseValidator;
 import lombok.RequiredArgsConstructor;
@@ -34,20 +30,11 @@ import java.util.UUID;
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
-
     private final ModuleRepository moduleRepository;
-
     private final LessonRepository lessonRepository;
-
     private final MessageSource messageSource;
-
-    private final  CourseValidator courseValidator;
-
-    private final UserService userService;
-
-    private final NotificationAssembler notificationAssembler;
-
-    private final NotificationCommandExchangeSender notificationCommandExchangeSender;
+    private final CourseValidator courseValidator;
+    private final CourseUserRepository courseUserRepository;
 
     @Transactional
     @Override
@@ -91,23 +78,6 @@ public class CourseServiceImpl implements CourseService {
 
     @Transactional
     @Override
-    public void saveSubscriptionUserInCourse(UUID courseId, UUID userId) {
-        Course course = findById(courseId);
-        User user = userService.findById(userId);
-        courseValidator.validateSubscription(course, user);
-        courseRepository.saveCourseUser(course.getCourseId(), user.getUserId());
-        try {
-            NotificationCommandDto notificationCommandDto = notificationAssembler.assemblerNotificationCommandDto(course, user);
-            notificationCommandExchangeSender.sendNotificationCommandExchange(notificationCommandDto);
-        } catch (Exception ex) {
-            log.warn("Error sending Exchange");
-        }
-
-    }
-
-
-    @Transactional
-    @Override
     public void deleteById(UUID courseId) {
 
         this.findById(courseId);
@@ -125,7 +95,7 @@ public class CourseServiceImpl implements CourseService {
 
             moduleRepository.deleteAll(modules);
         }
-        courseRepository.deleteCourseUserByCourseId(courseId);
+        courseUserRepository.deleteCourseUserByCourseId(courseId);
         courseRepository.deleteById(courseId);
     }
 

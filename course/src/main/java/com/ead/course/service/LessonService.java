@@ -12,7 +12,7 @@ public interface LessonService {
 
     Lesson save(UUID moduleId, Lesson lesson);
 
-    void validatedAndDelete(UUID moduleId, UUID lessonId);
+    void deleteById(UUID moduleId, UUID lessonId);
 
     Lesson findLessonIntoModule(UUID moduleId, UUID lessonId);
 

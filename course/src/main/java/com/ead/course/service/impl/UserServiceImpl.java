@@ -2,10 +2,10 @@ package com.ead.course.service.impl;
 
 import com.ead.course.domain.User;
 import com.ead.course.exception.NotFoundException;
-import com.ead.course.repository.CourseRepository;
+import com.ead.course.repository.CourseUserRepository;
 import com.ead.course.repository.UserRepository;
 import com.ead.course.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
@@ -16,17 +16,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private MessageSource messageSource;
-
-    @Autowired
-    private CourseRepository courseRepository;
+    private final UserRepository userRepository;
+    private final MessageSource messageSource;
+    private final CourseUserRepository courseUserRepository;
 
     @Override
     public Page<User> findAllUsersByCourseId(Specification<User> spec, Pageable pageable) {
@@ -42,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteById(UUID userId) {
-        courseRepository.deleteCourseUserByUserId(userId);
+        courseUserRepository.deleteCourseUserByUserId(userId);
         userRepository.deleteById(userId);
     }
 

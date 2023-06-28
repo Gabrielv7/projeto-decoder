@@ -1,5 +1,6 @@
-package com.ead.notification.exception;
+package com.ead.notification.domain.dto.response;
 
+import com.ead.notification.exception.ErrorObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

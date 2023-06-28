@@ -1,9 +1,10 @@
 package com.ead.course.controller;
 
+import com.ead.course.domain.User;
 import com.ead.course.domain.dto.request.SubscriptionRequest;
 import com.ead.course.domain.dto.response.UserResponse;
 import com.ead.course.mapper.UserMapper;
-import com.ead.course.service.CourseService;
+import com.ead.course.service.CourseUserService;
 import com.ead.course.service.UserService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.Constants;
@@ -35,23 +36,23 @@ import java.util.UUID;
 public class CourseUserController {
 
     private final UserService userService;
-
     private final UserMapper mapper;
-
-    private final CourseService courseService;
+    private final CourseUserService courseUserService;
 
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsersByCourse(SpecificationTemplate.UserSpec spec,
                                                                   @PathVariable(value = "courseId") UUID courseId,
-                                                                  @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.DESC) Pageable pageable){
+                                                                  @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.DESC) Pageable pageable) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
                 "getAllUsersByCourse", "GET", "Searching a list of users by course", courseId);
 
-        Page<UserResponse> usersResponse = userService.findAllUsersByCourseId(SpecificationTemplate.findUsersByCourseId(courseId).and(spec), pageable)
-                .map(u -> mapper.toResponse(u));
+        Page<User> users = userService.findAllUsersByCourseId(SpecificationTemplate.findUsersByCourseId(courseId).and(spec), pageable);
 
-        return ResponseEntity.ok(usersResponse);
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_SIZE,
+                "getAllUsersByCourse", ConstantsLog.LOG_EVENT, "Users found", ConstantsLog.LOG_HTTP_CODE_OK, users.getTotalElements());
+
+        return ResponseEntity.ok(mapper.convertToPageUsersResponse(users));
     }
 
     @PostMapping("/subscription")
@@ -61,7 +62,7 @@ public class CourseUserController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
                 "saveSubscriptionUserInCourse", "POST", "Saving subscription user in course", courseId, subscriptionRequest);
 
-        courseService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
+        courseUserService.saveSubscriptionUserInCourse(courseId, subscriptionRequest.getUserId());
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE,
                 "saveSubscriptionUserInCourse", ConstantsLog.LOG_EVENT_INFO, "Saved subscription user in course", ConstantsLog.LOG_HTTP_CODE_CREATED);

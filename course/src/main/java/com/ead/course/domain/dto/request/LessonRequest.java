@@ -13,12 +13,12 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class LessonRequest {
 
-    @NotBlank(message = "{lesson-title-not-blank}")
+    @NotBlank(message = "{lesson.title.not.blank}")
     private String title;
 
     private String description;
 
-    @NotBlank(message = "{lesson-video-url-not-blank}")
+    @NotBlank(message = "{lesson.video.url.not.blank}")
     private String videoUrl;
 
 

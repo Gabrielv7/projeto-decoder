@@ -7,8 +7,8 @@ import com.ead.course.mapper.LessonMapper;
 import com.ead.course.service.LessonService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,15 +29,13 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @Log4j2
+@RequiredArgsConstructor
 @RestController
 @CrossOrigin(value = "*", maxAge = 3600)
 public class LessonController {
 
-    @Autowired
-    private LessonService service;
-
-    @Autowired
-    private LessonMapper mapper;
+    private final LessonService service;
+    private final LessonMapper mapper;
 
     @PostMapping("/modules/{moduleId}/lessons")
     public ResponseEntity<LessonResponse> saveLesson(@PathVariable(value = "moduleId")UUID moduleId,
@@ -62,7 +60,7 @@ public class LessonController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_MODULE_ID + ConstantsLog.LOG_LESSON_ID,
                 "deleteLesson", "DELETE", "Deleting lesson", moduleId, lessonId);
 
-        service.validatedAndDelete(moduleId, lessonId);
+        service.deleteById(moduleId, lessonId);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_LESSON_ID,
                 "deleteLesson", ConstantsLog.LOG_EVENT_INFO, "Lesson deleted", ConstantsLog.LOG_HTTP_CODE_NO_CONTENT, lessonId);
@@ -92,10 +90,12 @@ public class LessonController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_MODULE_ID,
                 "getAllLessonsByModuleId", "GET", "Searching a list of lessons", moduleId);
 
-        Page<LessonResponse> lessonsResponse = service.findLessonsByModuleId(SpecificationTemplate.findLessonsByModuleId(moduleId).and(spec), pageable)
-                .map(l -> mapper.toResponse(l));
+        Page<Lesson> lessonsResponse = service.findLessonsByModuleId(SpecificationTemplate.findLessonsByModuleId(moduleId).and(spec), pageable);
 
-        return ResponseEntity.ok(lessonsResponse);
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_SIZE,
+                "getAllLessonsByModuleId", ConstantsLog.LOG_EVENT_INFO, "Lessons found", ConstantsLog.LOG_HTTP_CODE_OK, lessonsResponse.getTotalElements());
+
+        return ResponseEntity.ok(mapper.convertToPageLessonsResponse(lessonsResponse));
     }
 
     @GetMapping("/modules/{moduleId}/lessons/{lessonId}")
@@ -106,6 +106,10 @@ public class LessonController {
                 "getOneLesson", "GET", "Searching one lesson", moduleId, lessonId);
 
         Lesson lesson = service.findLessonIntoModule(moduleId, lessonId);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_LESSON_ID,
+                "getOneLesson", ConstantsLog.LOG_EVENT_INFO, "Lesson found", ConstantsLog.LOG_HTTP_CODE_OK, lessonId);
+
         return ResponseEntity.ok(mapper.toResponse(lesson));
     }
 

@@ -6,16 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.List;
 import java.util.UUID;
 
 public interface ModuleService {
 
-    void delete(UUID moduleId);
+    void delete(UUID courseId, UUID moduleId);
 
     Module save(Module module, UUID courseId);
-
-    void validateAndDelete(UUID courseId, UUID moduleId);
 
     Module updateModule(UUID courseId, UUID moduleId, ModuleRequest moduleRequest);
 
