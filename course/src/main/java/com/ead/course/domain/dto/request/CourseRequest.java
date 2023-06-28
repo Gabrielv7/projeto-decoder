@@ -17,21 +17,21 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CourseRequest {
 
-    @NotBlank(message = "{course-name-not-blank}")
+    @NotBlank(message = "{course.name.not.blank}")
     private String name;
 
-    @NotBlank(message = "{course-description-not-blank}")
+    @NotBlank(message = "{course.description.not.blank}")
     private String description;
 
     private String imageUrl;
 
-    @NotNull(message = "{course-status-not-null}")
+    @NotNull(message = "{course.status.not.null}")
     private CourseStatusEnum courseStatus;
 
-    @NotNull(message = "{course-level-not-null}")
+    @NotNull(message = "{course.level.not.null}")
     private CourseLevelEnum courseLevel;
 
-    @NotNull(message = "{course-userInstructor-not-null}")
+    @NotNull(message = "{course.userInstructor.not.null}")
     private UUID userInstructor;
 
 }

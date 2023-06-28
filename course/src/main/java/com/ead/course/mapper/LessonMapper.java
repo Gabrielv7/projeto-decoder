@@ -3,18 +3,16 @@ package com.ead.course.mapper;
 import com.ead.course.domain.Lesson;
 import com.ead.course.domain.dto.request.LessonRequest;
 import com.ead.course.domain.dto.response.LessonResponse;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+@RequiredArgsConstructor
 @Component
 public class LessonMapper {
 
-    @Autowired
-    private ModelMapper mapper;
+    private final ModelMapper mapper;
 
     public Lesson toEntity(LessonRequest lessonRequest){
         return mapper.map(lessonRequest, Lesson.class);
@@ -24,8 +22,7 @@ public class LessonMapper {
         return mapper.map(lesson, LessonResponse.class);
     }
 
-    public List<LessonResponse> toCollectionResponse(List<Lesson> lessons){
-        return lessons.stream().map(this::toResponse).collect(Collectors.toList());
+    public Page<LessonResponse> convertToPageLessonsResponse(Page<Lesson> lessons) {
+        return lessons.map(this::toResponse);
     }
-
 }

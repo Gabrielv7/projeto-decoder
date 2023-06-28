@@ -15,7 +15,7 @@ public class NotificationAssembler {
 
         return NotificationCommandDto.builder()
                 .title(MSG_BEM_VINDO + course.getName())
-                .message((user.getFullName() + MSG_INSCRICAO_SUCESSO))
+                .message(user.getFullName() + MSG_INSCRICAO_SUCESSO)
                 .userId(user.getUserId())
                 .build();
     }

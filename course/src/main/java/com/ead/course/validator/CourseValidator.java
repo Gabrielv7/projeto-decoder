@@ -2,7 +2,6 @@ package com.ead.course.validator;
 
 import com.ead.course.domain.Course;
 import com.ead.course.domain.User;
-import com.ead.course.domain.enums.UserStatusEnum;
 import com.ead.course.domain.enums.UserTypeEnum;
 import com.ead.course.exception.BusinessException;
 import com.ead.course.repository.CourseRepository;
@@ -22,9 +21,7 @@ import java.util.UUID;
 public class CourseValidator {
 
     private final CourseRepository courseRepository;
-
     private final MessageSource messageSource;
-
     private final UserService userService;
 
     public void validateCreate(Course course) {
@@ -34,10 +31,6 @@ public class CourseValidator {
 
     public void validateUpdate(Course course) {
         this.validNameAndDescriptionAlreadyExists(course.getName(), course.getDescription());
-    }
-
-    public void validateSubscription(Course course, User user) {
-        this.validSubscriptionUserInCourse(course, user);
     }
 
     private void validNameAndDescriptionAlreadyExists(String name, String description) {
@@ -66,15 +59,6 @@ public class CourseValidator {
                     "validUserInstructor", "BusinessException", ConstantsLog.LOG_HTTP_CODE_BAD_REQUEST, errorMessage);
 
             throw new BusinessException(errorMessage);
-        }
-    }
-
-    private void validSubscriptionUserInCourse(Course course, User user) {
-        if (courseRepository.hasExistsSubscription(course.getCourseId(), user.getUserId())) {
-            throw new BusinessException(this.messageSource.getMessage("subscription-already-exists", null, LocaleContextHolder.getLocale()));
-        }
-        if (UserStatusEnum.BLOCKED.equals(user.getUserStatus())) {
-            throw new BusinessException(messageSource.getMessage("user-is-blocked", null, LocaleContextHolder.getLocale()));
         }
     }
 

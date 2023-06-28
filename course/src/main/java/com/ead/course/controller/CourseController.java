@@ -7,8 +7,8 @@ import com.ead.course.mapper.CourseMapper;
 import com.ead.course.service.CourseService;
 import com.ead.course.specification.SpecificationTemplate;
 import com.ead.course.util.ConstantsLog;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,16 +31,14 @@ import javax.validation.Valid;
 import java.util.UUID;
 
 @Log4j2
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/courses")
-@CrossOrigin(origins = "*", maxAge = 3600)
 public class CourseController {
 
-    @Autowired
-    private CourseService service;
-
-    @Autowired
-    private CourseMapper mapper;
+    private final CourseService service;
+    private final CourseMapper mapper;
 
     @PostMapping
     public ResponseEntity<CourseResponse> saveCourse(@RequestBody @Valid CourseRequest courseRequest) {
@@ -72,7 +70,7 @@ public class CourseController {
 
     @PutMapping("/{courseId}")
     public ResponseEntity<CourseResponse> updateCourse(@PathVariable(value = "courseId") UUID courseId,
-                                                       @RequestBody @Valid CourseRequest courseRequest){
+                                                       @RequestBody @Valid CourseRequest courseRequest) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID + ConstantsLog.LOG_ENTITY,
                 "updateCourse", "PUT", "Updating course", courseId, courseRequest);
@@ -88,22 +86,30 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<Page<CourseResponse>> getAllCourses(SpecificationTemplate.CourseSpec spec,
                                                               @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable,
-                                                              @RequestParam(required = false) UUID userId){
+                                                              @RequestParam(required = false) UUID userId) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllCourses", "GET", "Searching a list of courses");
 
-        Page<CourseResponse> coursesResponse  = service.decideWhichSpecToCall(userId, spec, pageable).map(c -> mapper.toResponse(c));
-        return ResponseEntity.ok(coursesResponse);
+        Page<Course> courses  = service.decideWhichSpecToCall(userId, spec, pageable);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_SIZE,
+                "getAllCourses", ConstantsLog.LOG_EVENT_INFO, "Courses found", ConstantsLog.LOG_HTTP_CODE_OK, courses.getTotalElements());
+
+        return ResponseEntity.ok(mapper.convertToPageCourseResponse(courses));
     }
 
     @GetMapping("/{courseId}")
-    public ResponseEntity<CourseResponse> getOneCourse(@PathVariable(value = "courseId") UUID courseId){
+    public ResponseEntity<CourseResponse> getOneCourse(@PathVariable(value = "courseId") UUID courseId) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_COURSE_ID,
                 "getOneCourse", "GET", "Searching one course", courseId);
 
         Course courseFind = service.findById(courseId);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_COURSE_ID,
+                "getOneCourse", ConstantsLog.LOG_EVENT_INFO, "Course found", ConstantsLog.LOG_HTTP_CODE_OK ,courseId);
+
         return ResponseEntity.ok(mapper.toResponse(courseFind));
     }
 

@@ -38,7 +38,7 @@ public class UserNotificationController {
                                                                                   @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<Notification> notifications = notificationService.findAllNotificationsByUserId(userId, pageable);
-        return ResponseEntity.ok(mapper.getMap(notifications));
+        return ResponseEntity.ok(mapper.convertToPageNotificationsResponse(notifications));
     }
 
     @PutMapping("/{notificationId}/users/{userId}")

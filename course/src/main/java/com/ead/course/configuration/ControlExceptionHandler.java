@@ -1,6 +1,9 @@
-package com.ead.course.exception;
+package com.ead.course.configuration;
 
 import com.ead.course.domain.dto.response.ErrorResponse;
+import com.ead.course.exception.BusinessException;
+import com.ead.course.exception.ErrorObject;
+import com.ead.course.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,7 +21,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestControllerAdvice
-public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControlExceptionHandler extends ResponseEntityExceptionHandler {
 
     private static final HttpStatus STATUS_BAD_REQUEST = HttpStatus.BAD_REQUEST;
     private static final HttpStatus STATUS_NOT_FOUND = HttpStatus.NOT_FOUND;
@@ -53,7 +56,7 @@ public class CourseExceptionHandler extends ResponseEntityExceptionHandler {
     private ErrorResponse buildErrorResponse(Exception ex, HttpStatus status, List<ErrorObject> errors) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setCode((status.value()));
-        errorResponse.setMessage(messageSource.getMessage("request-invalid", null, LocaleContextHolder.getLocale()));
+        errorResponse.setMessage(messageSource.getMessage("request.invalid", null, LocaleContextHolder.getLocale()));
         if(!errors.isEmpty()){
             errorResponse.setErrors(errors);
         }
