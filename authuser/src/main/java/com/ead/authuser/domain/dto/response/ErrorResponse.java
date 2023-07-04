@@ -1,5 +1,6 @@
-package com.ead.authuser.exception;
+package com.ead.authuser.domain.dto.response;
 
+import com.ead.authuser.exception.ErrorObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

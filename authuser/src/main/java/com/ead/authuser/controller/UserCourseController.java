@@ -32,9 +32,13 @@ public class UserCourseController {
                                                                     @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_USER_ID,
-                "getAllCoursesByUser", "GET", "Searching a list of courses by user", userId);
+                "getAllCoursesByUser", "GET", "Searching a list of courses by userId", userId);
 
         Page<CourseResponse> coursesResponse = courseClientService.getAllCoursesByUserId(userId, pageable);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_SIZE + ConstantsLog.LOG_HTTP_CODE,
+                "getAllCoursesByUser", ConstantsLog.LOG_EVENT_INFO, "List of courses by userId found.", coursesResponse.getTotalElements(), ConstantsLog.LOG_HTTP_CODE_OK);
+
         return ResponseEntity.ok(coursesResponse);
     }
 

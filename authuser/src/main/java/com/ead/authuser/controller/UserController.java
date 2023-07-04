@@ -29,9 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
 @Log4j2
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -49,15 +46,12 @@ public class UserController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllUsers", "GET", "Searching a list of users");
 
-        Page<UserResponse> pageUserResponse = service.findAllUsers(pageable, spec).map(u -> mapper.toResponse(u));
+        Page<User> users = service.findAllUsers(pageable, spec);
 
-        if (!pageUserResponse.isEmpty()) {
-            pageUserResponse.forEach(userResponse -> {
-                userResponse.add(linkTo(methodOn(UserController.class).getOneUser(userResponse.getUserId())).withSelfRel());
-            });
-        }
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_SIZE + ConstantsLog.LOG_HTTP_CODE,
+                "getAllUsers", ConstantsLog.LOG_EVENT_INFO, "Users found.", users.getTotalElements(), ConstantsLog.LOG_HTTP_CODE_OK);
 
-        return ResponseEntity.ok(pageUserResponse);
+        return ResponseEntity.ok(mapper.convertToPageUserResponse(users));
     }
 
     @GetMapping("/{userId}")
@@ -67,6 +61,10 @@ public class UserController {
                 "getOneUser", "GET", "Searching one user", userId);
 
         User user = service.findById(userId);
+
+        log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID + ConstantsLog.LOG_HTTP_CODE,
+                "getOneUser", ConstantsLog.LOG_EVENT_INFO, "User found.", userId, ConstantsLog.LOG_HTTP_CODE_OK);
+
         return ResponseEntity.ok(mapper.toResponse(user));
     }
 

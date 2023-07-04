@@ -19,6 +19,7 @@ public class ConstantsLog {
     public static final String LOG_ENTITY_ID = "entityId={} ";
     public static final String LOG_USER_ID = "userId={} ";
     public static final String LOG_COURSE_ID = "courseId={} ";
+    public static final String LOG_SIZE = "size={} ";
 
 
 }

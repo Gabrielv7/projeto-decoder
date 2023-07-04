@@ -18,7 +18,6 @@ import java.util.UUID;
 public class InstructorServiceImpl implements InstructorService {
 
     private final UserService userService;
-
     private final UserAssembler userAssembler;
 
     @Transactional

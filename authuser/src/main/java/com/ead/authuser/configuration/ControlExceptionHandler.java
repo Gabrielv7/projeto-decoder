@@ -1,5 +1,9 @@
-package com.ead.authuser.exception;
+package com.ead.authuser.configuration;
 
+import com.ead.authuser.exception.BusinessException;
+import com.ead.authuser.exception.ErrorObject;
+import com.ead.authuser.domain.dto.response.ErrorResponse;
+import com.ead.authuser.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -13,25 +17,27 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestControllerAdvice
-public class AuthUserExceptionHandler extends ResponseEntityExceptionHandler {
+public class ControlExceptionHandler extends ResponseEntityExceptionHandler {
+
+    private static final HttpStatus STATUS_BAD_REQUEST = HttpStatus.BAD_REQUEST;
+    private static final HttpStatus STATUS_NOT_FOUND = HttpStatus.NOT_FOUND;
 
     private final MessageSource messageSource;
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
-        ErrorResponse errorResponse = buildErrorResponse(ex, HttpStatus.NOT_FOUND, null);
-        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
-    }
-
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<Object> handleBusinessException(BusinessException ex, WebRequest request) {
-        ErrorResponse errorResponse = buildErrorResponse(ex, HttpStatus.BAD_REQUEST, null);
-        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+        ErrorResponse errorResponse = buildErrorResponse(ex, STATUS_BAD_REQUEST);
+        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), STATUS_BAD_REQUEST, request);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
+        ErrorResponse errorResponse = buildErrorResponse(ex, STATUS_NOT_FOUND);
+        return handleExceptionInternal(ex, errorResponse, new HttpHeaders(), STATUS_NOT_FOUND, request);
     }
 
     @Override
@@ -50,15 +56,17 @@ public class AuthUserExceptionHandler extends ResponseEntityExceptionHandler {
     private ErrorResponse buildErrorResponse(Exception ex, HttpStatus status, List<ErrorObject> errors) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setCode((status.value()));
-        if(ex instanceof MethodArgumentNotValidException){
-            errorResponse.setMessage(messageSource.getMessage("request-invalid", null, LocaleContextHolder.getLocale()));
-            if(Objects.nonNull(errors)){
-                errorResponse.setErrors(errors);
-            }
-        }else{
-            errorResponse.setMessage(ex.getMessage());
+        errorResponse.setMessage(messageSource.getMessage("request.invalid", null, LocaleContextHolder.getLocale()));
+        if(!errors.isEmpty()){
+            errorResponse.setErrors(errors);
         }
         return errorResponse;
     }
 
+    private ErrorResponse buildErrorResponse(Exception ex, HttpStatus status) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setCode((status.value()));
+        errorResponse.setMessage(ex.getMessage());
+        return errorResponse;
+    }
 }

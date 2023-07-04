@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 public class UserValidator {
 
     private final UserRepository userRepository;
-
     private final MessageSource messageSource;
 
     public void validateCreate(User user) {
