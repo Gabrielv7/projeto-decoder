@@ -20,7 +20,6 @@ import java.util.UUID;
 public class CourseClientServiceImpl implements CourseClientService {
 
     private final CourseClient courseClient;
-
     private final  UserService userService;
 
     @CircuitBreaker(name = "circuitbreakerInstance")

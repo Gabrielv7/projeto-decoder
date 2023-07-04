@@ -7,7 +7,7 @@ import com.ead.authuser.domain.dto.request.UserRequest;
 import com.ead.authuser.domain.enums.ActionTypeEnum;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.UserRepository;
-import com.ead.authuser.sender.UserEventExchangeSender;
+import com.ead.authuser.publisher.UserEventExchangeSender;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,9 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final MessageSource messageSource;
-
     private final UserValidator validator;
-
     private final UserAssembler userAssembler;
-
     private final UserEventExchangeSender userEventExchangeSender;
 
     @Override
