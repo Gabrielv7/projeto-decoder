@@ -19,25 +19,26 @@ public class UserValidator {
     private final UserRepository userRepository;
     private final MessageSource messageSource;
 
-    public void validateCreate(User user) {
-        this.validUsernameAndEmailAlreadyExists(user);
+    public void validateCreate(UserRequest userRequest) {
+        this.validUsernameAndEmailAlreadyExists(userRequest);
     }
 
     public void validateUpdatePassword(User user, UserRequest userRequest) {
         this.matchOldPassword(user.getPassword(), userRequest.getOldPassword());
     }
 
-    private void validUsernameAndEmailAlreadyExists(User user) {
+    private void validUsernameAndEmailAlreadyExists(UserRequest userRequest) {
 
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(userRequest.getEmail())) {
 
             String message = messageSource.getMessage("email-already-registered", null, LocaleContextHolder.getLocale());
+
             log.error(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_MESSAGE,
                     "validUsernameAndEmailAlreadyExists", "BusinessException", ConstantsLog.LOG_HTTP_CODE_BAD_REQUEST, message);
 
             throw new BusinessException(message);
 
-        } else if (userRepository.existsByUsername(user.getUsername())) {
+        } else if (userRepository.existsByUsername(userRequest.getUsername())) {
 
             String message = messageSource.getMessage("username-already-registered", null, LocaleContextHolder.getLocale());
 

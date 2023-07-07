@@ -35,7 +35,7 @@ public class AuthenticationController {
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY,
                 "registerUser", "POST", "Saving user", userRequest);
 
-        User userSaved = service.save(mapper.toEntity(userRequest));
+        User userSaved = service.save(userRequest);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_HTTP_CODE + ConstantsLog.LOG_ENTITY_ID,
                 "registerUser", ConstantsLog.LOG_EVENT_INFO, "User saved", ConstantsLog.LOG_HTTP_CODE_CREATED, userSaved.getUserId());
