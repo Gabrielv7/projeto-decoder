@@ -5,6 +5,7 @@ import com.ead.authuser.domain.assembler.UserAssembler;
 import com.ead.authuser.domain.dto.rabbit.UserEventDto;
 import com.ead.authuser.domain.enums.ActionTypeEnum;
 import com.ead.authuser.domain.enums.UserTypeEnum;
+import com.ead.authuser.publisher.UserEventExchangeSender;
 import com.ead.authuser.service.InstructorService;
 import com.ead.authuser.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class InstructorServiceImpl implements InstructorService {
 
     private final UserService userService;
     private final UserAssembler userAssembler;
+    private final UserEventExchangeSender userEventExchangeSender;
 
     @Transactional
     @Override
@@ -26,7 +28,7 @@ public class InstructorServiceImpl implements InstructorService {
         User user = userService.findById(userId);
         user.setUserType(UserTypeEnum.INSTRUCTOR);
         UserEventDto userEventDto = userAssembler.assemblerUserEventDto(user, ActionTypeEnum.UPDATE);
-        userService.sendToUserEventExchange(userEventDto);
+        userEventExchangeSender.sendToUserEventExchange(userEventDto);
         return user;
     }
 }
