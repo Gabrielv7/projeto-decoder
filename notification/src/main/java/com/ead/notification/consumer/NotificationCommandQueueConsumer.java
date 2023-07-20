@@ -1,8 +1,6 @@
 package com.ead.notification.consumer;
 
-import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.rabbit.NotificationCommandDto;
-import com.ead.notification.mapper.NotificationMapper;
+import com.ead.notification.domain.dto.rabbit.NotificationCommandRecordDto;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Component;
 public class NotificationCommandQueueConsumer {
 
     private final NotificationService notificationService;
-    private final NotificationMapper mapper;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(
@@ -31,13 +28,12 @@ public class NotificationCommandQueueConsumer {
                 ignoreDeclarationExceptions = "true"),
             key = "${ead.broker.key.notificationCommandKey}"
     ))
-    public void receiveNotificationCommandMessage(@Payload NotificationCommandDto notificationCommandDto) {
-        this.doProcess(notificationCommandDto);
+    public void receiveNotificationCommandMessage(@Payload NotificationCommandRecordDto notificationCommandRecordDto) {
+        this.doProcess(notificationCommandRecordDto);
     }
 
-    public void doProcess(NotificationCommandDto notificationCommandDto) {
-        Notification notification = mapper.convertMessage(notificationCommandDto);
-        notificationService.saveNotification(notification);
+    public void doProcess(NotificationCommandRecordDto notificationCommandRecordDto) {
+        notificationService.saveNotification(notificationCommandRecordDto);
     }
 
 }

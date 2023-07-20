@@ -1,7 +1,8 @@
 package com.ead.notification.service.impl;
 
 import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.request.NotificationUpdateRequest;
+import com.ead.notification.domain.dto.rabbit.NotificationCommandRecordDto;
+import com.ead.notification.domain.dto.request.NotificationRecordRequest;
 import com.ead.notification.domain.enums.NotificationStatusEnum;
 import com.ead.notification.exception.NotFoundException;
 import com.ead.notification.repository.NotificationRepository;
@@ -25,7 +26,11 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public Notification saveNotification(Notification notification) {
+    public Notification saveNotification(NotificationCommandRecordDto notificationCommandRecordDto) {
+        Notification notification = new Notification();
+        notification.setMessage(notificationCommandRecordDto.message());
+        notification.setTitle(notificationCommandRecordDto.title());
+        notification.setUserId( notificationCommandRecordDto.userId());
         return repository.save(notification);
     }
 
@@ -36,9 +41,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public Notification updateStatusNotification(UUID notificationId, UUID userId, NotificationUpdateRequest notificationUpdateRequest) {
+    public Notification updateStatusNotification(UUID notificationId, UUID userId, NotificationRecordRequest notificationRecordRequest) {
         Notification notification = alreadyExistsNotification(notificationId, userId);
-        notification.setNotificationStatus(notificationUpdateRequest.getNotificationStatus());
+        notification.setNotificationStatus(notificationRecordRequest.notificationStatus());
         return notification;
     }
 

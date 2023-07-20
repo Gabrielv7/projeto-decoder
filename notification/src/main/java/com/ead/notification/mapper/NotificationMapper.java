@@ -1,29 +1,33 @@
 package com.ead.notification.mapper;
 
 import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.rabbit.NotificationCommandDto;
-import com.ead.notification.domain.dto.response.NotificationResponse;
+import com.ead.notification.domain.dto.response.NotificationRecordResponse;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Component
 public class NotificationMapper {
 
-    private final ModelMapper mapper;
-
-    public Notification convertMessage(NotificationCommandDto notificationCommandDto) {
-        return mapper.map(notificationCommandDto, Notification.class);
+    public NotificationRecordResponse toResponse(Notification notification) {
+        return convertToResponse(notification);
     }
 
-    public NotificationResponse toResponse(Notification notification) {
-        return mapper.map(notification, NotificationResponse.class);
-    }
-
-    public Page<NotificationResponse> convertToPageNotificationsResponse(Page<Notification> notifications) {
+    public Page<NotificationRecordResponse> convertToPageNotificationsResponse(Page<Notification> notifications) {
         return notifications.map(this::toResponse);
+    }
+
+    private NotificationRecordResponse convertToResponse(Notification notification) {
+        return new NotificationRecordResponse(notification.getNotificationId(), notification.getUserId(), notification.getTitle(),
+                notification.getMessage(), notification.getNotificationStatus(), convertDateOfPattern(notification.getCreationDate()));
+    }
+
+    private LocalDateTime convertDateOfPattern(LocalDateTime localDateTime) {
+        return LocalDateTime.parse(localDateTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
     }
 
 }
