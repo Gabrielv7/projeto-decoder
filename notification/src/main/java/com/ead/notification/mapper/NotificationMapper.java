@@ -1,7 +1,7 @@
 package com.ead.notification.mapper;
 
-import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.response.NotificationRecordResponse;
+import com.ead.notification.model.Notification;
+import com.ead.notification.dto.response.NotificationRecordResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;

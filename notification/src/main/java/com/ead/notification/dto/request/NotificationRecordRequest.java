@@ -1,6 +1,6 @@
-package com.ead.notification.domain.dto.request;
+package com.ead.notification.dto.request;
 
-import com.ead.notification.domain.enums.NotificationStatusEnum;
+import com.ead.notification.model.enums.NotificationStatusEnum;
 
 import javax.validation.constraints.NotNull;
 

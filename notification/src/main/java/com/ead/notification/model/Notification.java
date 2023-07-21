@@ -1,6 +1,6 @@
-package com.ead.notification.domain;
+package com.ead.notification.model;
 
-import com.ead.notification.domain.enums.NotificationStatusEnum;
+import com.ead.notification.model.enums.NotificationStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

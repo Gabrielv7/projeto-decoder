@@ -1,4 +1,4 @@
-package com.ead.notification.domain.dto.rabbit;
+package com.ead.notification.dto.rabbit;
 
 import java.util.UUID;
 

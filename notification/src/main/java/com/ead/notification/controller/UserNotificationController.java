@@ -1,8 +1,8 @@
 package com.ead.notification.controller;
 
-import com.ead.notification.domain.Notification;
-import com.ead.notification.domain.dto.request.NotificationRecordRequest;
-import com.ead.notification.domain.dto.response.NotificationRecordResponse;
+import com.ead.notification.model.Notification;
+import com.ead.notification.dto.request.NotificationRecordRequest;
+import com.ead.notification.dto.response.NotificationRecordResponse;
 import com.ead.notification.mapper.NotificationMapper;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;

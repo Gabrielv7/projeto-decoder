@@ -1,4 +1,4 @@
-package com.ead.notification.domain.enums;
+package com.ead.notification.model.enums;
 
 public enum NotificationStatusEnum {
 

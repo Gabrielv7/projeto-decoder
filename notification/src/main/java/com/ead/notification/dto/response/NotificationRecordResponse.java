@@ -1,6 +1,6 @@
-package com.ead.notification.domain.dto.response;
+package com.ead.notification.dto.response;
 
-import com.ead.notification.domain.enums.NotificationStatusEnum;
+import com.ead.notification.model.enums.NotificationStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;

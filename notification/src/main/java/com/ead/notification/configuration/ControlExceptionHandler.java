@@ -2,7 +2,7 @@ package com.ead.notification.configuration;
 
 import com.ead.notification.exception.BusinessException;
 import com.ead.notification.exception.ErrorObject;
-import com.ead.notification.domain.dto.response.ErrorResponse;
+import com.ead.notification.dto.response.ErrorResponse;
 import com.ead.notification.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;

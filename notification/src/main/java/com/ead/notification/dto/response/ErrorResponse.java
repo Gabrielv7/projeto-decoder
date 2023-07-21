@@ -1,4 +1,4 @@
-package com.ead.notification.domain.dto.response;
+package com.ead.notification.dto.response;
 
 import com.ead.notification.exception.ErrorObject;
 import com.fasterxml.jackson.annotation.JsonInclude;
