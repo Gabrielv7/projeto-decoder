@@ -27,10 +27,8 @@ public class NotificationServiceImpl implements NotificationService {
     @Override
     @Transactional
     public Notification saveNotification(NotificationCommandRecordDto notificationCommandRecordDto) {
-        Notification notification = new Notification();
-        notification.setMessage(notificationCommandRecordDto.message());
-        notification.setTitle(notificationCommandRecordDto.title());
-        notification.setUserId( notificationCommandRecordDto.userId());
+        Notification notification = new Notification(notificationCommandRecordDto.message(), notificationCommandRecordDto.title(),
+                                                        notificationCommandRecordDto.userId());
         return repository.save(notification);
     }
 
