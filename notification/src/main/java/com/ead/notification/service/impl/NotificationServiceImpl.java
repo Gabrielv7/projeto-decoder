@@ -41,7 +41,7 @@ public class NotificationServiceImpl implements NotificationService {
     @Transactional
     public Notification updateStatusNotification(UUID notificationId, UUID userId, NotificationRecordRequest notificationRecordRequest) {
         Notification notification = alreadyExistsNotification(notificationId, userId);
-        notification.setNotificationStatus(notificationRecordRequest.notificationStatus());
+        notification.setNotificationStatus(NotificationStatusEnum.valueOf(notificationRecordRequest.notificationStatus()));
         return notification;
     }
 

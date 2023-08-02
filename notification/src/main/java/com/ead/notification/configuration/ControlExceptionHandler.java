@@ -1,8 +1,9 @@
 package com.ead.notification.configuration;
 
-import com.ead.notification.exception.BusinessException;
-import com.ead.notification.exception.ErrorObject;
+import com.ead.notification.dto.response.ErrorResponseCustomized;
 import com.ead.notification.dto.response.ErrorResponse;
+import com.ead.notification.exception.BusinessException;
+import com.ead.notification.exception.FieldError;
 import com.ead.notification.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -41,32 +42,24 @@ public class ControlExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List<ErrorObject> errors = getFieldErrors(ex);
-        ErrorResponse errorResponse = buildErrorsResponse(ex, status, errors);
+        List<FieldError> errors = getFieldErrors(ex);
+        ErrorResponseCustomized errorResponse = buildErrorsResponse(status, errors);
         return handleExceptionInternal(ex, errorResponse, headers, status, request);
     }
 
-    private List<ErrorObject> getFieldErrors(MethodArgumentNotValidException ex) {
+    private List<FieldError> getFieldErrors(MethodArgumentNotValidException ex) {
         return ex.getBindingResult().getFieldErrors().stream()
-                .map(error -> new ErrorObject(error.getDefaultMessage(), error.getField()))
+                .map(error -> new FieldError(error.getDefaultMessage(), error.getField()))
                 .toList();
     }
 
-    private ErrorResponse buildErrorsResponse(Exception ex, HttpStatus status, List<ErrorObject> errors) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode((status.value()));
-        errorResponse.setMessage(messageSource.getMessage("request.invalid", null, LocaleContextHolder.getLocale()));
-        if(!errors.isEmpty()){
-            errorResponse.setErrors(errors);
-        }
-        return errorResponse;
+    private ErrorResponseCustomized buildErrorsResponse(HttpStatus status, List<FieldError> errors) {
+        String message = messageSource.getMessage("request.invalid", null, LocaleContextHolder.getLocale());
+        return new ErrorResponseCustomized(status.value(), message, errors);
     }
 
     private ErrorResponse buildErrorResponse(Exception ex, HttpStatus status) {
-        ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setCode((status.value()));
-        errorResponse.setMessage(ex.getMessage());
-        return errorResponse;
+        return new ErrorResponse(status.value(), ex.getMessage());
     }
 
 }
