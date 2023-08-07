@@ -1,8 +1,8 @@
 package com.ead.notification.service.impl;
 
 import com.ead.notification.model.Notification;
-import com.ead.notification.dto.rabbit.NotificationCommandRecordDto;
-import com.ead.notification.dto.request.NotificationRecordRequest;
+import com.ead.notification.dto.rabbit.NotificationCommandDto;
+import com.ead.notification.dto.request.NotificationRequest;
 import com.ead.notification.model.enums.NotificationStatusEnum;
 import com.ead.notification.exception.NotFoundException;
 import com.ead.notification.repository.NotificationRepository;
@@ -26,9 +26,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public Notification saveNotification(NotificationCommandRecordDto notificationCommandRecordDto) {
-        Notification notification = new Notification(notificationCommandRecordDto.message(), notificationCommandRecordDto.title(),
-                                                        notificationCommandRecordDto.userId());
+    public Notification saveNotification(NotificationCommandDto notificationCommandDto) {
+        Notification notification = new Notification(notificationCommandDto.message(), notificationCommandDto.title(),
+                                                        notificationCommandDto.userId());
         return repository.save(notification);
     }
 
@@ -39,9 +39,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public Notification updateStatusNotification(UUID notificationId, UUID userId, NotificationRecordRequest notificationRecordRequest) {
+    public Notification updateStatusNotification(UUID notificationId, UUID userId, NotificationRequest notificationRequest) {
         Notification notification = alreadyExistsNotification(notificationId, userId);
-        notification.setNotificationStatus(NotificationStatusEnum.valueOf(notificationRecordRequest.notificationStatus()));
+        notification.setNotificationStatus(NotificationStatusEnum.valueOf(notificationRequest.notificationStatus()));
         return notification;
     }
 

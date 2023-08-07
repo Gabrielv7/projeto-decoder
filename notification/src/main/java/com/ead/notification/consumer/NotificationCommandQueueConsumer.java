@@ -1,6 +1,6 @@
 package com.ead.notification.consumer;
 
-import com.ead.notification.dto.rabbit.NotificationCommandRecordDto;
+import com.ead.notification.dto.rabbit.NotificationCommandDto;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.ExchangeTypes;
@@ -28,12 +28,12 @@ public class NotificationCommandQueueConsumer {
                 ignoreDeclarationExceptions = "true"),
             key = "${ead.broker.key.notificationCommandKey}"
     ))
-    public void receiveNotificationCommandMessage(@Payload NotificationCommandRecordDto notificationCommandRecordDto) {
-        this.doProcess(notificationCommandRecordDto);
+    public void receiveNotificationCommandMessage(@Payload NotificationCommandDto notificationCommandDto) {
+        this.doProcess(notificationCommandDto);
     }
 
-    public void doProcess(NotificationCommandRecordDto notificationCommandRecordDto) {
-        notificationService.saveNotification(notificationCommandRecordDto);
+    public void doProcess(NotificationCommandDto notificationCommandDto) {
+        notificationService.saveNotification(notificationCommandDto);
     }
 
 }

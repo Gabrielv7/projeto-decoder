@@ -1,8 +1,8 @@
 package com.ead.notification.controller;
 
 import com.ead.notification.model.Notification;
-import com.ead.notification.dto.request.NotificationRecordRequest;
-import com.ead.notification.dto.response.NotificationRecordResponse;
+import com.ead.notification.dto.request.NotificationRequest;
+import com.ead.notification.dto.response.NotificationResponse;
 import com.ead.notification.mapper.NotificationMapper;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
@@ -34,19 +34,19 @@ public class UserNotificationController {
     private final NotificationMapper mapper;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<Page<NotificationRecordResponse>> getAllNotificationsByUserId(@PathVariable(value = "userId") UUID userId,
-                                                                                        @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<Page<NotificationResponse>> getAllNotificationsByUserId(@PathVariable(value = "userId") UUID userId,
+                                                                                  @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<Notification> notifications = notificationService.findAllNotificationsByUserId(userId, pageable);
         return ResponseEntity.ok(mapper.convertToPageNotificationsResponse(notifications));
     }
 
     @PutMapping("/{notificationId}/users/{userId}")
-    public ResponseEntity<NotificationRecordResponse> updateNotification(@PathVariable(value = "notificationId") UUID notificationId,
-                                                                         @PathVariable(value = "userId") UUID userId,
-                                                                         @RequestBody @Valid NotificationRecordRequest notificationRecordRequest) {
+    public ResponseEntity<NotificationResponse> updateNotification(@PathVariable(value = "notificationId") UUID notificationId,
+                                                                   @PathVariable(value = "userId") UUID userId,
+                                                                   @RequestBody @Valid NotificationRequest notificationRequest) {
 
-        Notification notificationUpdated = notificationService.updateStatusNotification(notificationId, userId, notificationRecordRequest);
+        Notification notificationUpdated = notificationService.updateStatusNotification(notificationId, userId, notificationRequest);
         return ResponseEntity.ok(mapper.toResponse(notificationUpdated));
     }
 

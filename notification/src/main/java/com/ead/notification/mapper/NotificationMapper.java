@@ -1,7 +1,7 @@
 package com.ead.notification.mapper;
 
 import com.ead.notification.model.Notification;
-import com.ead.notification.dto.response.NotificationRecordResponse;
+import com.ead.notification.dto.response.NotificationResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -11,16 +11,16 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class NotificationMapper {
 
-    public NotificationRecordResponse toResponse(Notification notification) {
+    public NotificationResponse toResponse(Notification notification) {
         return convertToResponse(notification);
     }
 
-    public Page<NotificationRecordResponse> convertToPageNotificationsResponse(Page<Notification> notifications) {
+    public Page<NotificationResponse> convertToPageNotificationsResponse(Page<Notification> notifications) {
         return notifications.map(this::toResponse);
     }
 
-    private NotificationRecordResponse convertToResponse(Notification notification) {
-        return new NotificationRecordResponse(notification.getNotificationId(), notification.getUserId(), notification.getTitle(),
+    private NotificationResponse convertToResponse(Notification notification) {
+        return new NotificationResponse(notification.getNotificationId(), notification.getUserId(), notification.getTitle(),
                 notification.getMessage(), notification.getNotificationStatus(), convertDateOfPattern(notification.getCreationDate()));
     }
 

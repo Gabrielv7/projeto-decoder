@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
-public record NotificationRecordResponse(UUID notificationId,
-                                         UUID userId,
-                                         String title,
-                                         String message,
-                                         NotificationStatusEnum notificationStatus,
-                                         LocalDateTime creationDate
+public record NotificationResponse(UUID notificationId,
+                                   UUID userId,
+                                   String title,
+                                   String message,
+                                   NotificationStatusEnum notificationStatus,
+                                   LocalDateTime creationDate
                                          ) {
 
 }
