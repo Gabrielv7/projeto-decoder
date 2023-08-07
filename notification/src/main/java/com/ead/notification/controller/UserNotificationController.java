@@ -1,9 +1,9 @@
 package com.ead.notification.controller;
 
+import com.ead.notification.mapper.NotificationMapper;
 import com.ead.notification.model.Notification;
 import com.ead.notification.dto.request.NotificationRequest;
 import com.ead.notification.dto.response.NotificationResponse;
-import com.ead.notification.mapper.NotificationMapper;
 import com.ead.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -38,7 +38,7 @@ public class UserNotificationController {
                                                                                   @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.ASC) Pageable pageable) {
 
         Page<Notification> notifications = notificationService.findAllNotificationsByUserId(userId, pageable);
-        return ResponseEntity.ok(mapper.convertToPageNotificationsResponse(notifications));
+        return ResponseEntity.ok(notifications.map(mapper::toResponse));
     }
 
     @PutMapping("/{notificationId}/users/{userId}")
