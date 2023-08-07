@@ -1,7 +1,7 @@
 package com.ead.authuser.validator;
 
-import com.ead.authuser.domain.User;
-import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.model.User;
+import com.ead.authuser.dto.request.UserRequest;
 import com.ead.authuser.exception.BusinessException;
 import com.ead.authuser.repository.UserRepository;
 import com.ead.authuser.util.ConstantsLog;

@@ -1,6 +1,6 @@
 package com.ead.authuser.repository;
 
-import com.ead.authuser.domain.User;
+import com.ead.authuser.model.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

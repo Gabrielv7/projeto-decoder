@@ -1,7 +1,7 @@
-package com.ead.authuser.domain.dto.response;
+package com.ead.authuser.dto.response;
 
-import com.ead.authuser.domain.enums.CourseLevelEnum;
-import com.ead.authuser.domain.enums.CourseStatusEnum;
+import com.ead.authuser.model.enums.CourseLevelEnum;
+import com.ead.authuser.model.enums.CourseStatusEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 

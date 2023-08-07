@@ -1,8 +1,8 @@
-package com.ead.authuser.domain.dto.rabbit;
+package com.ead.authuser.dto.rabbit;
 
-import com.ead.authuser.domain.enums.ActionTypeEnum;
-import com.ead.authuser.domain.enums.UserStatusEnum;
-import com.ead.authuser.domain.enums.UserTypeEnum;
+import com.ead.authuser.model.enums.ActionTypeEnum;
+import com.ead.authuser.model.enums.UserStatusEnum;
+import com.ead.authuser.model.enums.UserTypeEnum;
 import lombok.Data;
 
 import java.util.UUID;

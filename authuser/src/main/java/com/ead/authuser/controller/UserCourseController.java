@@ -1,6 +1,6 @@
 package com.ead.authuser.controller;
 
-import com.ead.authuser.domain.dto.response.CourseResponse;
+import com.ead.authuser.dto.response.CourseResponse;
 import com.ead.authuser.service.CourseClientService;
 import com.ead.authuser.util.ConstantsLog;
 import lombok.RequiredArgsConstructor;

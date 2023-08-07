@@ -1,6 +1,6 @@
 package com.ead.authuser.controller.client;
 
-import com.ead.authuser.domain.dto.response.CourseResponse;
+import com.ead.authuser.dto.response.CourseResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

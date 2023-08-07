@@ -1,6 +1,6 @@
 package com.ead.authuser.configuration.security;
 
-import com.ead.authuser.domain.User;
+import com.ead.authuser.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Data;

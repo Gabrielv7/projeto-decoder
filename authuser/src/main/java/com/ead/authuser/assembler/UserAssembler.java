@@ -1,8 +1,8 @@
-package com.ead.authuser.domain.assembler;
+package com.ead.authuser.assembler;
 
-import com.ead.authuser.domain.User;
-import com.ead.authuser.domain.dto.rabbit.UserEventDto;
-import com.ead.authuser.domain.enums.ActionTypeEnum;
+import com.ead.authuser.model.User;
+import com.ead.authuser.dto.rabbit.UserEventDto;
+import com.ead.authuser.model.enums.ActionTypeEnum;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

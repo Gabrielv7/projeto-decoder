@@ -1,6 +1,6 @@
 package com.ead.authuser.publisher;
 
-import com.ead.authuser.domain.dto.rabbit.UserEventDto;
+import com.ead.authuser.dto.rabbit.UserEventDto;
 import com.ead.authuser.util.ConstantsLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

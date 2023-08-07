@@ -1,6 +1,6 @@
 package com.ead.authuser.service;
 
-import com.ead.authuser.domain.dto.response.CourseResponse;
+import com.ead.authuser.dto.response.CourseResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

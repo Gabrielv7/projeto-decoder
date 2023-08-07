@@ -1,7 +1,7 @@
 package com.ead.authuser.service;
 
-import com.ead.authuser.domain.Role;
-import com.ead.authuser.domain.enums.RoleTypeEnum;
+import com.ead.authuser.model.Role;
+import com.ead.authuser.model.enums.RoleTypeEnum;
 
 public interface RoleService {
 

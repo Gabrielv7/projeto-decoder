@@ -1,4 +1,4 @@
-package com.ead.authuser.domain.dto.response;
+package com.ead.authuser.dto.response;
 
 import lombok.NonNull;
 

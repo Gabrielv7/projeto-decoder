@@ -1,7 +1,7 @@
-package com.ead.authuser.domain.dto.response;
+package com.ead.authuser.dto.response;
 
-import com.ead.authuser.domain.enums.UserStatusEnum;
-import com.ead.authuser.domain.enums.UserTypeEnum;
+import com.ead.authuser.model.enums.UserStatusEnum;
+import com.ead.authuser.model.enums.UserTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

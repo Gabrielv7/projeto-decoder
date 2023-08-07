@@ -1,7 +1,7 @@
 package com.ead.authuser.service.impl;
 
-import com.ead.authuser.domain.Role;
-import com.ead.authuser.domain.enums.RoleTypeEnum;
+import com.ead.authuser.model.Role;
+import com.ead.authuser.model.enums.RoleTypeEnum;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.repository.RoleRepository;
 import com.ead.authuser.service.RoleService;

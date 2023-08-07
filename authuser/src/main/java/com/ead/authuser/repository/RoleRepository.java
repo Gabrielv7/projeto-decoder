@@ -1,7 +1,7 @@
 package com.ead.authuser.repository;
 
-import com.ead.authuser.domain.Role;
-import com.ead.authuser.domain.enums.RoleTypeEnum;
+import com.ead.authuser.model.Role;
+import com.ead.authuser.model.enums.RoleTypeEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

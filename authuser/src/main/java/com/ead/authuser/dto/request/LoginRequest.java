@@ -1,4 +1,4 @@
-package com.ead.authuser.domain.dto.request;
+package com.ead.authuser.dto.request;
 
 import javax.validation.constraints.NotBlank;
 

@@ -1,7 +1,7 @@
-package com.ead.authuser.domain;
+package com.ead.authuser.model;
 
-import com.ead.authuser.domain.enums.UserStatusEnum;
-import com.ead.authuser.domain.enums.UserTypeEnum;
+import com.ead.authuser.model.enums.UserStatusEnum;
+import com.ead.authuser.model.enums.UserTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

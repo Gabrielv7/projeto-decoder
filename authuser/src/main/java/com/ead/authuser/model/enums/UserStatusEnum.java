@@ -1,4 +1,4 @@
-package com.ead.authuser.domain.enums;
+package com.ead.authuser.model.enums;
 
 public enum UserStatusEnum {
 

@@ -1,7 +1,7 @@
 package com.ead.authuser.service;
 
-import com.ead.authuser.domain.User;
-import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.model.User;
+import com.ead.authuser.dto.request.UserRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

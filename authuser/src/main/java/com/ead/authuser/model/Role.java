@@ -1,6 +1,6 @@
-package com.ead.authuser.domain;
+package com.ead.authuser.model;
 
-import com.ead.authuser.domain.enums.RoleTypeEnum;
+import com.ead.authuser.model.enums.RoleTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

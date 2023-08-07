@@ -1,7 +1,7 @@
 package com.ead.authuser.service.impl;
 
 import com.ead.authuser.controller.client.CourseClient;
-import com.ead.authuser.domain.dto.response.CourseResponse;
+import com.ead.authuser.dto.response.CourseResponse;
 import com.ead.authuser.service.CourseClientService;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.util.ConstantsLog;
