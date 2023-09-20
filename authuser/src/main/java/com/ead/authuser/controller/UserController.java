@@ -1,5 +1,6 @@
 package com.ead.authuser.controller;
 
+import com.ead.authuser.configuration.security.AuthenticationCurrentUserService;
 import com.ead.authuser.model.User;
 import com.ead.authuser.dto.request.UserRequest;
 import com.ead.authuser.dto.response.UserResponse;
@@ -16,6 +17,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,10 +43,16 @@ public class UserController {
 
     private final UserService service;
     private final UserMapper mapper;
+    private final AuthenticationCurrentUserService authenticationCurrentUserService;
 
+    @PreAuthorize("hasAnyRole('STUDENT')")
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsers(SpecificationTemplate.UserSpec spec,
-                                                          @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable) {
+                                                          @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
+                                                          Authentication authentication) {
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        log.info("Authentication {}", userDetails.getUsername());
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE,
                 "getAllUsers", "GET", "Searching a list of users");
@@ -54,8 +65,15 @@ public class UserController {
         return ResponseEntity.ok(mapper.convertToPageUserResponse(users));
     }
 
+    @PreAuthorize("hasAnyRole('STUDENT')")
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getOneUser(@PathVariable(value = "userId") UUID userId) {
+
+        UUID currentUserId = authenticationCurrentUserService.getCurrentUser().getUserId();
+
+        if (!currentUserId.equals(userId)) {
+            throw new AccessDeniedException("Forbidden");
+        }
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
                 "getOneUser", "GET", "Searching one user", userId);
