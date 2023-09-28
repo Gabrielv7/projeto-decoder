@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,7 +44,7 @@ public class UserController {
     private final UserMapper mapper;
     private final AuthenticationCurrentUserService authenticationCurrentUserService;
 
-    @PreAuthorize("hasAnyRole('STUDENT')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<UserResponse>> getAllUsers(SpecificationTemplate.UserSpec spec,
                                                           @PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.ASC) Pageable pageable,
@@ -71,9 +70,7 @@ public class UserController {
 
         UUID currentUserId = authenticationCurrentUserService.getCurrentUser().getUserId();
 
-        if (!currentUserId.equals(userId)) {
-            throw new AccessDeniedException("Forbidden");
-        }
+        authenticationCurrentUserService.validCurrentUserIdIsEqualsPathUserId(userId, currentUserId);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_ENTITY_ID,
                 "getOneUser", "GET", "Searching one user", userId);
