@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface NotificationService {
 
-    Notification saveNotification(NotificationCommandDto notificationCommandDto);
+    void saveNotification(NotificationCommandDto notificationCommandDto);
 
     Page<Notification> findAllNotificationsByUserId(UUID userId, Pageable pageable);
 
