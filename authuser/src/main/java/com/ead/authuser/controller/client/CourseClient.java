@@ -5,6 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.UUID;
@@ -13,6 +14,6 @@ import java.util.UUID;
 public interface CourseClient {
 
     @GetMapping("/courses")
-    Page<CourseResponse> getAllCourses(@RequestParam UUID userId, Pageable pageable);
+    Page<CourseResponse> getAllCourses(@RequestParam UUID userId, Pageable pageable, @RequestHeader("Authorization") String token);
 
 }

@@ -24,14 +24,14 @@ public class CourseClientServiceImpl implements CourseClientService {
 
     @CircuitBreaker(name = "circuitbreakerInstance")
     @Override
-    public Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable) {
+    public Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable, String token) {
 
         userService.findById(userId);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_USER_ID,
                 "getAllCoursesByUserId", "request ms-course", userId);
 
-        return courseClient.getAllCourses(userId, pageable);
+        return courseClient.getAllCourses(userId, pageable, token);
     }
 
 }

@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public interface CourseClientService {
 
-    Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable);
+    Page<CourseResponse> getAllCoursesByUserId(UUID userId, Pageable pageable, String token);
 
 }
