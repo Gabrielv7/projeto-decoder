@@ -1,7 +1,7 @@
 package com.ead.notification.mapper;
 
-import com.ead.notification.dto.response.NotificationResponse;
-import com.ead.notification.model.Notification;
+import com.ead.notification.domain.dto.response.NotificationResponse;
+import com.ead.notification.domain.model.Notification;
 import org.mapstruct.Mapper;
 
 import static org.mapstruct.NullValueCheckStrategy.ALWAYS;

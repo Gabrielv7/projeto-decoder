@@ -1,6 +1,6 @@
 package com.ead.authuser.controller.client;
 
-import com.ead.authuser.dto.response.CourseResponse;
+import com.ead.authuser.controller.client.dto.CourseDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +14,6 @@ import java.util.UUID;
 public interface CourseClient {
 
     @GetMapping("/courses")
-    Page<CourseResponse> getAllCourses(@RequestParam UUID userId, Pageable pageable, @RequestHeader("Authorization") String token);
+    Page<CourseDTO> getAllCourses(@RequestParam UUID userId, Pageable pageable, @RequestHeader("Authorization") String token);
 
 }

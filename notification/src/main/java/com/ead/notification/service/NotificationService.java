@@ -1,8 +1,8 @@
 package com.ead.notification.service;
 
-import com.ead.notification.model.Notification;
-import com.ead.notification.dto.rabbit.NotificationCommandDto;
-import com.ead.notification.dto.request.NotificationRequest;
+import com.ead.notification.domain.model.Notification;
+import com.ead.notification.messaging.dto.NotificationCommandDto;
+import com.ead.notification.domain.dto.request.NotificationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

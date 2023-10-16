@@ -1,8 +1,8 @@
 package com.ead.authuser.controller;
 
-import com.ead.authuser.model.User;
-import com.ead.authuser.dto.request.InstructorRequest;
-import com.ead.authuser.dto.response.UserResponse;
+import com.ead.authuser.domain.model.User;
+import com.ead.authuser.domain.dto.request.InstructorRequest;
+import com.ead.authuser.domain.dto.response.UserResponse;
 import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.service.InstructorService;
 import com.ead.authuser.util.ConstantsLog;

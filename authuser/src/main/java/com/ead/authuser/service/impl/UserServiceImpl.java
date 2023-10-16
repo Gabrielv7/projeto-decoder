@@ -1,16 +1,16 @@
 package com.ead.authuser.service.impl;
 
-import com.ead.authuser.model.Role;
-import com.ead.authuser.model.User;
-import com.ead.authuser.assembler.UserAssembler;
-import com.ead.authuser.dto.rabbit.UserEventDto;
-import com.ead.authuser.dto.request.UserRequest;
-import com.ead.authuser.model.enums.ActionTypeEnum;
-import com.ead.authuser.model.enums.RoleTypeEnum;
+import com.ead.authuser.domain.model.Role;
+import com.ead.authuser.domain.model.User;
+import com.ead.authuser.domain.assembler.UserAssembler;
+import com.ead.authuser.messaging.dto.UserEventDto;
+import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.model.enums.ActionTypeEnum;
+import com.ead.authuser.domain.model.enums.RoleTypeEnum;
 import com.ead.authuser.exception.NotFoundException;
 import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.repository.UserRepository;
-import com.ead.authuser.publisher.UserEventExchangeSender;
+import com.ead.authuser.messaging.publisher.UserEventExchangeSender;
 import com.ead.authuser.service.RoleService;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.validator.UserValidator;

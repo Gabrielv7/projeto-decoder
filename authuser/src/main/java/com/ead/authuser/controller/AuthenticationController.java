@@ -1,11 +1,11 @@
 package com.ead.authuser.controller;
 
 import com.ead.authuser.configuration.security.JwtProvider;
-import com.ead.authuser.model.User;
-import com.ead.authuser.dto.request.LoginRequest;
-import com.ead.authuser.dto.request.UserRequest;
-import com.ead.authuser.dto.response.JwtResponse;
-import com.ead.authuser.dto.response.UserResponse;
+import com.ead.authuser.domain.model.User;
+import com.ead.authuser.domain.dto.request.LoginRequest;
+import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.dto.response.JwtResponse;
+import com.ead.authuser.domain.dto.response.UserResponse;
 import com.ead.authuser.mapper.UserMapper;
 import com.ead.authuser.service.UserService;
 import com.ead.authuser.util.ConstantsLog;

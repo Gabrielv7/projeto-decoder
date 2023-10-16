@@ -2,7 +2,7 @@ package com.ead.course.domain.assembler;
 
 import com.ead.course.domain.Course;
 import com.ead.course.domain.User;
-import com.ead.course.domain.dto.rabbit.NotificationCommandDto;
+import com.ead.course.messaging.dto.NotificationCommandDto;
 import org.springframework.stereotype.Component;
 
 @Component

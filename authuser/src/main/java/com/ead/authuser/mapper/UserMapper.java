@@ -1,8 +1,8 @@
 package com.ead.authuser.mapper;
 
-import com.ead.authuser.model.User;
-import com.ead.authuser.dto.request.UserRequest;
-import com.ead.authuser.dto.response.UserResponse;
+import com.ead.authuser.domain.model.User;
+import com.ead.authuser.domain.dto.request.UserRequest;
+import com.ead.authuser.domain.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,6 @@
 package com.ead.authuser.service;
 
-import com.ead.authuser.model.User;
+import com.ead.authuser.domain.model.User;
 
 import java.util.UUID;
 

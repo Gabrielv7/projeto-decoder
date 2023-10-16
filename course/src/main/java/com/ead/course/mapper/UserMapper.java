@@ -1,7 +1,7 @@
 package com.ead.course.mapper;
 
 import com.ead.course.domain.User;
-import com.ead.course.domain.dto.rabbit.UserEventDto;
+import com.ead.course.messaging.dto.UserEventDto;
 import com.ead.course.domain.dto.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

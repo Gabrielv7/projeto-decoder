@@ -1,9 +1,9 @@
 package com.ead.notification.controller;
 
 import com.ead.notification.mapper.NotificationMapper;
-import com.ead.notification.model.Notification;
-import com.ead.notification.dto.request.NotificationRequest;
-import com.ead.notification.dto.response.NotificationResponse;
+import com.ead.notification.domain.model.Notification;
+import com.ead.notification.domain.dto.request.NotificationRequest;
+import com.ead.notification.domain.dto.response.NotificationResponse;
 import com.ead.notification.service.NotificationService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

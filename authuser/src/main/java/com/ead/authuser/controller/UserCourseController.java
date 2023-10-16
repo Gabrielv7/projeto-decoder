@@ -1,7 +1,7 @@
 package com.ead.authuser.controller;
 
-import com.ead.authuser.dto.response.CourseResponse;
-import com.ead.authuser.service.CourseClientService;
+import com.ead.authuser.controller.client.dto.CourseDTO;
+import com.ead.authuser.controller.client.service.CourseClientService;
 import com.ead.authuser.util.ConstantsLog;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,14 +31,14 @@ public class UserCourseController {
 
     @PreAuthorize("hasAnyRole('STUDENT')")
     @GetMapping("/{userId}/courses")
-    public ResponseEntity<Page<CourseResponse>> getAllCoursesByUser(@PathVariable(value = "userId") UUID userId,
-                                                                    @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable,
-                                                                    @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Page<CourseDTO>> getAllCoursesByUser(@PathVariable(value = "userId") UUID userId,
+                                                               @PageableDefault(page = 0, size = 10, sort = "creationDate", direction = Sort.Direction.DESC) Pageable pageable,
+                                                               @RequestHeader("Authorization") String token) {
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_USER_ID,
                 "getAllCoursesByUser", "GET", "Searching a list of courses by userId", userId);
 
-        Page<CourseResponse> coursesResponse = courseClientService.getAllCoursesByUserId(userId, pageable, token);
+        Page<CourseDTO> coursesResponse = courseClientService.getAllCoursesByUserId(userId, pageable, token);
 
         log.info(ConstantsLog.LOG_METHOD + ConstantsLog.LOG_EVENT + ConstantsLog.LOG_MESSAGE + ConstantsLog.LOG_SIZE + ConstantsLog.LOG_HTTP_CODE,
                 "getAllCoursesByUser", ConstantsLog.LOG_EVENT_INFO, "List of courses by userId found.", coursesResponse.getTotalElements(), ConstantsLog.LOG_HTTP_CODE_OK);
